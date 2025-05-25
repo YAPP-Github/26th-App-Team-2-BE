@@ -4,8 +4,8 @@
 # 설정
 # ===============================
 NGINX_CONF_DIR="./nginx"
-MAX_RETRIES=10
-HEALTHCHECK_WAIT=3
+MAX_RETRIES=40
+HEALTHCHECK_WAIT=5
 
 # ===============================
 # 함수: 헬스 체크
@@ -13,14 +13,23 @@ HEALTHCHECK_WAIT=3
 health_check() {
   local NAME=$1  # blue 또는 green
   local RETRIES=0
+  local CONTAINER_ID
+  CONTAINER_ID=$(docker compose ps -q "$NAME")
+
+  if [ -z "$CONTAINER_ID" ]; then
+    echo "[HealthCheck] No container found for service: $NAME"
+    return 1
+  fi
 
   while [[ $RETRIES -lt $MAX_RETRIES ]]; do
-    echo "[HealthCheck] Checking $NAME (Attempt $((RETRIES+1))/$MAX_RETRIES)..."
-    sleep $HEALTHCHECK_WAIT
+    echo "[HealthCheck] Checking $NAME (Attempt $((RETRIES + 1))/$MAX_RETRIES)..."
+    sleep "$HEALTHCHECK_WAIT"
 
-    local RESPONSE=$(docker exec "$NAME" curl -s http://127.0.0.1:8080/health)
-    if [[ -n "$RESPONSE" ]]; then
-      echo "[HealthCheck] $NAME is healthy."
+    local STATUS
+    STATUS=$(docker exec "$CONTAINER_ID" curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8080/health)
+
+    if [[ "$STATUS" == "200" ]]; then
+      echo "[HealthCheck] $NAME is healthy!"
       return 0
     fi
 
