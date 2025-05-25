@@ -1,0 +1,44 @@
+services:
+  blue:
+    container_name: blue
+    image: gvf156/yapp-dev:latest
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - TZ=Asia/Seoul
+    restart: always
+    networks:
+      - yapp_server
+  green:
+    container_name: green
+    image: gvf156/yapp-dev:latest
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - TZ=Asia/Seoul
+    restart: always
+    networks:
+      - yapp_server
+  nginx:
+    container_name: nginx
+    image: nginx:1.25-alpine
+    ports:
+      - "80:80"
+    networks:
+      - yapp_server
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/log:/var/log/nginx
+      - /etc/localtime:/etc/localtime:ro
+    restart: always
+    depends_on:
+      - green
+      - blue
+
+networks:
+  yapp_server:
+    external: true
+    name: yapp_server
+    driver: bridge

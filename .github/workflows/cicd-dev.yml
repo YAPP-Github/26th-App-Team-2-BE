@@ -1,0 +1,70 @@
+name: CI CD to dev
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Login to docker
+        uses: docker/login-action@v3
+        with:
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build image
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/yapp-dev:latest .
+
+      - name: Push image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/yapp-dev:latest
+
+  cd:
+    needs: ci
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Send script to remote
+        uses: appleboy/scp-action@master
+        with:
+          username: ${{ secrets.DEV_USERNAME }}
+          host: ${{ secrets.DEV_HOST }}
+          key: ${{ secrets.DEV_SSH_KEY }}
+          source: "./scripts/dev-deploy.sh"
+          target: "/home/app"
+
+      - name: Send docker-compose to remote
+        uses: appleboy/scp-action@master
+        with:
+          username: ${{ secrets.DEV_USERNAME }}
+          host: ${{ secrets.DEV_HOST }}
+          key: ${{ secrets.DEV_SSH_KEY }}
+          source: "./docker-compose/"
+          target: "/home/app"
+
+      - name: Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          username: ${{ secrets.DEV_USERNAME }}
+          host: ${{ secrets.DEV_HOST }}
+          key: ${{ secrets.DEV_SSH_KEY }}
+          script: |
+            sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/yapp-dev:latest
+            cd /home/app/docker-compose
+            chmod 777 ../scripts/dev-deploy.sh
+            ../scripts/dev-deploy.sh
