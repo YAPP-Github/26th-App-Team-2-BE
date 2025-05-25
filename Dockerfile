@@ -25,6 +25,8 @@ RUN java -Djarmode=layertools -jar *.jar extract
 FROM eclipse-temurin:21-jdk-alpine
 WORKDIR /app
 
+RUN apk --no-cache add curl
+
 # Layer 별 복사 변경되지 않았다면 복사 안 함
 COPY --from=build /app/build/libs/dependencies/ ./
 COPY --from=build /app/build/libs/spring-boot-loader/ ./
