@@ -68,3 +68,4 @@ jobs:
             cd /home/app/docker-compose
             chmod 777 ../scripts/dev-deploy.sh
             ../scripts/dev-deploy.sh
+            docker image prune -f
