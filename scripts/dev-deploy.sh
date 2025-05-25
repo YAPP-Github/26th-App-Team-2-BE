@@ -59,7 +59,7 @@ reload_nginx() {
   local CONF_NAME=$1
   echo "[Nginx] Switching to $CONF_NAME..."
   sudo cp "$NGINX_CONF_DIR/$CONF_NAME" "$NGINX_CONF_DIR/nginx.conf"
-  sudo docker compose exec nginx nginx -s reload
+  sudo docker compose restart nginx
   echo "[Nginx] Reload complete."
 }
 
