@@ -21,6 +21,7 @@ health_check() {
     return 1
   fi
 
+  echo "[HealthCheck] Start health check after 15s"
   sleep 15
 
   while [[ $RETRIES -lt $MAX_RETRIES ]]; do
