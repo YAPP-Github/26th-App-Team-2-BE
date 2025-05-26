@@ -4,8 +4,8 @@
 # 설정
 # ===============================
 NGINX_CONF_DIR="./nginx"
-MAX_RETRIES=40
-HEALTHCHECK_WAIT=5
+MAX_RETRIES=20
+HEALTHCHECK_WAIT=3
 
 # ===============================
 # 함수: 헬스 체크
@@ -20,6 +20,8 @@ health_check() {
     echo "[HealthCheck] No container found for service: $NAME"
     return 1
   fi
+
+  sleep 15
 
   while [[ $RETRIES -lt $MAX_RETRIES ]]; do
     echo "[HealthCheck] Checking $NAME (Attempt $((RETRIES + 1))/$MAX_RETRIES)..."
