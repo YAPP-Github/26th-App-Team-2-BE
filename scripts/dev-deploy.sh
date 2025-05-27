@@ -80,13 +80,15 @@ reload_nginx() {
 # ===============================
 health_check_nginx() {
   if systemctl is-active --quiet nginx; then
-    echo "Nginx is running."
+    echo "[Nginx] Nginx is running."
   else
-    echo "Nginx is not running"
+    echo "[Nginx] Nginx is not running."
+    echo "[Nginx] Start"
     sudo systemctl start nginx
     sleep 3
   fi
 }
+
 
 # ===============================
 # 배포 시작 (Blue <-> Green 스위칭)
@@ -111,7 +113,6 @@ if [[ -z "$IS_GREEN_RUNNING" ]]; then
 else
   echo "[Deploy] Switching from GREEN to BLUE..."
 
-  health_check_nginx
   start_service blue
   if ! health_check blue; then
     echo "[Abort] BLUE failed health check. Deployment cancelled."
@@ -119,6 +120,7 @@ else
     exit 1
   fi
 
+  health_check_nginx
   reload_nginx "nginx-blue.conf"
   stop_service green
   echo "[Deploy] BLUE is now live."
