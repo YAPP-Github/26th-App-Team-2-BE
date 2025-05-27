@@ -76,6 +76,19 @@ reload_nginx() {
 }
 
 # ===============================
+# 함수: Nginx 실행 중 확인
+# ===============================
+health_check_nginx() {
+  if systemctl is-active --quiet nginx; then
+    echo "Nginx is running."
+  else
+    echo "Nginx is not running"
+    sudo systemctl start nginx
+    sleep 3
+  fi
+}
+
+# ===============================
 # 배포 시작 (Blue <-> Green 스위칭)
 # ===============================
 IS_GREEN_RUNNING=$(docker compose ps | grep green)
@@ -90,6 +103,7 @@ if [[ -z "$IS_GREEN_RUNNING" ]]; then
     exit 1
   fi
 
+  health_check_nginx
   reload_nginx "nginx-green.conf"
   stop_service blue
   echo "[Deploy] GREEN is now live."
@@ -97,6 +111,7 @@ if [[ -z "$IS_GREEN_RUNNING" ]]; then
 else
   echo "[Deploy] Switching from GREEN to BLUE..."
 
+  health_check_nginx
   start_service blue
   if ! health_check blue; then
     echo "[Abort] BLUE failed health check. Deployment cancelled."
