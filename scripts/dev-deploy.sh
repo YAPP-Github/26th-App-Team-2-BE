@@ -21,8 +21,8 @@ health_check() {
     return 1
   fi
 
-  echo "[HealthCheck] Start health check after 15s"
-  sleep 15
+  echo "[HealthCheck] Start health check after 50s"
+  sleep 50
 
   while [[ $RETRIES -lt $MAX_RETRIES ]]; do
     echo "[HealthCheck] Checking $NAME (Attempt $((RETRIES + 1))/$MAX_RETRIES)..."
@@ -71,7 +71,8 @@ reload_nginx() {
   local CONF_NAME=$1
   echo "[Nginx] Switching to $CONF_NAME..."
   sudo cp "$NGINX_CONF_DIR/$CONF_NAME" "$NGINX_CONF_DIR/nginx.conf"
-  sudo docker compose restart nginx
+#  sudo docker compose restart nginx
+  docker compose exec nginx nginx -s reload
   echo "[Nginx] Reload complete."
 }
 
@@ -86,6 +87,7 @@ if [[ -z "$IS_GREEN_RUNNING" ]]; then
   start_service green
   if ! health_check green; then
     echo "[Abort] GREEN failed health check. Deployment cancelled."
+    stop_service green
     exit 1
   fi
 
@@ -99,6 +101,7 @@ else
   start_service blue
   if ! health_check blue; then
     echo "[Abort] BLUE failed health check. Deployment cancelled."
+    stop_service blue
     exit 1
   fi
 
