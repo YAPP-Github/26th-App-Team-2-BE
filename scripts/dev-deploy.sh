@@ -70,8 +70,6 @@ stop_service() {
 reload_nginx() {
   local CONF_NAME=$1
   echo "[Nginx] Switching to $CONF_NAME..."
-#  sudo cp "$NGINX_CONF_DIR/$CONF_NAME" "$NGINX_CONF_DIR/nginx.conf"
-#  sudo docker compose restart nginx
   sudo cp "$NGINX_CONF_DIR/$CONF_NAME" /etc/nginx/conf.d/nginx.conf
   sudo sudo nginx -s reload
   echo "[Nginx] Reload complete."
