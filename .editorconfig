@@ -11,9 +11,9 @@ max_line_length = 120
 tab_width = 4
 
 [*.{kt,kts}]
-# java.* 패키지를 의존하는 경우  IntelliJ의 Orgarnize Import 기능으로는 알파벳 순서대로 import 구문을 정렬할 수 없다.
-# 이는 ktlint의 import-ordering 규칙과 맞지 않는다.
-disabled_rules=import-ordering
+# 알파벳 순으로 정렬하되,
+# java.*, javax.*, kotlin.* 패키지와 alias import는 마지막에 배치됩니다.
+ij_kotlin_imports_layout=*,java.**,javax.**,kotlin.**,^
 
 [*.yml]
 indent_size = 2
