@@ -1,0 +1,35 @@
+package com.yapp.demo.common.exception
+
+import com.yapp.demo.common.dto.ApiResponse
+import com.yapp.demo.common.exception.ErrorCode.BAD_REQUEST
+import com.yapp.demo.common.exception.ErrorCode.INTERNAL_SERVER_ERROR
+import io.github.oshai.kotlinlogging.KotlinLogging
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.bind.annotation.RestControllerAdvice
+
+@RestControllerAdvice
+class GlobalExceptionHandler {
+    private val logger = KotlinLogging.logger {}
+
+    @ExceptionHandler(CustomException::class)
+    fun handleCustomException(e: CustomException): ResponseEntity<ApiResponse<String>> {
+        logger.warn { "code=${e.errorCode.code}, message=${e.errorCode.message}" }
+        return ResponseEntity.status(e.errorCode.status)
+            .body(ApiResponse.error(e.errorCode.message))
+    }
+
+    @ExceptionHandler(IllegalArgumentException::class)
+    fun handleIllegalArgumentException(e: IllegalArgumentException): ResponseEntity<ApiResponse<String>> {
+        logger.warn(e) { "code=${BAD_REQUEST.status}, message=${e.message}" }
+        return ResponseEntity.status(BAD_REQUEST.status)
+            .body(ApiResponse.error(BAD_REQUEST.message))
+    }
+
+    @ExceptionHandler(Exception::class)
+    fun handleGlobalException(e: Exception): ResponseEntity<ApiResponse<String>> {
+        logger.error(e) { "code=${INTERNAL_SERVER_ERROR.status}, message=${e.message}" }
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR.status)
+            .body(ApiResponse.error(INTERNAL_SERVER_ERROR.message))
+    }
+}
