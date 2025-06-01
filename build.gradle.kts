@@ -5,6 +5,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
     kotlin("plugin.jpa") version "1.9.25"
     id("org.jlleitschuh.gradle.ktlint").version("12.3.0") // ktlint
+    id("jacoco") // jacoco
 }
 
 group = "com.yapp"
@@ -53,7 +54,17 @@ allOpen {
 }
 
 tasks.withType<Test> {
+    finalizedBy(tasks.jacocoTestReport)
     useJUnitPlatform()
+}
+
+jacoco {
+    toolVersion = "0.8.13"
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    reports.xml.required.set(true)
 }
 
 ktlint {
