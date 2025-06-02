@@ -8,10 +8,10 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
+private val logger = KotlinLogging.logger {}
+
 @RestControllerAdvice
 class GlobalExceptionHandler {
-    private val logger = KotlinLogging.logger {}
-
     @ExceptionHandler(CustomException::class)
     fun handleCustomException(e: CustomException): ResponseEntity<ApiResponse<String>> {
         logger.warn { "code=${e.errorCode.code}, message=${e.errorCode.message}" }
