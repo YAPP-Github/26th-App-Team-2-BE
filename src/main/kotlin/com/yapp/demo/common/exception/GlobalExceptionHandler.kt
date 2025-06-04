@@ -16,20 +16,20 @@ class GlobalExceptionHandler {
     fun handleCustomException(e: CustomException): ResponseEntity<ApiResponse<String>> {
         logger.warn { "code=${e.errorCode.code}, message=${e.errorCode.message}" }
         return ResponseEntity.status(e.errorCode.status)
-            .body(ApiResponse.error(e.errorCode.message))
+            .body(ApiResponse.error(e.errorCode.status, e.errorCode.message))
     }
 
     @ExceptionHandler(IllegalArgumentException::class)
     fun handleIllegalArgumentException(e: IllegalArgumentException): ResponseEntity<ApiResponse<String>> {
         logger.warn(e) { "code=${BAD_REQUEST.status}, message=${e.message}" }
         return ResponseEntity.status(BAD_REQUEST.status)
-            .body(ApiResponse.error(BAD_REQUEST.message))
+            .body(ApiResponse.error(BAD_REQUEST.status, BAD_REQUEST.message))
     }
 
     @ExceptionHandler(Exception::class)
     fun handleGlobalException(e: Exception): ResponseEntity<ApiResponse<String>> {
         logger.error(e) { "code=${INTERNAL_SERVER_ERROR.status}, message=${e.message}" }
         return ResponseEntity.status(INTERNAL_SERVER_ERROR.status)
-            .body(ApiResponse.error(INTERNAL_SERVER_ERROR.message))
+            .body(ApiResponse.error(INTERNAL_SERVER_ERROR.status, INTERNAL_SERVER_ERROR.message))
     }
 }
