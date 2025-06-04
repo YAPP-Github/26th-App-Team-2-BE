@@ -69,6 +69,18 @@ jacoco {
 tasks.jacocoTestReport {
     dependsOn(tasks.test)
     reports.xml.required.set(true)
+
+    classDirectories.setFrom(
+        files(
+            classDirectories.files.map {
+                fileTree(it) {
+                    exclude(
+                        "**/common/**",
+                    )
+                }
+            },
+        ),
+    )
 }
 
 ktlint {
