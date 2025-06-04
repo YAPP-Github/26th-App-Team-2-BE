@@ -13,21 +13,21 @@ private val logger = KotlinLogging.logger {}
 @RestControllerAdvice
 class GlobalExceptionHandler {
     @ExceptionHandler(CustomException::class)
-    fun handleCustomException(e: CustomException): ResponseEntity<ApiResponse<String>> {
+    fun handleCustomException(e: CustomException): ResponseEntity<ApiResponse<Unit>> {
         logger.warn { "code=${e.errorCode.code}, message=${e.errorCode.message}" }
         return ResponseEntity.status(e.errorCode.status)
             .body(ApiResponse.error(e.errorCode.status, e.errorCode.message))
     }
 
     @ExceptionHandler(IllegalArgumentException::class)
-    fun handleIllegalArgumentException(e: IllegalArgumentException): ResponseEntity<ApiResponse<String>> {
+    fun handleIllegalArgumentException(e: IllegalArgumentException): ResponseEntity<ApiResponse<Unit>> {
         logger.warn(e) { "code=${BAD_REQUEST.status}, message=${e.message}" }
         return ResponseEntity.status(BAD_REQUEST.status)
             .body(ApiResponse.error(BAD_REQUEST.status, BAD_REQUEST.message))
     }
 
     @ExceptionHandler(Exception::class)
-    fun handleGlobalException(e: Exception): ResponseEntity<ApiResponse<String>> {
+    fun handleGlobalException(e: Exception): ResponseEntity<ApiResponse<Unit>> {
         logger.error(e) { "code=${INTERNAL_SERVER_ERROR.status}, message=${e.message}" }
         return ResponseEntity.status(INTERNAL_SERVER_ERROR.status)
             .body(ApiResponse.error(INTERNAL_SERVER_ERROR.status, INTERNAL_SERVER_ERROR.message))
