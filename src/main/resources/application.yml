@@ -1,3 +1,33 @@
 spring:
   profiles:
     active: local
+
+  security:
+    oauth2:
+      client:
+        registration:
+          apple:
+            clientId: ${APPLE_CLIENT_ID}
+            clientSecret: ${APPLE_CLIENT_SECRET}
+            authorization-grant-type: authorization_code
+            redirect-uri: http://localhost:8080/login/oauth2/code/apple
+            client-authentication-method: POST
+            client-name: apple
+            scope: name, email
+          kakao:
+            clientId: ${KAKAO_CLIENT_ID}
+            clientSecret: ${KAKAO_CLIENT_SECRET}
+            authorization-grant-type: authorization_code
+            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
+            client-authentication-method: client_secret_post
+            client-name: kakao
+            scope: profile_nickname, account_email
+        provider:
+          apple:
+            authorizationUri: https://appleid.apple.com/auth/authorize?response_mode=form_post
+            tokenUri: https://appleid.apple.com/auth/token
+          kakao:
+            authorizationUri: https://kauth.kakao.com/oauth/authorize
+            tokenUri: https://kauth.kakao.com/oauth/token
+            userInfoUri: https://kapi.kakao.com/v2/user/me
+            userNameAttribute: id
