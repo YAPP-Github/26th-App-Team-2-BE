@@ -1,26 +1,28 @@
-package com.yapp.demo.common.security.exception
+package com.yapp.demo.common.security.handler
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.yapp.demo.common.dto.ApiResponse
-import com.yapp.demo.common.exception.ErrorCode.FORBIDDEN
+import com.yapp.demo.common.exception.ErrorCode.UNAUTHORIZED
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.MediaType
-import org.springframework.security.access.AccessDeniedException
-import org.springframework.security.web.access.AccessDeniedHandler
+import org.springframework.security.core.AuthenticationException
+import org.springframework.security.web.authentication.AuthenticationFailureHandler
 import org.springframework.stereotype.Component
 import java.nio.charset.StandardCharsets
 
 @Component
-class ForbiddenHandler(
+class OAuth2LoginFailureHandler(
     private val objectMapper: ObjectMapper,
-) : AccessDeniedHandler {
-    override fun handle(
-        request: HttpServletRequest,
-        response: HttpServletResponse,
-        accessDeniedException: AccessDeniedException,
+) : AuthenticationFailureHandler {
+    override fun onAuthenticationFailure(
+        request: HttpServletRequest?,
+        response: HttpServletResponse?,
+        exception: AuthenticationException?,
     ) {
-        val apiResponse = ApiResponse.error(FORBIDDEN.status, FORBIDDEN.message)
+        requireNotNull(response) { "response is null" }
+
+        val apiResponse = ApiResponse.error(UNAUTHORIZED.status, UNAUTHORIZED.message)
         val responseBody = objectMapper.writeValueAsString(apiResponse)
 
         response.apply {
