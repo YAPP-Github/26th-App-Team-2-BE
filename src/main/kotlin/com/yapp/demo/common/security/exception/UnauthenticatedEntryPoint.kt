@@ -9,6 +9,7 @@ import org.springframework.http.MediaType
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.stereotype.Component
+import java.nio.charset.StandardCharsets
 
 @Component
 class UnauthenticatedEntryPoint(
@@ -25,7 +26,7 @@ class UnauthenticatedEntryPoint(
         response.apply {
             contentType = MediaType.APPLICATION_JSON_VALUE
             status = apiResponse.code
-            characterEncoding = "UTF-8"
+            characterEncoding = StandardCharsets.UTF_8.name()
             writer.write(responseBody)
             writer.flush()
         }

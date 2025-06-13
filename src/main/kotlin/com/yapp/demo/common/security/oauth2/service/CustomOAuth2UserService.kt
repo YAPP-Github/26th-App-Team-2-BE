@@ -11,13 +11,14 @@ import org.springframework.stereotype.Service
 class CustomOAuth2UserService(
     private val defaultOAuth2UserService: DefaultOAuth2UserService = DefaultOAuth2UserService(),
 ) : OAuth2UserService<OAuth2UserRequest, OAuth2User> {
-    override fun loadUser(request: OAuth2UserRequest): OAuth2User {
+    override fun loadUser(request: OAuth2UserRequest?): OAuth2User {
+        requireNotNull(request) { "OAuth2 request is null" }
+
         val oauthUser = defaultOAuth2UserService.loadUser(request)
 
-        SocialProvider.from(request.clientRegistration.registrationId)
+        return SocialProvider.from(request.clientRegistration.registrationId)
             .createUserInfo(oauthUser.attributes)
 
         // TODO(user save || get)
-        return oauthUser
     }
 }

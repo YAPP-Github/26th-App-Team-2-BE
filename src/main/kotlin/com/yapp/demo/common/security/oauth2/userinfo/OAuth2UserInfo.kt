@@ -1,7 +1,8 @@
 package com.yapp.demo.common.security.oauth2.userinfo
 
-interface OAuth2UserInfo {
+import org.springframework.security.oauth2.core.user.OAuth2User
+
+interface OAuth2UserInfo : OAuth2User {
     val id: String
     val email: String
-    val name: String
 }

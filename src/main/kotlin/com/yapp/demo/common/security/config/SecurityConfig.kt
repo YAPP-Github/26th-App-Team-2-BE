@@ -2,6 +2,8 @@ package com.yapp.demo.common.security.config
 
 import com.yapp.demo.common.security.exception.ForbiddenHandler
 import com.yapp.demo.common.security.exception.UnauthenticatedEntryPoint
+import com.yapp.demo.common.security.handler.OAuth2LoginFailureHandler
+import com.yapp.demo.common.security.handler.OAuth2LoginSuccessHandler
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -18,6 +20,8 @@ class SecurityConfig(
     private val unauthenticatedEntryPoint: UnauthenticatedEntryPoint,
     private val forbiddenHandler: ForbiddenHandler,
     private val customOAuth2UserService: OAuth2UserService<OAuth2UserRequest, OAuth2User>,
+    private val oAuth2LoginSuccessHandler: OAuth2LoginSuccessHandler,
+    private val oAuth2LoginFailureHandler: OAuth2LoginFailureHandler,
 ) {
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
@@ -49,8 +53,8 @@ class SecurityConfig(
             .oauth2Login {
                 it
                     .userInfoEndpoint { endpoint -> endpoint.userService(customOAuth2UserService) }
-                    .successHandler { _, _, _ -> run { println("success") } }
-                    .failureHandler { _, _, _ -> run { println("fail") } }
+                    .successHandler(oAuth2LoginSuccessHandler)
+                    .failureHandler(oAuth2LoginFailureHandler)
             }
 
         return http.build()
