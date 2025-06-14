@@ -8,7 +8,6 @@ enum class SocialProvider(
 ) {
     KAKAO(::KakaoUserInfo),
     APPLE(::AppleUserInfo),
-    GOOGLE(::GoogleUserInfo),
     ;
 
     fun createUserInfo(attributes: Map<String, Any>): OAuth2UserInfo = creator(attributes)
