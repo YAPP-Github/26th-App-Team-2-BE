@@ -1,6 +1,7 @@
 package com.yapp.demo.common.filter
 
 import com.yapp.demo.auth.service.JwtTokenProvider
+import com.yapp.demo.common.constants.TOKEN_TYPE_ACCESS
 import com.yapp.demo.common.exception.CustomException
 import com.yapp.demo.common.exception.ErrorCode
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -24,11 +25,7 @@ class JwtAuthenticationFilter(
         try {
             val accessToken = resolveToken(request)
 
-            if (!jwtTokenProvider.isAccessToken(accessToken)) {
-                throw CustomException(ErrorCode.TOKEN_TYPE_MISMATCH)
-            }
-
-            val userId = jwtTokenProvider.extractUserId(accessToken)
+            val userId = jwtTokenProvider.extractUserId(accessToken, TOKEN_TYPE_ACCESS)
 
             /***
              * @TODO: UserPrincipal 설계 필요

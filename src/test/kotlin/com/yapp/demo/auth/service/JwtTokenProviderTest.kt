@@ -1,6 +1,8 @@
 package com.yapp.demo.auth.service
 
 import com.yapp.demo.common.config.properties.JwtProperties
+import com.yapp.demo.common.constants.TOKEN_TYPE_ACCESS
+import com.yapp.demo.common.constants.TOKEN_TYPE_REFRESH
 import com.yapp.demo.common.exception.CustomException
 import com.yapp.demo.common.exception.ErrorCode
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -9,7 +11,6 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.junit.jupiter.MockitoExtension
 import kotlin.test.Test
-import kotlin.test.assertTrue
 
 @ExtendWith(MockitoExtension::class)
 class JwtTokenProviderTest {
@@ -35,8 +36,8 @@ class JwtTokenProviderTest {
         val accessToken = jwtTokenProvider.generateAccessToken(userId)
         val refreshToken = jwtTokenProvider.generateRefreshToken(userId)
 
-        val extractedUserIdFromAccess = jwtTokenProvider.extractUserId(accessToken)
-        val extractedUserIdFromRefresh = jwtTokenProvider.extractUserId(refreshToken)
+        val extractedUserIdFromAccess = jwtTokenProvider.extractUserId(accessToken, TOKEN_TYPE_ACCESS)
+        val extractedUserIdFromRefresh = jwtTokenProvider.extractUserId(refreshToken, TOKEN_TYPE_REFRESH)
 
         assertEquals(userId.toLong(), extractedUserIdFromAccess)
         assertEquals(userId.toLong(), extractedUserIdFromRefresh)
@@ -48,21 +49,10 @@ class JwtTokenProviderTest {
 
         val exception =
             assertThrows<CustomException> {
-                jwtTokenProvider.extractUserId(invalidToken)
+                jwtTokenProvider.extractUserId(invalidToken, TOKEN_TYPE_ACCESS)
             }
 
         assertEquals(ErrorCode.TOKEN_INVALID, exception.errorCode)
-    }
-
-    @Test
-    fun `JwtTokenProvider는 토큰의 타입을 구별 할 수 있다`() {
-        val userId = "12345"
-
-        val accessToken = jwtTokenProvider.generateAccessToken(userId)
-        val refreshToken = jwtTokenProvider.generateRefreshToken(userId)
-
-        assertTrue { jwtTokenProvider.isAccessToken(accessToken) }
-        assertTrue { jwtTokenProvider.isRefreshToken(refreshToken) }
     }
 
     @Test
@@ -79,7 +69,7 @@ class JwtTokenProviderTest {
 
         val exception =
             assertThrows<CustomException> {
-                expiredTokenProvider.extractUserId(token)
+                expiredTokenProvider.extractUserId(token, TOKEN_TYPE_ACCESS)
             }
 
         assertEquals(ErrorCode.TOKEN_EXPIRED, exception.errorCode)

@@ -1,6 +1,8 @@
 package com.yapp.demo.auth.service
 
 import com.yapp.demo.common.config.properties.JwtProperties
+import com.yapp.demo.common.constants.TOKEN_TYPE_ACCESS
+import com.yapp.demo.common.constants.TOKEN_TYPE_REFRESH
 import com.yapp.demo.common.exception.CustomException
 import com.yapp.demo.common.exception.ErrorCode
 import io.jsonwebtoken.Claims
@@ -35,24 +37,18 @@ class JwtTokenProvider(
         )
     }
 
-    fun extractUserId(token: String): Long {
+    fun extractUserId(
+        token: String,
+        tokenType: String,
+    ): Long {
         val claims = getClaims(token)
+        val type = claims.payload[TOKEN_TYPE_KEY] as? String
+
+        if (type != tokenType) {
+            throw CustomException(ErrorCode.TOKEN_TYPE_MISMATCH)
+        }
 
         return claims.payload.subject.toLong()
-    }
-
-    fun isAccessToken(token: String): Boolean {
-        val claims = getClaims(token)
-        val type = claims.payload[TOKEN_TYPE_KEY] as? String
-
-        return type == TOKEN_TYPE_ACCESS
-    }
-
-    fun isRefreshToken(token: String): Boolean {
-        val claims = getClaims(token)
-        val type = claims.payload[TOKEN_TYPE_KEY] as? String
-
-        return type == TOKEN_TYPE_REFRESH
     }
 
     private fun generateToken(
@@ -68,7 +64,7 @@ class JwtTokenProvider(
             .claim(TOKEN_TYPE_KEY, type)
             .issuedAt(now)
             .expiration(expirationDate)
-            .signWith(decodedSecretKey)
+            .signWith(decodedSecretKey, Jwts.SIG.HS256)
             .compact()
     }
 
@@ -86,7 +82,5 @@ class JwtTokenProvider(
 
     companion object {
         private const val TOKEN_TYPE_KEY = "token_type"
-        private const val TOKEN_TYPE_ACCESS = "access"
-        private const val TOKEN_TYPE_REFRESH = "refresh"
     }
 }
