@@ -12,3 +12,8 @@ spring:
     show-sql: false
     hibernate:
       ddl-auto: none
+
+jwt:
+  secret: ${JWT_SECRET}
+  access-token-expiry-time: ${JWT_ACCESS_TOKEN_EXPIRY_TIME}
+  refresh-token-expiry-time: ${JWT_REFRESH_TOKEN_EXPIRY_TIME}
