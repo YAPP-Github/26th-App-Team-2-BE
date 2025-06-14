@@ -21,14 +21,14 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException::class)
     fun handleIllegalArgumentException(e: IllegalArgumentException): ResponseEntity<ApiResponse<Unit>> {
-        logger.warn(e) { "code=${BAD_REQUEST.status}, message=${e.message}" }
+        logger.warn(e) { "code=${BAD_REQUEST.code}, message=${e.message}" }
         return ResponseEntity.status(BAD_REQUEST.status)
             .body(ApiResponse.error(BAD_REQUEST.status, BAD_REQUEST.message))
     }
 
     @ExceptionHandler(Exception::class)
     fun handleGlobalException(e: Exception): ResponseEntity<ApiResponse<Unit>> {
-        logger.error(e) { "code=${INTERNAL_SERVER_ERROR.status}, message=${e.message}" }
+        logger.error(e) { "code=${INTERNAL_SERVER_ERROR.code}, message=${e.message}" }
         return ResponseEntity.status(INTERNAL_SERVER_ERROR.status)
             .body(ApiResponse.error(INTERNAL_SERVER_ERROR.status, INTERNAL_SERVER_ERROR.message))
     }

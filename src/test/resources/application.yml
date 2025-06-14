@@ -10,3 +10,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
+
+jwt:
+  secret: abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789
+  access-token-expiry-time: 1800
+  refresh-token-expiry-time: 1209600

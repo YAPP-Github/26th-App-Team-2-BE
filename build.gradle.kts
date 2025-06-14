@@ -20,6 +20,7 @@ java {
 repositories {
     mavenCentral()
 }
+val jwtVersion = "0.12.6"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -37,6 +38,11 @@ dependencies {
 
     // Kotlin-Logging
     implementation("io.github.oshai:kotlin-logging-jvm:7.0.3")
+
+    // jwt
+    implementation("io.jsonwebtoken:jjwt-api:$jwtVersion")
+    implementation("io.jsonwebtoken:jjwt-impl:$jwtVersion")
+    implementation("io.jsonwebtoken:jjwt-jackson:$jwtVersion")
 
     // test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
