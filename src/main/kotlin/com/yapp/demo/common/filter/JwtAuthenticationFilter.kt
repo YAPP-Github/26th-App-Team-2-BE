@@ -17,6 +17,13 @@ private val log = KotlinLogging.logger {}
 class JwtAuthenticationFilter(
     private val jwtTokenProvider: JwtTokenProvider,
 ) : OncePerRequestFilter() {
+    override fun shouldNotFilter(request: HttpServletRequest): Boolean {
+        val path = request.servletPath
+        return path == "/health"
+            || path.startsWith("/oauth2/")
+            || path.startsWith("/login/oauth2/")
+    }
+
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
