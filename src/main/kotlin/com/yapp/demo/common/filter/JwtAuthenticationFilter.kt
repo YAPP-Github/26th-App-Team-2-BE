@@ -48,11 +48,11 @@ class JwtAuthenticationFilter(
         val bearer = request.getHeader("Authorization")
 
         return if (isValid(bearer)) {
-            bearer.substring(7)
+            bearer.substringAfter("Bearer ").trim()
         } else {
             throw CustomException(ErrorCode.TOKEN_NOT_FOUND)
         }
     }
 
-    private fun isValid(bearer: String?): Boolean = !bearer.isNullOrEmpty() && bearer.startsWith("Bearer")
+    private fun isValid(bearer: String?): Boolean = !bearer.isNullOrEmpty() && bearer.startsWith("Bearer ")
 }
