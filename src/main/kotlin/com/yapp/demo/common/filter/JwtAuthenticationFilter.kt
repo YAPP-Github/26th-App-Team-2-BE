@@ -16,6 +16,13 @@ private val log = KotlinLogging.logger {}
 class JwtAuthenticationFilter(
     private val jwtTokenProvider: JwtTokenProvider,
 ) : OncePerRequestFilter() {
+    /**
+     * Processes incoming HTTP requests to authenticate users based on a JWT access token.
+     *
+     * Extracts the JWT access token from the Authorization header, validates its type, and retrieves the user ID.
+     * Throws a custom exception if the token is missing, malformed, or of the wrong type.
+     * Proceeds with the filter chain after authentication checks.
+     */
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
@@ -44,6 +51,13 @@ class JwtAuthenticationFilter(
         filterChain.doFilter(request, response)
     }
 
+    /**
+     * Extracts the JWT token from the Authorization header of the HTTP request.
+     *
+     * @param request The incoming HTTP request containing the Authorization header.
+     * @return The JWT token string without the "Bearer " prefix.
+     * @throws CustomException if the Authorization header is missing, empty, or does not start with "Bearer".
+     */
     private fun resolveToken(request: HttpServletRequest): String {
         val bearer = request.getHeader("Authorization")
 
@@ -54,5 +68,11 @@ class JwtAuthenticationFilter(
         }
     }
 
-    private fun isValid(bearer: String?): Boolean = !bearer.isNullOrEmpty() && bearer.startsWith("Bearer")
+    /**
+ * Checks if the provided string is a non-empty bearer token starting with "Bearer".
+ *
+ * @param bearer The authorization header value to validate.
+ * @return `true` if the string is non-null, non-empty, and starts with "Bearer"; otherwise, `false`.
+ */
+private fun isValid(bearer: String?): Boolean = !bearer.isNullOrEmpty() && bearer.startsWith("Bearer")
 }

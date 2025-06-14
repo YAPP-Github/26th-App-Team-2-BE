@@ -19,6 +19,13 @@ class GlobalExceptionHandler {
             .body(ApiResponse.error(e.errorCode.status, e.errorCode.message))
     }
 
+    /**
+     * Handles `IllegalArgumentException` by returning a standardized bad request error response.
+     *
+     * Responds with HTTP 400 status and a generic bad request message.
+     *
+     * @return A `ResponseEntity` containing an error response with bad request status and message.
+     */
     @ExceptionHandler(IllegalArgumentException::class)
     fun handleIllegalArgumentException(e: IllegalArgumentException): ResponseEntity<ApiResponse<Unit>> {
         logger.warn(e) { "code=${BAD_REQUEST.code}, message=${e.message}" }
@@ -26,6 +33,11 @@ class GlobalExceptionHandler {
             .body(ApiResponse.error(BAD_REQUEST.status, BAD_REQUEST.message))
     }
 
+    /**
+     * Handles uncaught exceptions and returns a standardized internal server error response.
+     *
+     * @return A ResponseEntity containing an error response with HTTP 500 status and a generic error message.
+     */
     @ExceptionHandler(Exception::class)
     fun handleGlobalException(e: Exception): ResponseEntity<ApiResponse<Unit>> {
         logger.error(e) { "code=${INTERNAL_SERVER_ERROR.code}, message=${e.message}" }
