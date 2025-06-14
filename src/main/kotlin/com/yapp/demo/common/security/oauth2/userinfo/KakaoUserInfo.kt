@@ -2,7 +2,7 @@ package com.yapp.demo.common.security.oauth2.userinfo
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 
-class KakaoUserInfo(
+data class KakaoUserInfo(
     private val attributes: Map<String, Any>,
 ) : OAuth2UserInfo {
     private val account: Map<String, Any> =
