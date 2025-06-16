@@ -20,12 +20,17 @@ java {
 repositories {
     mavenCentral()
 }
+
 val jwtVersion = "0.12.6"
+extra["springCloudVersion"] = "2024.0.0"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+
+    // feign
+    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
 
     // JPA
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -51,11 +56,20 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-impl:$jwtVersion")
     implementation("io.jsonwebtoken:jjwt-jackson:$jwtVersion")
 
+    // validation
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+
     // test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
+}
+
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+    }
 }
 
 kotlin {

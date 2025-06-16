@@ -8,6 +8,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 
@@ -19,9 +20,8 @@ class JwtAuthenticationFilter(
 ) : OncePerRequestFilter() {
     override fun shouldNotFilter(request: HttpServletRequest): Boolean {
         val path = request.servletPath
-        return path == "/health"
-            || path.startsWith("/oauth2/")
-            || path.startsWith("/login/oauth2/")
+        return path == "/health" ||
+            path.startsWith("/v1/login/")
     }
 
     override fun doFilterInternal(
@@ -31,15 +31,10 @@ class JwtAuthenticationFilter(
     ) {
         try {
             val accessToken = resolveToken(request)
-
             val userId = jwtTokenProvider.extractUserId(accessToken, TOKEN_TYPE_ACCESS)
+            val authentication = jwtTokenProvider.getAuthentication(userId)
 
-            /***
-             * @TODO: UserPrincipal 설계 필요
-             * val authorities = listOf(SimpleGrantedAuthority("ROLE_USER")) //
-             * val authentication = UsernamePasswordAuthenticationToken(userId, null, authorities)
-             * SecurityContextHolder.getContext().authentication = authentication
-             */
+            SecurityContextHolder.getContext().authentication = authentication
         } catch (e: Exception) {
             log.warn(e) { "[JwtAuthenticationFilter.doFilterInternal] fail to parse token" }
             throw e

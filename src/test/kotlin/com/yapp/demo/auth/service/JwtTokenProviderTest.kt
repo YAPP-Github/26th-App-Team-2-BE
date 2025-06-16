@@ -31,7 +31,7 @@ class JwtTokenProviderTest {
 
     @Test
     fun `AccessToken과 RefreshToken 생성 후 userId 추출이 동일해야 한다`() {
-        val userId = "12345"
+        val userId = 12345L
 
         val accessToken = jwtTokenProvider.generateAccessToken(userId)
         val refreshToken = jwtTokenProvider.generateRefreshToken(userId)
@@ -39,8 +39,8 @@ class JwtTokenProviderTest {
         val extractedUserIdFromAccess = jwtTokenProvider.extractUserId(accessToken, TOKEN_TYPE_ACCESS)
         val extractedUserIdFromRefresh = jwtTokenProvider.extractUserId(refreshToken, TOKEN_TYPE_REFRESH)
 
-        assertEquals(userId.toLong(), extractedUserIdFromAccess)
-        assertEquals(userId.toLong(), extractedUserIdFromRefresh)
+        assertEquals(userId, extractedUserIdFromAccess)
+        assertEquals(userId, extractedUserIdFromRefresh)
     }
 
     @Test
@@ -65,7 +65,7 @@ class JwtTokenProviderTest {
             )
 
         val expiredTokenProvider = JwtTokenProvider(expiredJwtProperties)
-        val token = expiredTokenProvider.generateAccessToken("1")
+        val token = expiredTokenProvider.generateAccessToken(1L)
 
         val exception =
             assertThrows<CustomException> {
