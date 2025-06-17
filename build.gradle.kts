@@ -104,6 +104,9 @@ ktlint {
 
 tasks.named<ProcessResources>("processResources") {
     dependsOn("copy main env")
+}
+
+tasks.named<ProcessResources>("processTestResources") {
     dependsOn("copy test env")
 }
 
