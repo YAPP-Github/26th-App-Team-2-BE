@@ -39,6 +39,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: 'recursive'
+          ssh-key: ${{ secrets.SUBMODULE_SSH_KEY }}
+          ssh-known-hosts: github.com
 
       - name: Send env configs to remote
         uses: appleboy/scp-action@master
