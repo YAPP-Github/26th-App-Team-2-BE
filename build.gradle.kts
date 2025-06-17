@@ -101,3 +101,14 @@ ktlint {
         reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.JSON)
     }
 }
+
+tasks.named<ProcessResources>("processResources") {
+    dependsOn("copy env")
+}
+
+tasks.register<Copy>("copy env") {
+    from("./YAPP-ENV")
+    include("*.yml")
+    into("src/main/resources")
+    println("환경변수 복사 성공")
+}
