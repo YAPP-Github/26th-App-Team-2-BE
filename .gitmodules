@@ -1,0 +1,3 @@
+[submodule "YAPP-ENV"]
+	path = YAPP-ENV
+	url = https://github.com/ay-eonii/YAPP-ENV.git
