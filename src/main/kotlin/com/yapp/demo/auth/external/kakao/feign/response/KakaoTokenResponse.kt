@@ -1,4 +1,4 @@
-package com.yapp.demo.auth.external.kakao.response
+package com.yapp.demo.auth.external.kakao.feign.response
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
