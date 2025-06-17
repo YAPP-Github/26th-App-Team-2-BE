@@ -117,6 +117,10 @@ tasks.register<Copy>("copy main env") {
     }
     into("src/main/resources")
 
+    onlyIf {
+        gradle.startParameter.taskNames.none { it.contains("test") }
+    }
+
     doLast {
         logger.lifecycle("✅ 메인 환경변수 복사 완료")
     }
