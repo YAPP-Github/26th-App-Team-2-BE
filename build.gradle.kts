@@ -103,12 +103,30 @@ ktlint {
 }
 
 tasks.named<ProcessResources>("processResources") {
-    dependsOn("copy env")
+    dependsOn("copy main env")
+    dependsOn("copy test env")
 }
 
-tasks.register<Copy>("copy env") {
-    from("./YAPP-ENV")
-    include("*.yml")
+tasks.register<Copy>("copy main env") {
+    from("YAPP-ENV") {
+        include("*.yml")
+        exclude("application-test.yml")
+    }
     into("src/main/resources")
-    println("환경변수 복사 성공")
+
+    doLast {
+        logger.lifecycle("✅ 메인 환경변수 복사 완료")
+    }
+}
+
+tasks.register<Copy>("copy test env") {
+    from("YAPP-ENV") {
+        include("application-test.yml")
+        rename("application-test.yml", "application.yml")
+    }
+    into("src/test/resources")
+
+    doLast {
+        logger.lifecycle("✅ 테스트 환경변수 복사 완료")
+    }
 }

@@ -45,6 +45,7 @@ out/
 
 ### Resouces ###
 /src/main/resources/
+/src/test/resources/
 docker-compose/.env
 
 
