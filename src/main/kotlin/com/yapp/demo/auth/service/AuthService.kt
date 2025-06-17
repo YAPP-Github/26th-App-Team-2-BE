@@ -3,7 +3,6 @@ package com.yapp.demo.auth.service
 import com.yapp.demo.auth.dto.response.OAuthLoginResponse
 import com.yapp.demo.auth.dto.response.RefreshTokenResponse
 import com.yapp.demo.auth.external.OAuthProvider
-import com.yapp.demo.auth.external.userinfo.OAuthUserInfo
 import com.yapp.demo.common.constants.TOKEN_TYPE_REFRESH
 import com.yapp.demo.common.enums.Role
 import com.yapp.demo.common.enums.SocialProvider
@@ -18,7 +17,7 @@ import org.springframework.stereotype.Service
 @Service
 class AuthService(
     private val jwtTokenProvider: JwtTokenProvider,
-    private val oauthProviders: List<OAuthProvider<*>>,
+    private val oauthProviders: List<OAuthProvider>,
     private val userReader: UserReader,
     private val userWriter: UserWriter,
 ) {
@@ -71,7 +70,6 @@ class AuthService(
         )
     }
 
-    private fun findProvider(socialType: SocialProvider): OAuthProvider<OAuthUserInfo>? =
-        oauthProviders.filterIsInstance<OAuthProvider<OAuthUserInfo>>()
-            .firstOrNull { it.supports(socialType) }
+    private fun findProvider(socialType: SocialProvider): OAuthProvider? =
+        oauthProviders.firstOrNull { it.supports(socialType) }
 }

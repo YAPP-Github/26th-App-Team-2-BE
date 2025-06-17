@@ -5,11 +5,13 @@ import com.yapp.demo.common.constants.TOKEN_TYPE_ACCESS
 import com.yapp.demo.common.constants.TOKEN_TYPE_REFRESH
 import com.yapp.demo.common.exception.CustomException
 import com.yapp.demo.common.exception.ErrorCode
+import com.yapp.demo.user.infrastructure.UserReader
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.junit.jupiter.MockitoExtension
+import org.mockito.kotlin.mock
 import kotlin.test.Test
 
 @ExtendWith(MockitoExtension::class)
@@ -24,9 +26,11 @@ class JwtTokenProviderTest {
 
     private lateinit var jwtTokenProvider: JwtTokenProvider
 
+    private val userReader = mock<UserReader>()
+
     @BeforeEach
     fun setUp() {
-        jwtTokenProvider = JwtTokenProvider(jwtProperties)
+        jwtTokenProvider = JwtTokenProvider(jwtProperties, userReader)
     }
 
     @Test
@@ -64,7 +68,7 @@ class JwtTokenProviderTest {
                 refreshTokenExpiryTime = -1,
             )
 
-        val expiredTokenProvider = JwtTokenProvider(expiredJwtProperties)
+        val expiredTokenProvider = JwtTokenProvider(expiredJwtProperties, userReader)
         val token = expiredTokenProvider.generateAccessToken(1L)
 
         val exception =
