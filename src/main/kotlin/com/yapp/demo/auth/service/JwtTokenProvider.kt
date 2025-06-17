@@ -56,6 +56,11 @@ class JwtTokenProvider(
         return claims.payload.subject.toLong()
     }
 
+    fun extractExpiration(token: String): Long {
+        val claims = getClaims(token)
+        return claims.payload.expiration.time
+    }
+
     fun getAuthentication(userId: Long): Authentication {
         val user =
             userReader.findById(userId)

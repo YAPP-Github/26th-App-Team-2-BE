@@ -1,5 +1,6 @@
 package com.yapp.demo.common.filter
 
+import com.yapp.demo.auth.infrastructure.RedisBlackListRepository
 import com.yapp.demo.auth.service.JwtTokenProvider
 import com.yapp.demo.common.constants.TOKEN_TYPE_ACCESS
 import com.yapp.demo.common.exception.CustomException
@@ -17,6 +18,7 @@ private val log = KotlinLogging.logger {}
 @Component
 class JwtAuthenticationFilter(
     private val jwtTokenProvider: JwtTokenProvider,
+    private val blackListRepository: RedisBlackListRepository,
 ) : OncePerRequestFilter() {
     override fun shouldNotFilter(request: HttpServletRequest): Boolean {
         val path = request.servletPath
@@ -32,6 +34,11 @@ class JwtAuthenticationFilter(
         try {
             val accessToken = resolveToken(request)
             val userId = jwtTokenProvider.extractUserId(accessToken, TOKEN_TYPE_ACCESS)
+
+            if (isBlackList(accessToken)) {
+                throw CustomException(ErrorCode.FORBIDDEN)
+            }
+
             val authentication = jwtTokenProvider.getAuthentication(userId)
 
             SecurityContextHolder.getContext().authentication = authentication
@@ -41,6 +48,14 @@ class JwtAuthenticationFilter(
         }
 
         filterChain.doFilter(request, response)
+    }
+
+    private fun isBlackList(token: String): Boolean {
+        val blacklistToken =
+            blackListRepository.read(token)
+                ?: return false
+
+        return blacklistToken == token
     }
 
     private fun resolveToken(request: HttpServletRequest): String {

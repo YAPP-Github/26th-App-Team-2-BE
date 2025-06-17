@@ -3,16 +3,20 @@ package com.yapp.demo.auth.service
 import com.yapp.demo.auth.dto.response.OAuthLoginResponse
 import com.yapp.demo.auth.dto.response.RefreshTokenResponse
 import com.yapp.demo.auth.external.OAuthProvider
+import com.yapp.demo.auth.infrastructure.RedisBlackListRepository
+import com.yapp.demo.auth.infrastructure.RedisRefreshTokenRepository
 import com.yapp.demo.common.constants.TOKEN_TYPE_REFRESH
 import com.yapp.demo.common.enums.Role
 import com.yapp.demo.common.enums.SocialProvider
 import com.yapp.demo.common.exception.CustomException
 import com.yapp.demo.common.exception.ErrorCode
+import com.yapp.demo.common.security.getUserId
 import com.yapp.demo.user.infrastructure.UserReader
 import com.yapp.demo.user.infrastructure.UserWriter
 import com.yapp.demo.user.infrastructure.jpa.UserEntity
 import com.yapp.demo.user.model.UserStatus
 import org.springframework.stereotype.Service
+import java.time.Duration
 
 @Service
 class AuthService(
@@ -20,6 +24,8 @@ class AuthService(
     private val oauthProviders: List<OAuthProvider>,
     private val userReader: UserReader,
     private val userWriter: UserWriter,
+    private val refreshTokenRepository: RedisRefreshTokenRepository,
+    private val blackListRepository: RedisBlackListRepository,
 ) {
     fun login(
         socialProvider: SocialProvider,
@@ -29,8 +35,8 @@ class AuthService(
             findProvider(socialProvider)
                 ?: throw CustomException(ErrorCode.BAD_REQUEST)
 
-        val accessToken = authProvider.getAccessToken(code)
-        val userInfo = authProvider.getUserInfo(accessToken)
+        val authToken = authProvider.getAccessToken(code)
+        val userInfo = authProvider.getUserInfo(authToken)
 
         var user = userReader.findByAuthEmail(userInfo.email)
 
@@ -46,12 +52,13 @@ class AuthService(
                 )
         }
 
-        // 토큰 redis 저장 처리
+        val accessToken = jwtTokenProvider.generateAccessToken(user.id)
+        val refreshToken = jwtTokenProvider.generateRefreshToken(user.id)
+        val ttl = jwtTokenProvider.extractExpiration(refreshToken)
 
-        return OAuthLoginResponse(
-            accessToken = jwtTokenProvider.generateAccessToken(user.id),
-            refreshToken = jwtTokenProvider.generateRefreshToken(user.id),
-        )
+        refreshTokenRepository.add(user.id, refreshToken, Duration.ofMillis(ttl))
+
+        return OAuthLoginResponse(accessToken, refreshToken)
     }
 
     fun refreshToken(refreshToken: String): RefreshTokenResponse {
@@ -60,9 +67,13 @@ class AuthService(
             userReader.findById(userId)
                 ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
 
-        // 토른 레디스 조회 및 유효성 검사
+        val savedToken =
+            refreshTokenRepository.read(userId)
+                ?: throw CustomException(ErrorCode.TOKEN_NOT_FOUND)
 
-        // 토큰 레디스 다시 저장
+        if (savedToken != refreshToken) {
+            throw CustomException(ErrorCode.TOKEN_INVALID)
+        }
 
         return RefreshTokenResponse(
             accessToken = jwtTokenProvider.generateRefreshToken(user.id),
@@ -72,4 +83,11 @@ class AuthService(
 
     private fun findProvider(socialType: SocialProvider): OAuthProvider? =
         oauthProviders.firstOrNull { it.supports(socialType) }
+
+    fun logout(accessToken: String) {
+        refreshTokenRepository.remove(getUserId())
+
+        val ttl = jwtTokenProvider.extractExpiration(accessToken)
+        blackListRepository.add(accessToken, Duration.ofMillis(ttl))
+    }
 }

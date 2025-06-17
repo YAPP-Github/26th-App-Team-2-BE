@@ -35,6 +35,9 @@ dependencies {
     // JPA
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
+    // redis
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+
     // security
     implementation("org.springframework.boot:spring-boot-starter-security")
 
