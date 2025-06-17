@@ -37,6 +37,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+
+      - name: Send env configs to remote
+        uses: appleboy/scp-action@master
+        with:
+          username: ${{ secrets.DEV_USERNAME }}
+          host: ${{ secrets.DEV_HOST }}
+          key: ${{ secrets.DEV_SSH_KEY }}
+          source: "./YAPP-ENV/"
+          target: "/home/app/env"
 
       - name: Send script to remote
         uses: appleboy/scp-action@master
