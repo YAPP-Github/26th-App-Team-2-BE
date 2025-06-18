@@ -1,5 +1,7 @@
 package com.yapp.demo.auth.infrastructure
 
+import com.yapp.demo.common.exception.CustomException
+import com.yapp.demo.common.exception.ErrorCode
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.data.redis.core.StringRedisTemplate
 import org.springframework.stereotype.Repository
@@ -20,6 +22,7 @@ class RedisRefreshTokenRepository(
             redisTemplate.opsForValue().set(generateKey(userId), token, ttl)
         } catch (e: Exception) {
             logger.error(e) { "[RedisRefreshTokenRepository.add] userId=$userId, token=$token" }
+            throw CustomException(ErrorCode.INTERNAL_SERVER_ERROR)
         }
     }
 
