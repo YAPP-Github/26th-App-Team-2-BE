@@ -6,6 +6,7 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
     id("org.jlleitschuh.gradle.ktlint").version("12.3.0") // ktlint
     id("jacoco") // jacoco
+    id("com.epages.restdocs-api-spec") version "0.19.4"
 }
 
 group = "com.yapp"
@@ -67,6 +68,9 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
+
+    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
+    testImplementation("com.epages:restdocs-api-spec-mockmvc:0.19.4")
 }
 
 dependencyManagement {
@@ -85,11 +89,6 @@ allOpen {
     annotation("jakarta.persistence.Entity")
     annotation("jakarta.persistence.MappedSuperclass")
     annotation("jakarta.persistence.Embeddable")
-}
-
-tasks.withType<Test> {
-    finalizedBy(tasks.jacocoTestReport)
-    useJUnitPlatform()
 }
 
 jacoco {
@@ -111,6 +110,29 @@ tasks.jacocoTestReport {
             },
         ),
     )
+}
+
+openapi3 {
+    setServer("http://localhost:8080")
+    title = "YAPP API"
+    description = "YAPP API description"
+    version = "0.1.0"
+    format = "yaml"
+//    snippetsDirectory = "build/generated-snippets"
+//    outputDirectory = "build/docs"
+}
+
+// Swagger 문서 복사
+tasks.register<Copy>("copyOasToSwagger") {
+    dependsOn("openapi3")
+    delete("src/main/resources/static/swagger/openapi3.yaml")
+    from("build/api-spec/openapi3.yaml")
+    into("src/main/resources/static/swagger/")
+}
+
+tasks.withType<Test> {
+    finalizedBy(tasks.jacocoTestReport, "copyOasToSwagger")
+    useJUnitPlatform()
 }
 
 ktlint {

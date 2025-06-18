@@ -27,7 +27,7 @@ class RedisBlackListRepository(
     private fun generateKey(accessToken: String): String = KEY_FORMAT.format(accessToken)
 
     companion object {
-        // auth::black-list::${access-token}
-        private const val KEY_FORMAT = "auth::black-list::%s"
+        // auth::blacklist::${access-token}
+        private const val KEY_FORMAT = "auth::blacklist::%s"
     }
 }
