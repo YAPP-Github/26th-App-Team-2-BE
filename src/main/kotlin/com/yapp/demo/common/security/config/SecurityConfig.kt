@@ -31,7 +31,7 @@ class SecurityConfig(
             .rememberMe { it.disable() }
             .requestCache { it.disable() }
             .authorizeHttpRequests {
-                it.requestMatchers("/health")
+                it.requestMatchers("/health", "/v1/auth/login")
                     .permitAll()
                     .anyRequest().authenticated()
             }

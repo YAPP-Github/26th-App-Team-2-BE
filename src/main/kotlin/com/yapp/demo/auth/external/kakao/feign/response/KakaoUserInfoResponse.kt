@@ -11,4 +11,12 @@ data class KakaoUserInfoResponse(
         @JsonProperty("email")
         val email: String,
     )
+
+    companion object {
+        fun createEmpty() =
+            KakaoUserInfoResponse(
+                id = "",
+                kakaoAccount = KakaoAccount(""),
+            )
+    }
 }
