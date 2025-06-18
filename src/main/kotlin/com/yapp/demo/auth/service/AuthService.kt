@@ -75,10 +75,13 @@ class AuthService(
             throw CustomException(ErrorCode.TOKEN_INVALID)
         }
 
-        return RefreshTokenResponse(
-            accessToken = jwtTokenProvider.generateAccessToken(user.id),
-            refreshToken = jwtTokenProvider.generateRefreshToken(user.id),
-        )
+        val newAccessToken = jwtTokenProvider.generateAccessToken(user.id)
+        val newRefreshToken = jwtTokenProvider.generateRefreshToken(user.id)
+        val ttl = jwtTokenProvider.extractExpiration(newRefreshToken)
+
+        refreshTokenRepository.add(user.id, newRefreshToken, Duration.ofMillis(ttl))
+
+        return RefreshTokenResponse(newAccessToken, newRefreshToken)
     }
 
     override fun logout(accessToken: String) {
