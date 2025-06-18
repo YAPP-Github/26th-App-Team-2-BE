@@ -3,8 +3,8 @@ package com.yapp.demo.auth.service
 import com.yapp.demo.auth.dto.response.OAuthLoginResponse
 import com.yapp.demo.auth.dto.response.RefreshTokenResponse
 import com.yapp.demo.auth.external.OAuthProvider
-import com.yapp.demo.auth.infrastructure.RedisBlackListRepository
-import com.yapp.demo.auth.infrastructure.RedisRefreshTokenRepository
+import com.yapp.demo.auth.infrastructure.BlackListRepository
+import com.yapp.demo.auth.infrastructure.RefreshTokenRepository
 import com.yapp.demo.common.constants.TOKEN_TYPE_REFRESH
 import com.yapp.demo.common.enums.Role
 import com.yapp.demo.common.enums.SocialProvider
@@ -24,8 +24,8 @@ class AuthService(
     private val oauthProviders: List<OAuthProvider>,
     private val userReader: UserReader,
     private val userWriter: UserWriter,
-    private val refreshTokenRepository: RedisRefreshTokenRepository,
-    private val blackListRepository: RedisBlackListRepository,
+    private val refreshTokenRepository: RefreshTokenRepository,
+    private val blackListRepository: BlackListRepository,
 ) : AuthUseCase {
     override fun login(
         socialProvider: SocialProvider,
@@ -76,7 +76,7 @@ class AuthService(
         }
 
         return RefreshTokenResponse(
-            accessToken = jwtTokenProvider.generateRefreshToken(user.id),
+            accessToken = jwtTokenProvider.generateAccessToken(user.id),
             refreshToken = jwtTokenProvider.generateRefreshToken(user.id),
         )
     }
