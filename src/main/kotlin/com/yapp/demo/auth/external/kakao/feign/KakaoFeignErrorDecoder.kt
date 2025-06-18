@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component
 private val logger = KotlinLogging.logger {}
 
 @Component
-class KakaoFeignErrorDecoder() : ErrorDecoder {
+class KakaoFeignErrorDecoder : ErrorDecoder {
     val objectMapper: ObjectMapper = ObjectMapper()
 
     override fun decode(

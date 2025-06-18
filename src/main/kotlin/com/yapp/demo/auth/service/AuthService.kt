@@ -16,6 +16,7 @@ import com.yapp.demo.user.infrastructure.UserWriter
 import com.yapp.demo.user.infrastructure.jpa.UserEntity
 import com.yapp.demo.user.model.UserStatus
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.time.Duration
 
 @Service
@@ -27,6 +28,7 @@ class AuthService(
     private val refreshTokenRepository: RefreshTokenRepository,
     private val blackListRepository: BlackListRepository,
 ) : AuthUseCase {
+    @Transactional
     override fun login(
         socialProvider: SocialProvider,
         code: String,
