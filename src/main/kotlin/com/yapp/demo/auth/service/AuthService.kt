@@ -26,8 +26,8 @@ class AuthService(
     private val userWriter: UserWriter,
     private val refreshTokenRepository: RedisRefreshTokenRepository,
     private val blackListRepository: RedisBlackListRepository,
-) {
-    fun login(
+) : AuthUseCase {
+    override fun login(
         socialProvider: SocialProvider,
         code: String,
     ): OAuthLoginResponse {
@@ -61,7 +61,7 @@ class AuthService(
         return OAuthLoginResponse(accessToken, refreshToken)
     }
 
-    fun refreshToken(refreshToken: String): RefreshTokenResponse {
+    override fun refreshToken(refreshToken: String): RefreshTokenResponse {
         val userId = jwtTokenProvider.extractUserId(refreshToken, TOKEN_TYPE_REFRESH)
         val user =
             userReader.findById(userId)
@@ -81,13 +81,13 @@ class AuthService(
         )
     }
 
-    private fun findProvider(socialType: SocialProvider): OAuthProvider? =
-        oauthProviders.firstOrNull { it.supports(socialType) }
-
-    fun logout(accessToken: String) {
+    override fun logout(accessToken: String) {
         refreshTokenRepository.remove(getUserId())
 
         val ttl = jwtTokenProvider.extractExpiration(accessToken)
         blackListRepository.add(accessToken, Duration.ofMillis(ttl))
     }
+
+    private fun findProvider(socialType: SocialProvider): OAuthProvider? =
+        oauthProviders.firstOrNull { it.supports(socialType) }
 }
