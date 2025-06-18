@@ -10,7 +10,7 @@ enum class SocialProvider {
 
     companion object {
         fun from(value: String) =
-            entries.find { it.name.lowercase() == value }
-                ?: throw throw CustomException(BAD_REQUEST)
+            entries.find { it.name.uppercase() == value }
+                ?: throw CustomException(BAD_REQUEST)
     }
 }
