@@ -42,10 +42,6 @@ dependencies {
     // security
     implementation("org.springframework.boot:spring-boot-starter-security")
 
-    // oauth
-    implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
-    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
-
     // Mysql
     implementation("com.mysql:mysql-connector-j")
 
