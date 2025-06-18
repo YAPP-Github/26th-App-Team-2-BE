@@ -14,7 +14,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 import java.time.LocalDateTime
 
-@Table(name = "users")
+@Table(name = "user")
 @Entity
 class UserEntity(
     @Id
