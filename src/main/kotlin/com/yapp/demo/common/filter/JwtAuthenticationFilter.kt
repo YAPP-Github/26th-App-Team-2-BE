@@ -23,7 +23,8 @@ class JwtAuthenticationFilter(
     override fun shouldNotFilter(request: HttpServletRequest): Boolean {
         val path = request.servletPath
         return path == "/health" ||
-            path.startsWith("/v1/auth/login")
+            path.startsWith("/v1/auth/login") ||
+            path.startsWith("/static/swagger")
     }
 
     override fun doFilterInternal(
