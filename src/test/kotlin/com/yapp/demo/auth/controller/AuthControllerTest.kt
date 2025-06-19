@@ -102,7 +102,7 @@ class AuthControllerTest : RestApiTestBase() {
         mockMvc.perform(builder)
             .andExpect(status().isNoContent)
             .andDocument(
-                "auth-refresh",
+                "auth-logout",
                 requestBody(
                     "accessToken" type STRING means "기존 액세스 토큰",
                 ),
