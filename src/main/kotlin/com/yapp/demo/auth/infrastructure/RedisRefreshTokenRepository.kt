@@ -28,6 +28,11 @@ class RedisRefreshTokenRepository(
 
     override fun read(userId: Long): String? = redisTemplate.opsForValue().get(generateKey(userId))
 
+    override fun get(userId: Long): String =
+        redisTemplate.opsForValue()
+            .get(generateKey(userId))
+            ?: throw CustomException(ErrorCode.TOKEN_NOT_FOUND)
+
     override fun remove(userId: Long) {
         redisTemplate.delete(generateKey(userId))
     }

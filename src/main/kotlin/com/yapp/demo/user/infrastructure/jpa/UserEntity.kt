@@ -46,7 +46,7 @@ class UserEntity(
             id = userId,
             authEmail = authEmail,
             nickname = nickname,
-            socialType = socialProvider,
+            socialProvider = socialProvider,
             role = role,
             status = status,
             createdAt = requireNotNull(createdAt),
@@ -58,7 +58,7 @@ class UserEntity(
             UserEntity(
                 authEmail = user.authEmail,
                 nickname = user.nickname,
-                socialProvider = user.socialType,
+                socialProvider = user.socialProvider,
                 role = user.role,
                 status = user.status,
             )

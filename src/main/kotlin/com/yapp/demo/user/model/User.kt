@@ -5,10 +5,10 @@ import com.yapp.demo.common.enums.SocialProvider
 import java.time.LocalDateTime
 
 data class User(
-    val id: Long,
+    val id: Long = 0L,
     var nickname: String? = null,
     val authEmail: String,
-    val socialType: SocialProvider,
+    val socialProvider: SocialProvider,
     val role: Role,
     var status: UserStatus,
     val createdAt: LocalDateTime? = null,
@@ -25,14 +25,12 @@ data class User(
 
     companion object {
         fun create(
-            id: Long,
             authEmail: String,
-            socialType: SocialProvider,
+            socialProvider: SocialProvider,
             role: Role,
         ) = User(
-            id = id,
             authEmail = authEmail,
-            socialType = socialType,
+            socialProvider = socialProvider,
             role = role,
             status = UserStatus.ACTIVE,
         )

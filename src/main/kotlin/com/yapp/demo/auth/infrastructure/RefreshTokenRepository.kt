@@ -11,5 +11,7 @@ interface RefreshTokenRepository {
 
     fun read(userId: Long): String?
 
+    fun get(userId: Long): String
+
     fun remove(userId: Long)
 }

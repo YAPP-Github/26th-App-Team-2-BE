@@ -9,5 +9,8 @@ import org.springframework.stereotype.Repository
 class UserWriter(
     private val userRepository: UserRepository,
 ) {
-    fun save(userEntity: UserEntity): User = userRepository.save(userEntity).toDomain()
+    fun save(user: User): User {
+        val entity = UserEntity.from(user)
+        return userRepository.save(entity).toDomain()
+    }
 }

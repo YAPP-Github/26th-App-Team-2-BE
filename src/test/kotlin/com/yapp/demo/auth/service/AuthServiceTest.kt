@@ -65,7 +65,7 @@ class AuthServiceTest {
             User(
                 id = 1L,
                 authEmail = userInfo.email,
-                socialType = provider,
+                socialProvider = provider,
                 role = Role.USER,
                 status = UserStatus.ACTIVE,
             )
@@ -92,7 +92,7 @@ class AuthServiceTest {
             User(
                 id = userId,
                 authEmail = userInfo.email,
-                socialType = SocialProvider.KAKAO,
+                socialProvider = SocialProvider.KAKAO,
                 role = Role.USER,
                 status = UserStatus.ACTIVE,
             )

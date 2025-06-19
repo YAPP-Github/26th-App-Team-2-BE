@@ -13,8 +13,7 @@ import com.yapp.demo.common.exception.ErrorCode
 import com.yapp.demo.common.security.getUserId
 import com.yapp.demo.user.infrastructure.UserReader
 import com.yapp.demo.user.infrastructure.UserWriter
-import com.yapp.demo.user.infrastructure.jpa.UserEntity
-import com.yapp.demo.user.model.UserStatus
+import com.yapp.demo.user.model.User
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.Duration
@@ -45,11 +44,10 @@ class AuthService(
         if (user == null) {
             user =
                 userWriter.save(
-                    UserEntity(
+                    User.create(
                         authEmail = userInfo.email,
                         socialProvider = socialProvider,
                         role = Role.USER,
-                        status = UserStatus.ACTIVE,
                     ),
                 )
         }
@@ -65,13 +63,8 @@ class AuthService(
 
     override fun refreshToken(refreshToken: String): RefreshTokenResponse {
         val userId = jwtTokenProvider.extractUserId(refreshToken, TOKEN_TYPE_REFRESH)
-        val user =
-            userReader.findById(userId)
-                ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
-
-        val savedToken =
-            refreshTokenRepository.read(userId)
-                ?: throw CustomException(ErrorCode.TOKEN_NOT_FOUND)
+        val user = userReader.getById(userId)
+        val savedToken = refreshTokenRepository.get(userId)
 
         if (savedToken != refreshToken) {
             throw CustomException(ErrorCode.TOKEN_INVALID)
