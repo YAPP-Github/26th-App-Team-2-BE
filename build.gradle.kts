@@ -114,20 +114,40 @@ openapi3 {
     description = "YAPP API description"
     version = "0.1.0"
     format = "yaml"
-//    snippetsDirectory = "build/generated-snippets"
-//    outputDirectory = "build/docs"
+}
+
+tasks.register("generateSwagger") {
+    dependsOn("openapi3")
+    doFirst {
+        val swaggerUIFile = file("build/api-spec/openapi3.yaml")
+        val securitySchemesContent =
+            """
+              securitySchemes:
+                bearerAuth:
+                  type: http
+                  scheme: bearer
+                  bearerFormat: JWT
+                  name: Authorization
+                  in: header
+                  description: "액세스 토큰을 기입해 주세요"
+            security:
+              - bearerAuth: []
+            """.trimIndent()
+
+        swaggerUIFile.appendText(securitySchemesContent)
+    }
 }
 
 // Swagger 문서 복사
-tasks.register<Copy>("copyOasToSwagger") {
-    dependsOn("openapi3")
+tasks.register<Copy>("copyToSwagger") {
+    dependsOn("generateSwagger")
     delete("src/main/resources/static/swagger/openapi3.yaml")
     from("build/api-spec/openapi3.yaml")
     into("src/main/resources/static/swagger/")
 }
 
 tasks.withType<Test> {
-    finalizedBy(tasks.jacocoTestReport, "copyOasToSwagger")
+    finalizedBy(tasks.jacocoTestReport, "copyToSwagger")
     useJUnitPlatform()
 }
 
