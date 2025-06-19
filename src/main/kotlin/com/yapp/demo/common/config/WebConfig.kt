@@ -8,6 +8,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 class WebConfig : WebMvcConfigurer {
     override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
         registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/")
-        registry.addResourceHandler("index.html").addResourceLocations("classpath:/static/swagger/")
+        registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/static/swagger/")
     }
 }
