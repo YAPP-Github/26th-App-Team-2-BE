@@ -13,6 +13,11 @@ spring:
     hibernate:
       ddl-auto: none
 
+oauth:
+  kakao:
+    client-id: ${KAKAO_CLIENT_ID}
+    redirect-uri: ${KAKAO_REDIRECT_URI}
+
 jwt:
   secret: ${JWT_SECRET}
   access-token-expiry-time: ${JWT_ACCESS_TOKEN_EXPIRY_TIME}
