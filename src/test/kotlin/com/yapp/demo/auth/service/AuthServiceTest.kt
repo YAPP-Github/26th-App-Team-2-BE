@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
@@ -102,11 +103,11 @@ class AuthServiceTest {
             val newAccessToken = "new-access-token"
             val newRefreshToken = "new-refresh-token"
 
-            whenever(jwtTokenProvider.extractUserId(refreshToken, TOKEN_TYPE_REFRESH)).thenReturn(user.id)
-            whenever(userReader.findById(user.id)).thenReturn(user)
-            whenever(refreshTokenRepository.read(user.id)).thenReturn(refreshToken)
-            whenever(jwtTokenProvider.generateRefreshToken(user.id)).thenReturn(newRefreshToken)
-            whenever(jwtTokenProvider.generateAccessToken(user.id)).thenReturn(newAccessToken)
+            `when`(jwtTokenProvider.extractUserId(refreshToken, TOKEN_TYPE_REFRESH)).thenReturn(user.id)
+            `when`(userReader.getById(user.id)).thenReturn(user)
+            `when`(refreshTokenRepository.get(user.id)).thenReturn(refreshToken)
+            `when`(jwtTokenProvider.generateRefreshToken(user.id)).thenReturn(newRefreshToken)
+            `when`(jwtTokenProvider.generateAccessToken(user.id)).thenReturn(newAccessToken)
 
             val result = authService.refreshToken(refreshToken)
 
@@ -116,8 +117,8 @@ class AuthServiceTest {
 
         @Test
         fun `refresh는 유저가 존재하지 않으면 예외를 던진다`() {
-            whenever(jwtTokenProvider.extractUserId(refreshToken, TOKEN_TYPE_REFRESH)).thenReturn(userId)
-            whenever(userReader.findById(userId)).thenReturn(null)
+            `when`(jwtTokenProvider.extractUserId(refreshToken, TOKEN_TYPE_REFRESH)).thenReturn(userId)
+            `when`(userReader.getById(userId)).thenThrow(CustomException(ErrorCode.USER_NOT_FOUND))
 
             val exception =
                 assertThrows<CustomException> {
@@ -129,9 +130,9 @@ class AuthServiceTest {
 
         @Test
         fun `refresh는 기존 토큰이 저장소에 존재하지 않으면 예외를 던진다`() {
-            whenever(jwtTokenProvider.extractUserId(refreshToken, TOKEN_TYPE_REFRESH)).thenReturn(user.id)
-            whenever(userReader.findById(user.id)).thenReturn(user)
-            whenever(refreshTokenRepository.read(user.id)).thenReturn(null)
+            `when`(jwtTokenProvider.extractUserId(refreshToken, TOKEN_TYPE_REFRESH)).thenReturn(user.id)
+            `when`(userReader.getById(user.id)).thenReturn(user)
+            `when`(refreshTokenRepository.get(user.id)).thenThrow(CustomException(ErrorCode.TOKEN_NOT_FOUND))
 
             val exception =
                 assertThrows<CustomException> {
@@ -143,9 +144,9 @@ class AuthServiceTest {
 
         @Test
         fun `refresh는 기존 토큰이 저장소의 토큰과 일치하지 않으면 예외를 던진다`() {
-            whenever(jwtTokenProvider.extractUserId(refreshToken, TOKEN_TYPE_REFRESH)).thenReturn(user.id)
-            whenever(userReader.findById(user.id)).thenReturn(user)
-            whenever(refreshTokenRepository.read(user.id)).thenReturn("another-token")
+            `when`(jwtTokenProvider.extractUserId(refreshToken, TOKEN_TYPE_REFRESH)).thenReturn(user.id)
+            `when`(userReader.getById(user.id)).thenReturn(user)
+            `when`(refreshTokenRepository.get(user.id)).thenReturn("another-token")
 
             val exception =
                 assertThrows<CustomException> {
@@ -166,7 +167,7 @@ class AuthServiceTest {
         val authentication = UsernamePasswordAuthenticationToken(userId.toString(), null)
         SecurityContextHolder.getContext().authentication = authentication
 
-        whenever(jwtTokenProvider.extractExpiration(accessToken)).thenReturn(ttl)
+        `when`(jwtTokenProvider.extractExpiration(accessToken)).thenReturn(ttl)
         // when
         authService.logout(accessToken)
 
