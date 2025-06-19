@@ -15,11 +15,13 @@ data class User(
     var updatedAt: LocalDateTime? = null,
     var deletedAt: LocalDateTime? = null,
 ) {
-    fun update(user: User) =
-        copy(
-            nickname = user.nickname,
-            status = user.status,
-        )
+    fun update(
+        nickname: String? = this.nickname,
+        status: UserStatus = this.status,
+    ) = copy(
+        nickname = nickname,
+        status = status,
+    )
 
     companion object {
         fun create(
