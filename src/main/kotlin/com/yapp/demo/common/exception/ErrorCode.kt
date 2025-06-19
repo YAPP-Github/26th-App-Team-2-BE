@@ -18,4 +18,5 @@ enum class ErrorCode(
 
     // User
     USER_NOT_FOUND(404, "U-001", "유저를 찾을 수 없습니다."),
+    USER_INVALID(400, "U-002", "유저 정보가 유효하지 않습니다."),
 }
