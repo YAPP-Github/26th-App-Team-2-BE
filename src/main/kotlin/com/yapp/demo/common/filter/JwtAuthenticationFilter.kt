@@ -1,5 +1,6 @@
 package com.yapp.demo.common.filter
 
+import com.yapp.demo.auth.infrastructure.RedisBlackListRepository
 import com.yapp.demo.auth.service.JwtTokenProvider
 import com.yapp.demo.common.constants.TOKEN_TYPE_ACCESS
 import com.yapp.demo.common.exception.CustomException
@@ -8,6 +9,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 
@@ -16,12 +18,14 @@ private val log = KotlinLogging.logger {}
 @Component
 class JwtAuthenticationFilter(
     private val jwtTokenProvider: JwtTokenProvider,
+    private val blackListRepository: RedisBlackListRepository,
 ) : OncePerRequestFilter() {
     override fun shouldNotFilter(request: HttpServletRequest): Boolean {
         val path = request.servletPath
-        return path == "/health"
-            || path.startsWith("/oauth2/")
-            || path.startsWith("/login/oauth2/")
+        return path == "/health" ||
+            path.startsWith("/v1/auth/login") ||
+            path.startsWith("/static/swagger") ||
+            path.startsWith("/v1/swagger")
     }
 
     override fun doFilterInternal(
@@ -31,21 +35,29 @@ class JwtAuthenticationFilter(
     ) {
         try {
             val accessToken = resolveToken(request)
-
             val userId = jwtTokenProvider.extractUserId(accessToken, TOKEN_TYPE_ACCESS)
 
-            /***
-             * @TODO: UserPrincipal 설계 필요
-             * val authorities = listOf(SimpleGrantedAuthority("ROLE_USER")) //
-             * val authentication = UsernamePasswordAuthenticationToken(userId, null, authorities)
-             * SecurityContextHolder.getContext().authentication = authentication
-             */
+            if (isBlackList(accessToken)) {
+                throw CustomException(ErrorCode.FORBIDDEN)
+            }
+
+            val authentication = jwtTokenProvider.getAuthentication(userId)
+
+            SecurityContextHolder.getContext().authentication = authentication
         } catch (e: Exception) {
             log.warn(e) { "[JwtAuthenticationFilter.doFilterInternal] fail to parse token" }
             throw e
         }
 
         filterChain.doFilter(request, response)
+    }
+
+    private fun isBlackList(token: String): Boolean {
+        val blacklistToken =
+            blackListRepository.read(token)
+                ?: return false
+
+        return blacklistToken == token
     }
 
     private fun resolveToken(request: HttpServletRequest): String {
