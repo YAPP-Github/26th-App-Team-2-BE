@@ -62,8 +62,8 @@ jobs:
           username: ${{ secrets.DEV_USERNAME }}
           host: ${{ secrets.DEV_HOST }}
           key: ${{ secrets.DEV_SSH_KEY }}
-          source: "./YAPP-ENV/*"
-          target: "/home/app/env"
+          source: "./YAPP-ENV/"
+          target: "/home/app"
 
       - name: Send script to remote
         uses: appleboy/scp-action@master
