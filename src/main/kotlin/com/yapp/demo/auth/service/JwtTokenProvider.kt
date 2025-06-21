@@ -6,14 +6,18 @@ import com.yapp.demo.common.constants.TOKEN_TYPE_REFRESH
 import com.yapp.demo.common.exception.CustomException
 import com.yapp.demo.common.exception.ErrorCode
 import com.yapp.demo.member.infrastructure.MemberReader
-import io.jsonwebtoken.*
+import io.jsonwebtoken.Claims
+import io.jsonwebtoken.ExpiredJwtException
+import io.jsonwebtoken.Jws
+import io.jsonwebtoken.JwtException
+import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.stereotype.Component
-import java.util.*
+import java.util.Date
 
 @Component
 class JwtTokenProvider(
@@ -65,7 +69,7 @@ class JwtTokenProvider(
         return UsernamePasswordAuthenticationToken(
             member.id,
             null,
-            listOf(SimpleGrantedAuthority(member.role.toString()))
+            listOf(SimpleGrantedAuthority(member.role.toString())),
         )
     }
 

@@ -5,7 +5,13 @@ import com.yapp.demo.common.enums.SocialProvider
 import com.yapp.demo.common.persistence.Auditable
 import com.yapp.demo.member.model.Member
 import com.yapp.demo.member.model.MemberStatus
-import jakarta.persistence.*
+import jakarta.persistence.Entity
+import jakarta.persistence.EnumType
+import jakarta.persistence.Enumerated
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
+import jakarta.persistence.Table
 import java.time.LocalDateTime
 
 @Table(name = "member")
