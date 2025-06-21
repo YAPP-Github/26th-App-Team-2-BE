@@ -1,5 +1,7 @@
 package com.yapp.demo.common.security.config
 
+import com.yapp.demo.auth.infrastructure.RedisBlackListRepository
+import com.yapp.demo.auth.service.JwtTokenProvider
 import com.yapp.demo.common.filter.JwtAuthenticationFilter
 import com.yapp.demo.common.security.exception.ForbiddenHandler
 import com.yapp.demo.common.security.exception.UnauthenticatedEntryPoint
@@ -17,8 +19,9 @@ import org.springframework.web.filter.CommonsRequestLoggingFilter
 class SecurityConfig(
     private val unauthenticatedEntryPoint: UnauthenticatedEntryPoint,
     private val forbiddenHandler: ForbiddenHandler,
-    private val jwtAuthenticationFilter: JwtAuthenticationFilter,
     private val requestLoggingFilter: CommonsRequestLoggingFilter,
+    private val jwtTokenProvider: JwtTokenProvider,
+    private val blackListRepository: RedisBlackListRepository,
 ) {
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
@@ -33,7 +36,7 @@ class SecurityConfig(
             .rememberMe { it.disable() }
             .requestCache { it.disable() }
             .authorizeHttpRequests {
-                it.requestMatchers("/health", "/v1/auth/login", "/static/**", "/v1/swagger")
+                it.requestMatchers(*allowedUrls.toTypedArray())
                     .permitAll()
                     .anyRequest().authenticated()
             }
@@ -42,8 +45,15 @@ class SecurityConfig(
                     .accessDeniedHandler(forbiddenHandler)
             }
             .addFilterBefore(requestLoggingFilter, UsernamePasswordAuthenticationFilter::class.java)
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
+            .addFilterBefore(
+                JwtAuthenticationFilter(jwtTokenProvider, blackListRepository),
+                UsernamePasswordAuthenticationFilter::class.java,
+            )
 
         return http.build()
+    }
+
+    companion object {
+        private val allowedUrls = listOf("/health", "/v1/auth/login", "/static/**", "/v1/swagger")
     }
 }
