@@ -1,49 +1,43 @@
-package com.yapp.demo.user.infrastructure.jpa
+package com.yapp.demo.member.infrastructure.jpa
 
 import com.yapp.demo.common.enums.Role
 import com.yapp.demo.common.enums.SocialProvider
 import com.yapp.demo.common.persistence.Auditable
-import com.yapp.demo.user.model.User
-import com.yapp.demo.user.model.UserStatus
-import jakarta.persistence.Entity
-import jakarta.persistence.EnumType
-import jakarta.persistence.Enumerated
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.Table
+import com.yapp.demo.member.model.Member
+import com.yapp.demo.member.model.MemberStatus
+import jakarta.persistence.*
 import java.time.LocalDateTime
 
-@Table(name = "user")
+@Table(name = "member")
 @Entity
-class UserEntity(
+class MemberEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val userId: Long = 0L,
+    val memberId: Long = 0L,
     val authEmail: String,
     @Enumerated(EnumType.STRING)
     val socialProvider: SocialProvider,
     @Enumerated(EnumType.STRING)
     val role: Role,
     val deletedAt: LocalDateTime? = null,
-    status: UserStatus,
+    status: MemberStatus,
     nickname: String? = null,
 ) : Auditable() {
     var nickname: String? = nickname
         protected set
 
     @Enumerated(EnumType.STRING)
-    var status: UserStatus = status
+    var status: MemberStatus = status
         protected set
 
-    fun update(entity: UserEntity) {
+    fun update(entity: MemberEntity) {
         nickname = entity.nickname
         status = entity.status
     }
 
     fun toDomain() =
-        User(
-            id = userId,
+        Member(
+            id = memberId,
             authEmail = authEmail,
             nickname = nickname,
             socialProvider = socialProvider,
@@ -54,13 +48,13 @@ class UserEntity(
         )
 
     companion object {
-        fun from(user: User) =
-            UserEntity(
-                authEmail = user.authEmail,
-                nickname = user.nickname,
-                socialProvider = user.socialProvider,
-                role = user.role,
-                status = user.status,
+        fun from(member: Member) =
+            MemberEntity(
+                authEmail = member.authEmail,
+                nickname = member.nickname,
+                socialProvider = member.socialProvider,
+                role = member.role,
+                status = member.status,
             )
     }
 }

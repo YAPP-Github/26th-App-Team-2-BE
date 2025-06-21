@@ -16,7 +16,7 @@ enum class ErrorCode(
     TOKEN_NOT_FOUND(401, "T-003", "토큰을 찾을 수 없습니다."),
     TOKEN_TYPE_MISMATCH(401, "T-004", "토큰의 타입이 올바르지 않습니다."),
 
-    // User
-    USER_NOT_FOUND(404, "U-001", "유저를 찾을 수 없습니다."),
-    USER_INVALID(400, "U-002", "유저 정보가 유효하지 않습니다."),
+    // Meber
+    MEMBER_NOT_FOUND(404, "M-001", "사용자를 찾을 수 없습니다."),
+    MEMBER_INVALID(400, "M-002", "사용자 정보가 유효하지 않습니다."),
 }

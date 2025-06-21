@@ -10,10 +10,10 @@ import com.yapp.demo.common.enums.Role
 import com.yapp.demo.common.enums.SocialProvider
 import com.yapp.demo.common.exception.CustomException
 import com.yapp.demo.common.exception.ErrorCode
-import com.yapp.demo.common.security.getUserId
-import com.yapp.demo.user.infrastructure.UserReader
-import com.yapp.demo.user.infrastructure.UserWriter
-import com.yapp.demo.user.model.User
+import com.yapp.demo.common.security.getMemberId
+import com.yapp.demo.member.infrastructure.MemberReader
+import com.yapp.demo.member.infrastructure.MemberWriter
+import com.yapp.demo.member.model.Member
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.Duration
@@ -22,8 +22,8 @@ import java.time.Duration
 class AuthService(
     private val jwtTokenProvider: JwtTokenProvider,
     private val oauthProviders: List<OAuthProvider>,
-    private val userReader: UserReader,
-    private val userWriter: UserWriter,
+    private val memberReader: MemberReader,
+    private val memberWriter: MemberWriter,
     private val refreshTokenRepository: RefreshTokenRepository,
     private val blackListRepository: BlackListRepository,
 ) : AuthUseCase {
@@ -39,12 +39,12 @@ class AuthService(
         val authToken = authProvider.getAccessToken(code)
         val userInfo = authProvider.getUserInfo(authToken)
 
-        var user = userReader.findByAuthEmail(userInfo.email)
+        var member = memberReader.findByAuthEmail(userInfo.email)
 
-        if (user == null) {
-            user =
-                userWriter.save(
-                    User.create(
+        if (member == null) {
+            member =
+                memberWriter.save(
+                    Member.create(
                         authEmail = userInfo.email,
                         socialProvider = socialProvider,
                         role = Role.USER,
@@ -52,35 +52,35 @@ class AuthService(
                 )
         }
 
-        val accessToken = jwtTokenProvider.generateAccessToken(user.id)
-        val refreshToken = jwtTokenProvider.generateRefreshToken(user.id)
+        val accessToken = jwtTokenProvider.generateAccessToken(member.id)
+        val refreshToken = jwtTokenProvider.generateRefreshToken(member.id)
         val ttl = jwtTokenProvider.extractExpiration(refreshToken)
 
-        refreshTokenRepository.add(user.id, refreshToken, Duration.ofMillis(ttl))
+        refreshTokenRepository.add(member.id, refreshToken, Duration.ofMillis(ttl))
 
         return OAuthLoginResponse(accessToken, refreshToken)
     }
 
     override fun refreshToken(refreshToken: String): RefreshTokenResponse {
-        val userId = jwtTokenProvider.extractUserId(refreshToken, TOKEN_TYPE_REFRESH)
-        val user = userReader.getById(userId)
-        val savedToken = refreshTokenRepository.get(userId)
+        val memberId = jwtTokenProvider.extractMemberId(refreshToken, TOKEN_TYPE_REFRESH)
+        val member = memberReader.getById(memberId)
+        val savedToken = refreshTokenRepository.get(memberId)
 
         if (savedToken != refreshToken) {
             throw CustomException(ErrorCode.TOKEN_INVALID)
         }
 
-        val newAccessToken = jwtTokenProvider.generateAccessToken(user.id)
-        val newRefreshToken = jwtTokenProvider.generateRefreshToken(user.id)
+        val newAccessToken = jwtTokenProvider.generateAccessToken(member.id)
+        val newRefreshToken = jwtTokenProvider.generateRefreshToken(member.id)
         val ttl = jwtTokenProvider.extractExpiration(newRefreshToken)
 
-        refreshTokenRepository.add(user.id, newRefreshToken, Duration.ofMillis(ttl))
+        refreshTokenRepository.add(member.id, newRefreshToken, Duration.ofMillis(ttl))
 
         return RefreshTokenResponse(newAccessToken, newRefreshToken)
     }
 
     override fun logout(accessToken: String) {
-        refreshTokenRepository.remove(getUserId())
+        refreshTokenRepository.remove(getMemberId())
 
         val ttl = jwtTokenProvider.extractExpiration(accessToken)
         blackListRepository.add(accessToken, Duration.ofMillis(ttl))

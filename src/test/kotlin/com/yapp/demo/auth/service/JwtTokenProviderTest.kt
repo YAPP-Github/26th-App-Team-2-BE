@@ -7,9 +7,9 @@ import com.yapp.demo.common.enums.Role
 import com.yapp.demo.common.enums.SocialProvider
 import com.yapp.demo.common.exception.CustomException
 import com.yapp.demo.common.exception.ErrorCode
-import com.yapp.demo.user.infrastructure.UserReader
-import com.yapp.demo.user.model.User
-import com.yapp.demo.user.model.UserStatus
+import com.yapp.demo.member.infrastructure.MemberReader
+import com.yapp.demo.member.model.Member
+import com.yapp.demo.member.model.MemberStatus
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.assertThrows
@@ -33,25 +33,25 @@ class JwtTokenProviderTest {
 
     private lateinit var jwtTokenProvider: JwtTokenProvider
 
-    private val userReader = mock<UserReader>()
+    private val memberReader = mock<MemberReader>()
 
     @BeforeEach
     fun setUp() {
-        jwtTokenProvider = JwtTokenProvider(jwtProperties, userReader)
+        jwtTokenProvider = JwtTokenProvider(jwtProperties, memberReader)
     }
 
     @Test
-    fun `AccessToken과 RefreshToken 생성 후 userId 추출이 동일해야 한다`() {
-        val userId = 12345L
+    fun `AccessToken과 RefreshToken 생성 후 memberId 추출이 동일해야 한다`() {
+        val memberId = 12345L
 
-        val accessToken = jwtTokenProvider.generateAccessToken(userId)
-        val refreshToken = jwtTokenProvider.generateRefreshToken(userId)
+        val accessToken = jwtTokenProvider.generateAccessToken(memberId)
+        val refreshToken = jwtTokenProvider.generateRefreshToken(memberId)
 
-        val extractedUserIdFromAccess = jwtTokenProvider.extractUserId(accessToken, TOKEN_TYPE_ACCESS)
-        val extractedUserIdFromRefresh = jwtTokenProvider.extractUserId(refreshToken, TOKEN_TYPE_REFRESH)
+        val extractedMemberIdFromAccess = jwtTokenProvider.extractMemberId(accessToken, TOKEN_TYPE_ACCESS)
+        val extractedMemberIdFromRefresh = jwtTokenProvider.extractMemberId(refreshToken, TOKEN_TYPE_REFRESH)
 
-        assertEquals(userId, extractedUserIdFromAccess)
-        assertEquals(userId, extractedUserIdFromRefresh)
+        assertEquals(memberId, extractedMemberIdFromAccess)
+        assertEquals(memberId, extractedMemberIdFromRefresh)
     }
 
     @Test
@@ -60,7 +60,7 @@ class JwtTokenProviderTest {
 
         val exception =
             assertThrows<CustomException> {
-                jwtTokenProvider.extractUserId(invalidToken, TOKEN_TYPE_ACCESS)
+                jwtTokenProvider.extractMemberId(invalidToken, TOKEN_TYPE_ACCESS)
             }
 
         assertEquals(ErrorCode.TOKEN_INVALID, exception.errorCode)
@@ -75,46 +75,46 @@ class JwtTokenProviderTest {
                 refreshTokenExpiryTime = -1,
             )
 
-        val expiredTokenProvider = JwtTokenProvider(expiredJwtProperties, userReader)
+        val expiredTokenProvider = JwtTokenProvider(expiredJwtProperties, memberReader)
         val token = expiredTokenProvider.generateAccessToken(1L)
 
         val exception =
             assertThrows<CustomException> {
-                expiredTokenProvider.extractUserId(token, TOKEN_TYPE_ACCESS)
+                expiredTokenProvider.extractMemberId(token, TOKEN_TYPE_ACCESS)
             }
 
         assertEquals(ErrorCode.TOKEN_EXPIRED, exception.errorCode)
     }
 
     @Test
-    fun `getAuthentication은 유효한 userId에 대해 Authentication 객체를 반환해야 한다`() {
+    fun `getAuthentication은 유효한 memberId에 대해 Authentication 객체를 반환해야 한다`() {
         // given
-        val userId = 123L
-        val user =
-            User(
-                id = userId,
+        val memberId = 123L
+        val member =
+            Member(
+                id = memberId,
                 authEmail = "email@email.com",
                 socialProvider = SocialProvider.KAKAO,
                 role = Role.USER,
-                status = UserStatus.ACTIVE,
+                status = MemberStatus.ACTIVE,
             )
 
-        `when`(userReader.findById(userId)).thenReturn(user)
+        `when`(memberReader.findById(memberId)).thenReturn(member)
 
         // when
-        val authentication = jwtTokenProvider.getAuthentication(userId)
+        val authentication = jwtTokenProvider.getAuthentication(memberId)
 
         // then
-        assertEquals(userId, authentication.principal)
+        assertEquals(memberId, authentication.principal)
         assertTrue(authentication.authorities.contains(SimpleGrantedAuthority(Role.USER.name)))
         assertEquals(null, authentication.credentials)
     }
 
     @Test
     fun `JwtTokenProvider는 토큰으로 부터 만료시간을 추출할 수 있다`() {
-        val userId = 12345L
+        val memberId = 12345L
 
-        val accessToken = jwtTokenProvider.generateAccessToken(userId)
+        val accessToken = jwtTokenProvider.generateAccessToken(memberId)
         val expiration = jwtTokenProvider.extractExpiration(accessToken)
 
         val now = System.currentTimeMillis()

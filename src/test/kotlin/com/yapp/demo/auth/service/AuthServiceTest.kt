@@ -9,10 +9,10 @@ import com.yapp.demo.common.enums.Role
 import com.yapp.demo.common.enums.SocialProvider
 import com.yapp.demo.common.exception.CustomException
 import com.yapp.demo.common.exception.ErrorCode
-import com.yapp.demo.user.infrastructure.UserReader
-import com.yapp.demo.user.infrastructure.UserWriter
-import com.yapp.demo.user.model.User
-import com.yapp.demo.user.model.UserStatus
+import com.yapp.demo.member.infrastructure.MemberReader
+import com.yapp.demo.member.infrastructure.MemberWriter
+import com.yapp.demo.member.model.Member
+import com.yapp.demo.member.model.MemberStatus
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -41,8 +41,8 @@ class AuthServiceTest {
 
     private val oauthProviders = listOf(mockProvider)
     private val jwtTokenProvider = mock<JwtTokenProvider>()
-    private val userReader = mock<UserReader>()
-    private val userWriter = mock<UserWriter>()
+    private val memberReader = mock<MemberReader>()
+    private val memberWriter = mock<MemberWriter>()
     private val refreshTokenRepository = mock<RefreshTokenRepository>()
     private val blackListRepository = mock<BlackListRepository>()
 
@@ -50,8 +50,8 @@ class AuthServiceTest {
         AuthService(
             jwtTokenProvider,
             oauthProviders,
-            userReader,
-            userWriter,
+            memberReader,
+            memberWriter,
             refreshTokenRepository,
             blackListRepository,
         )
@@ -62,19 +62,19 @@ class AuthServiceTest {
         val provider = SocialProvider.KAKAO
         val accessToken = "access-token"
         val refreshToken = "refresh-token"
-        val user =
-            User(
+        val member =
+            Member(
                 id = 1L,
                 authEmail = userInfo.email,
                 socialProvider = provider,
                 role = Role.USER,
-                status = UserStatus.ACTIVE,
+                status = MemberStatus.ACTIVE,
             )
 
-        whenever(userReader.findByAuthEmail(userInfo.email)).thenReturn(user)
+        whenever(memberReader.findByAuthEmail(userInfo.email)).thenReturn(member)
 
-        whenever(jwtTokenProvider.generateAccessToken(user.id)).thenReturn(accessToken)
-        whenever(jwtTokenProvider.generateRefreshToken(user.id)).thenReturn(refreshToken)
+        whenever(jwtTokenProvider.generateAccessToken(member.id)).thenReturn(accessToken)
+        whenever(jwtTokenProvider.generateRefreshToken(member.id)).thenReturn(refreshToken)
         whenever(jwtTokenProvider.extractExpiration(refreshToken)).thenReturn(60000L)
 
         // when
@@ -88,14 +88,14 @@ class AuthServiceTest {
     @Nested
     inner class RefreshTokenTest {
         private val refreshToken = "refresh-token"
-        private val userId = 1L
-        private val user =
-            User(
-                id = userId,
+        private val memberId = 1L
+        private val member =
+            Member(
+                id = memberId,
                 authEmail = userInfo.email,
                 socialProvider = SocialProvider.KAKAO,
                 role = Role.USER,
-                status = UserStatus.ACTIVE,
+                status = MemberStatus.ACTIVE,
             )
 
         @Test
@@ -103,11 +103,11 @@ class AuthServiceTest {
             val newAccessToken = "new-access-token"
             val newRefreshToken = "new-refresh-token"
 
-            `when`(jwtTokenProvider.extractUserId(refreshToken, TOKEN_TYPE_REFRESH)).thenReturn(user.id)
-            `when`(userReader.getById(user.id)).thenReturn(user)
-            `when`(refreshTokenRepository.get(user.id)).thenReturn(refreshToken)
-            `when`(jwtTokenProvider.generateRefreshToken(user.id)).thenReturn(newRefreshToken)
-            `when`(jwtTokenProvider.generateAccessToken(user.id)).thenReturn(newAccessToken)
+            `when`(jwtTokenProvider.extractMemberId(refreshToken, TOKEN_TYPE_REFRESH)).thenReturn(member.id)
+            `when`(memberReader.getById(member.id)).thenReturn(member)
+            `when`(refreshTokenRepository.get(member.id)).thenReturn(refreshToken)
+            `when`(jwtTokenProvider.generateRefreshToken(member.id)).thenReturn(newRefreshToken)
+            `when`(jwtTokenProvider.generateAccessToken(member.id)).thenReturn(newAccessToken)
 
             val result = authService.refreshToken(refreshToken)
 
@@ -117,22 +117,22 @@ class AuthServiceTest {
 
         @Test
         fun `refresh는 유저가 존재하지 않으면 예외를 던진다`() {
-            `when`(jwtTokenProvider.extractUserId(refreshToken, TOKEN_TYPE_REFRESH)).thenReturn(userId)
-            `when`(userReader.getById(userId)).thenThrow(CustomException(ErrorCode.USER_NOT_FOUND))
+            `when`(jwtTokenProvider.extractMemberId(refreshToken, TOKEN_TYPE_REFRESH)).thenReturn(memberId)
+            `when`(memberReader.getById(memberId)).thenThrow(CustomException(ErrorCode.MEMBER_NOT_FOUND))
 
             val exception =
                 assertThrows<CustomException> {
                     authService.refreshToken(refreshToken)
                 }
 
-            assertThat(exception.errorCode).isEqualTo(ErrorCode.USER_NOT_FOUND)
+            assertThat(exception.errorCode).isEqualTo(ErrorCode.MEMBER_NOT_FOUND)
         }
 
         @Test
         fun `refresh는 기존 토큰이 저장소에 존재하지 않으면 예외를 던진다`() {
-            `when`(jwtTokenProvider.extractUserId(refreshToken, TOKEN_TYPE_REFRESH)).thenReturn(user.id)
-            `when`(userReader.getById(user.id)).thenReturn(user)
-            `when`(refreshTokenRepository.get(user.id)).thenThrow(CustomException(ErrorCode.TOKEN_NOT_FOUND))
+            `when`(jwtTokenProvider.extractMemberId(refreshToken, TOKEN_TYPE_REFRESH)).thenReturn(member.id)
+            `when`(memberReader.getById(member.id)).thenReturn(member)
+            `when`(refreshTokenRepository.get(member.id)).thenThrow(CustomException(ErrorCode.TOKEN_NOT_FOUND))
 
             val exception =
                 assertThrows<CustomException> {
@@ -144,9 +144,9 @@ class AuthServiceTest {
 
         @Test
         fun `refresh는 기존 토큰이 저장소의 토큰과 일치하지 않으면 예외를 던진다`() {
-            `when`(jwtTokenProvider.extractUserId(refreshToken, TOKEN_TYPE_REFRESH)).thenReturn(user.id)
-            `when`(userReader.getById(user.id)).thenReturn(user)
-            `when`(refreshTokenRepository.get(user.id)).thenReturn("another-token")
+            `when`(jwtTokenProvider.extractMemberId(refreshToken, TOKEN_TYPE_REFRESH)).thenReturn(member.id)
+            `when`(memberReader.getById(member.id)).thenReturn(member)
+            `when`(refreshTokenRepository.get(member.id)).thenReturn("another-token")
 
             val exception =
                 assertThrows<CustomException> {
@@ -161,10 +161,10 @@ class AuthServiceTest {
     fun `logout은 유저의 토큰을 삭제하고 블랙리스트에 추가한다`() {
         val accessToken = "access-token"
         val ttl = 12345L
-        val userId = 1L
+        val memberId = 1L
 
         // SecurityContext 설정
-        val authentication = UsernamePasswordAuthenticationToken(userId.toString(), null)
+        val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), null)
         SecurityContextHolder.getContext().authentication = authentication
 
         `when`(jwtTokenProvider.extractExpiration(accessToken)).thenReturn(ttl)
@@ -172,7 +172,7 @@ class AuthServiceTest {
         authService.logout(accessToken)
 
         // then
-        verify(refreshTokenRepository).remove(userId)
+        verify(refreshTokenRepository).remove(memberId)
         verify(blackListRepository).add(accessToken, Duration.ofMillis(ttl))
 
         SecurityContextHolder.clearContext()
