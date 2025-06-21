@@ -1,11 +1,12 @@
 plugins {
     kotlin("jvm") version "1.9.25"
     kotlin("plugin.spring") version "1.9.25"
+    kotlin("plugin.jpa") version "1.9.25"
     id("org.springframework.boot") version "3.5.0"
     id("io.spring.dependency-management") version "1.1.7"
-    kotlin("plugin.jpa") version "1.9.25"
     id("org.jlleitschuh.gradle.ktlint").version("12.3.0") // ktlint
     id("jacoco") // jacoco
+    id("com.epages.restdocs-api-spec") version "0.19.4"
 }
 
 group = "com.yapp"
@@ -20,22 +21,26 @@ java {
 repositories {
     mavenCentral()
 }
+
 val jwtVersion = "0.12.6"
+extra["springCloudVersion"] = "2025.0.0"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
+    // feign
+    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+
     // JPA
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
+    // redis
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+
     // security
     implementation("org.springframework.boot:spring-boot-starter-security")
-
-    // oauth
-    implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
-    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
 
     // Mysql
     implementation("com.mysql:mysql-connector-j")
@@ -51,11 +56,23 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-impl:$jwtVersion")
     implementation("io.jsonwebtoken:jjwt-jackson:$jwtVersion")
 
+    // validation
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+
     // test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
+
+    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
+    testImplementation("com.epages:restdocs-api-spec-mockmvc:0.19.4")
+}
+
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+    }
 }
 
 kotlin {
@@ -68,11 +85,6 @@ allOpen {
     annotation("jakarta.persistence.Entity")
     annotation("jakarta.persistence.MappedSuperclass")
     annotation("jakarta.persistence.Embeddable")
-}
-
-tasks.withType<Test> {
-    finalizedBy(tasks.jacocoTestReport)
-    useJUnitPlatform()
 }
 
 jacoco {
@@ -94,6 +106,49 @@ tasks.jacocoTestReport {
             },
         ),
     )
+}
+
+openapi3 {
+    setServer("http://localhost:8080")
+    title = "YAPP API"
+    description = "YAPP API description"
+    version = "0.1.0"
+    format = "yaml"
+}
+
+tasks.register("generateSwagger") {
+    dependsOn("openapi3")
+    doFirst {
+        val swaggerUIFile = file("build/api-spec/openapi3.yaml")
+        val securitySchemesContent =
+            """
+              securitySchemes:
+                bearerAuth:
+                  type: http
+                  scheme: bearer
+                  bearerFormat: JWT
+                  name: Authorization
+                  in: header
+                  description: "액세스 토큰을 기입해 주세요"
+            security:
+              - bearerAuth: []
+            """.trimIndent()
+
+        swaggerUIFile.appendText(securitySchemesContent)
+    }
+}
+
+// Swagger 문서 복사
+tasks.register<Copy>("copyToSwagger") {
+    dependsOn("generateSwagger")
+    delete("src/main/resources/static/swagger/openapi3.yaml")
+    from("build/api-spec/openapi3.yaml")
+    into("src/main/resources/static/swagger/")
+}
+
+tasks.withType<Test> {
+    finalizedBy(tasks.jacocoTestReport, "copyToSwagger")
+    useJUnitPlatform()
 }
 
 ktlint {

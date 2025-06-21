@@ -18,6 +18,6 @@ abstract class Auditable {
 
     @LastModifiedDate
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
-    var modifiedAt: LocalDateTime? = null
+    var updatedAt: LocalDateTime? = null
         protected set
 }

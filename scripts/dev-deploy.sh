@@ -4,7 +4,7 @@
 # 설정
 # ===============================
 NGINX_CONF_DIR="./nginx"
-MAX_RETRIES=20
+MAX_RETRIES=50
 HEALTHCHECK_WAIT=3
 
 # ===============================
