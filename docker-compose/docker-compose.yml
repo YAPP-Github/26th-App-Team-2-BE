@@ -3,9 +3,9 @@ services:
     container_name: blue
     image: gvf156/yapp-dev:latest
     volumes:
-      - /home/app/env:/env:ro
+      - /home/app/YAPP-ENV:/YAPP-ENV:ro
     environment:
-      - SPRING_CONFIG_LOCATION=file:/env/
+      - SPRING_CONFIG_LOCATION=file:/YAPP-ENV/
       - SPRING_PROFILES_ACTIVE=dev
       - TZ=Asia/Seoul
     restart: always
