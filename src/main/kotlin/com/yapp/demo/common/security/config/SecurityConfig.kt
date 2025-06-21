@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.web.filter.CommonsRequestLoggingFilter
 
 @Configuration
 @EnableWebSecurity
@@ -17,6 +18,7 @@ class SecurityConfig(
     private val unauthenticatedEntryPoint: UnauthenticatedEntryPoint,
     private val forbiddenHandler: ForbiddenHandler,
     private val jwtAuthenticationFilter: JwtAuthenticationFilter,
+    private val requestLoggingFilter: CommonsRequestLoggingFilter,
 ) {
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
@@ -39,6 +41,7 @@ class SecurityConfig(
                 it.authenticationEntryPoint(unauthenticatedEntryPoint)
                     .accessDeniedHandler(forbiddenHandler)
             }
+            .addFilterBefore(requestLoggingFilter, UsernamePasswordAuthenticationFilter::class.java)
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
 
         return http.build()
