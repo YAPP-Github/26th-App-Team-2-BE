@@ -35,13 +35,13 @@ class JwtAuthenticationFilter(
     ) {
         try {
             val accessToken = resolveToken(request)
-            val userId = jwtTokenProvider.extractUserId(accessToken, TOKEN_TYPE_ACCESS)
+            val memberId = jwtTokenProvider.extractMemberId(accessToken, TOKEN_TYPE_ACCESS)
 
             if (isBlackList(accessToken)) {
                 throw CustomException(ErrorCode.FORBIDDEN)
             }
 
-            val authentication = jwtTokenProvider.getAuthentication(userId)
+            val authentication = jwtTokenProvider.getAuthentication(memberId)
 
             SecurityContextHolder.getContext().authentication = authentication
         } catch (e: Exception) {

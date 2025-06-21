@@ -5,7 +5,7 @@ import com.yapp.demo.common.constants.TOKEN_TYPE_ACCESS
 import com.yapp.demo.common.constants.TOKEN_TYPE_REFRESH
 import com.yapp.demo.common.exception.CustomException
 import com.yapp.demo.common.exception.ErrorCode
-import com.yapp.demo.user.infrastructure.UserReader
+import com.yapp.demo.member.infrastructure.MemberReader
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jws
@@ -22,27 +22,27 @@ import java.util.Date
 @Component
 class JwtTokenProvider(
     private val jwtProperties: JwtProperties,
-    private val userReader: UserReader,
+    private val memberReader: MemberReader,
 ) {
     private val decodedSecretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtProperties.secret))
 
-    fun generateAccessToken(userId: Long): String {
+    fun generateAccessToken(memberId: Long): String {
         return generateToken(
-            userId = userId.toString(),
+            memberId = memberId.toString(),
             type = TOKEN_TYPE_ACCESS,
             expiryMillis = jwtProperties.accessTokenExpiryTime * 1000L,
         )
     }
 
-    fun generateRefreshToken(userId: Long): String {
+    fun generateRefreshToken(memberId: Long): String {
         return generateToken(
-            userId = userId.toString(),
+            memberId = memberId.toString(),
             type = TOKEN_TYPE_REFRESH,
             expiryMillis = jwtProperties.refreshTokenExpiryTime * 1000L,
         )
     }
 
-    fun extractUserId(
+    fun extractMemberId(
         token: String,
         tokenType: String,
     ): Long {
@@ -61,16 +61,20 @@ class JwtTokenProvider(
         return claims.payload.expiration.time
     }
 
-    fun getAuthentication(userId: Long): Authentication {
-        val user =
-            userReader.findById(userId)
-                ?: throw CustomException(ErrorCode.USER_NOT_FOUND)
+    fun getAuthentication(memberId: Long): Authentication {
+        val member =
+            memberReader.findById(memberId)
+                ?: throw CustomException(ErrorCode.MEMBER_NOT_FOUND)
 
-        return UsernamePasswordAuthenticationToken(user.id, null, listOf(SimpleGrantedAuthority(user.role.toString())))
+        return UsernamePasswordAuthenticationToken(
+            member.id,
+            null,
+            listOf(SimpleGrantedAuthority(member.role.toString())),
+        )
     }
 
     private fun generateToken(
-        userId: String,
+        memberId: String,
         type: String,
         expiryMillis: Long,
     ): String {
@@ -78,7 +82,7 @@ class JwtTokenProvider(
         val expirationDate = Date(now.time + expiryMillis)
 
         return Jwts.builder()
-            .subject(userId)
+            .subject(memberId)
             .claim(TOKEN_TYPE_KEY, type)
             .issuedAt(now)
             .expiration(expirationDate)

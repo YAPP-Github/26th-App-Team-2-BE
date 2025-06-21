@@ -1,9 +1,9 @@
-package com.yapp.demo.user.model
+package com.yapp.demo.member.model
 
 import com.yapp.demo.common.exception.CustomException
 import com.yapp.demo.common.exception.ErrorCode.BAD_REQUEST
 
-enum class UserStatus {
+enum class MemberStatus {
     HOLD,
     ACTIVE,
     DELETED,

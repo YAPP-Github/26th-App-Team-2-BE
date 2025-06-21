@@ -44,7 +44,8 @@ out/
 .DS_Store
 
 ### Resouces ###
-/src/main/resources/application-local.yml
+/src/main/resources/
+/src/test/resources/
 docker-compose/.env
 
 

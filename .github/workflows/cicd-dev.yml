@@ -11,6 +11,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+          ssh-key: ${{ secrets.SUBMODULE_SSH_KEY }}
+          ssh-known-hosts: github.com
+
+      - name: Update submodule to remote HEAD
+        run: git submodule update --remote
+
+      - name: Fail if submodule changed
+        run: |
+          if git diff --exit-code | grep -q 'Subproject'; then
+            echo "::error ::서브모듈에 변경 사항이 있습니다."
+            exit 1
+          fi
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
@@ -37,6 +51,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+          ssh-key: ${{ secrets.SUBMODULE_SSH_KEY }}
+          ssh-known-hosts: github.com
+
+      - name: Send env configs to remote
+        uses: appleboy/scp-action@master
+        with:
+          username: ${{ secrets.DEV_USERNAME }}
+          host: ${{ secrets.DEV_HOST }}
+          key: ${{ secrets.DEV_SSH_KEY }}
+          source: "./YAPP-ENV/"
+          target: "/home/app/env"
 
       - name: Send script to remote
         uses: appleboy/scp-action@master

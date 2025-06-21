@@ -4,14 +4,14 @@ import java.time.Duration
 
 interface RefreshTokenRepository {
     fun add(
-        userId: Long,
+        memberId: Long,
         token: String,
         ttl: Duration,
     )
 
-    fun read(userId: Long): String?
+    fun read(memberId: Long): String?
 
-    fun get(userId: Long): String
+    fun get(memberId: Long): String
 
-    fun remove(userId: Long)
+    fun remove(memberId: Long)
 }

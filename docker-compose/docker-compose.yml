@@ -2,9 +2,10 @@ services:
   blue:
     container_name: blue
     image: gvf156/yapp-dev:latest
-    env_file:
-      - .env
+    volumes:
+      - /home/app/env:/env:ro
     environment:
+      - SPRING_CONFIG_LOCATION=file:/env/
       - SPRING_PROFILES_ACTIVE=dev
       - TZ=Asia/Seoul
     restart: always
@@ -15,9 +16,10 @@ services:
   green:
     container_name: green
     image: gvf156/yapp-dev:latest
-    env_file:
-      - .env
+    volumes:
+      - /home/app/env:/env:ro
     environment:
+      - SPRING_CONFIG_LOCATION=file:/env/
       - SPRING_PROFILES_ACTIVE=dev
       - TZ=Asia/Seoul
     restart: always

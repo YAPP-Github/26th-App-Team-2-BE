@@ -14,33 +14,33 @@ class RedisRefreshTokenRepository(
     private val redisTemplate: StringRedisTemplate,
 ) : RefreshTokenRepository {
     override fun add(
-        userId: Long,
+        memberId: Long,
         token: String,
         ttl: Duration,
     ) {
         try {
-            redisTemplate.opsForValue().set(generateKey(userId), token, ttl)
+            redisTemplate.opsForValue().set(generateKey(memberId), token, ttl)
         } catch (e: Exception) {
-            logger.error(e) { "[RedisRefreshTokenRepository.add] userId=$userId, token=$token" }
+            logger.error(e) { "[RedisRefreshTokenRepository.add] memberId=$memberId, token=$token" }
             throw CustomException(ErrorCode.INTERNAL_SERVER_ERROR)
         }
     }
 
-    override fun read(userId: Long): String? = redisTemplate.opsForValue().get(generateKey(userId))
+    override fun read(memberId: Long): String? = redisTemplate.opsForValue().get(generateKey(memberId))
 
-    override fun get(userId: Long): String =
+    override fun get(memberId: Long): String =
         redisTemplate.opsForValue()
-            .get(generateKey(userId))
+            .get(generateKey(memberId))
             ?: throw CustomException(ErrorCode.TOKEN_NOT_FOUND)
 
-    override fun remove(userId: Long) {
-        redisTemplate.delete(generateKey(userId))
+    override fun remove(memberId: Long) {
+        redisTemplate.delete(generateKey(memberId))
     }
 
-    private fun generateKey(userId: Long): String = KEY_FORMAT.format(userId)
+    private fun generateKey(memberId: Long): String = KEY_FORMAT.format(memberId)
 
     companion object {
-        // auth::refresh-token::{userid}
+        // auth::refresh-token::{memberId}
         private const val KEY_FORMAT = "auth::refresh-token::%s"
     }
 }

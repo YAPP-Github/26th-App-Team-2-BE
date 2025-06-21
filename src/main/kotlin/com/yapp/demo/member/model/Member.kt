@@ -1,23 +1,23 @@
-package com.yapp.demo.user.model
+package com.yapp.demo.member.model
 
 import com.yapp.demo.common.enums.Role
 import com.yapp.demo.common.enums.SocialProvider
 import java.time.LocalDateTime
 
-data class User(
+data class Member(
     val id: Long = 0L,
     var nickname: String? = null,
     val authEmail: String,
     val socialProvider: SocialProvider,
     val role: Role,
-    var status: UserStatus,
+    var status: MemberStatus,
     val createdAt: LocalDateTime? = null,
     var updatedAt: LocalDateTime? = null,
     var deletedAt: LocalDateTime? = null,
 ) {
     fun update(
         nickname: String? = this.nickname,
-        status: UserStatus = this.status,
+        status: MemberStatus = this.status,
     ) = copy(
         nickname = nickname,
         status = status,
@@ -28,11 +28,11 @@ data class User(
             authEmail: String,
             socialProvider: SocialProvider,
             role: Role,
-        ) = User(
+        ) = Member(
             authEmail = authEmail,
             socialProvider = socialProvider,
             role = role,
-            status = UserStatus.ACTIVE,
+            status = MemberStatus.ACTIVE,
         )
     }
 }
