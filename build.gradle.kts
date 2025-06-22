@@ -140,6 +140,7 @@ tasks.register("generateSwagger") {
 
 // Swagger 문서 복사
 tasks.register<Copy>("copyToSwagger") {
+    dependsOn("test")
     dependsOn("generateSwagger")
     delete("src/main/resources/static/swagger/openapi3.yaml")
     copy {
