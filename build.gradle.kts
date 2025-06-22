@@ -146,6 +146,10 @@ tasks.register<Copy>("copyToSwagger") {
     into("src/main/resources/static/swagger/")
 }
 
+tasks.named("bootJar") {
+    dependsOn("copyToSwagger")
+}
+
 tasks.withType<Test> {
     finalizedBy(tasks.jacocoTestReport, "copyToSwagger")
     useJUnitPlatform()
