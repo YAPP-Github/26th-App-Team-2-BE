@@ -151,7 +151,7 @@ tasks.named("bootJar") {
 }
 
 tasks.withType<Test> {
-    finalizedBy(tasks.jacocoTestReport, "copyToSwagger")
+    finalizedBy(tasks.jacocoTestReport)
     useJUnitPlatform()
 }
 
