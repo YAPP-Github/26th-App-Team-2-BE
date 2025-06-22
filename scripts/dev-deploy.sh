@@ -5,7 +5,7 @@
 # ===============================
 NGINX_CONF_DIR="./nginx"
 MAX_RETRIES=50
-HEALTHCHECK_WAIT=3
+HEALTHCHECK_WAIT=10
 
 # ===============================
 # 함수: 헬스 체크
