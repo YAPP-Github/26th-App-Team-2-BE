@@ -16,7 +16,7 @@ RUN ./gradlew --no-daemon dependencies
 # 소스코드 복사 및 애플리케이션 빌드
 # Layered Jar 활성화를 위해 bootJar 태스크를 사용
 COPY . .
-RUN ./gradlew bootJar -x test
+RUN ./gradlew bootJar
 
 # Layer Tools를 사용하여 Jar 파일에서 계층 분리
 WORKDIR /app/build/libs
