@@ -142,8 +142,10 @@ tasks.register("generateSwagger") {
 tasks.register<Copy>("copyToSwagger") {
     dependsOn("generateSwagger")
     delete("src/main/resources/static/swagger/openapi3.yaml")
-    from("build/api-spec/openapi3.yaml")
-    into("src/main/resources/static/swagger/")
+    copy {
+        from("build/api-spec/openapi3.yaml")
+        into("src/main/resources/static/swagger/")
+    }
 }
 
 tasks.named("bootJar") {
