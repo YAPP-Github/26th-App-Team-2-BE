@@ -42,6 +42,7 @@ class KakaoAuthProvider(
             } catch (e: Exception) {
                 logger.error(e) { "[KakaoAuthProvider.getUserInfo] token=$token" }
                 KakaoUserInfoResponse.createEmpty()
+                throw e
             }
 
         return OAuthUserInfo(
