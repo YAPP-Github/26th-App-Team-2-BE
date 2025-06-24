@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.filter.CommonsRequestLoggingFilter
 
 @Configuration
@@ -22,6 +23,7 @@ class SecurityConfig(
     private val requestLoggingFilter: CommonsRequestLoggingFilter,
     private val jwtTokenProvider: JwtTokenProvider,
     private val blackListRepository: RedisBlackListRepository,
+    private val corsConfigurationSource: CorsConfigurationSource,
 ) {
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
@@ -30,6 +32,7 @@ class SecurityConfig(
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
+            .cors { it.configurationSource(corsConfigurationSource) }
             .httpBasic { it.disable() }
             .formLogin { it.disable() }
             .logout { it.disable() }
