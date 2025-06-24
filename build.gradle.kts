@@ -1,3 +1,5 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 plugins {
     kotlin("jvm") version "1.9.25"
     kotlin("plugin.spring") version "1.9.25"
@@ -165,6 +167,14 @@ ktlint {
 
 tasks.named<ProcessResources>("processResources") {
     dependsOn("copy main env")
+}
+
+tasks.named<BootJar>("bootJar") {
+    dependsOn("generateSwagger")
+
+    from("build/api-spec/openapi3.yaml") {
+        into("static/swagger")
+    }
 }
 
 tasks.named<ProcessResources>("processTestResources") {
