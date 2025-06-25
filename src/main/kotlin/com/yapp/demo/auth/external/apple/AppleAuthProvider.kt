@@ -18,6 +18,7 @@ class AppleAuthProvider(
     private val appleProperties: AppleProperties,
     private val appleAuthFeignClient: AppleAuthFeignClient,
     private val applePrivateKey: PrivateKey,
+    private val jwtVerifier: AppleIdTokenVerifier,
 ) : OAuthProvider {
     /**
      * validate code and generate tokens
@@ -52,8 +53,19 @@ class AppleAuthProvider(
             .compact()
     }
 
+    /**
+     * parse IdToken
+     */
     override fun getUserInfo(token: String): OAuthUserInfo {
-        TODO("Not yet implemented")
+        val claims = jwtVerifier.verify(token)
+        val userId = claims.subject
+        val email = claims["email"] as? String ?: "empty"
+        val name = claims["name"] as? String
+
+        return OAuthUserInfo(
+            id = userId,
+            email = email,
+        )
     }
 
     override fun supports(socialType: SocialProvider): Boolean = socialType == SocialProvider.APPLE
