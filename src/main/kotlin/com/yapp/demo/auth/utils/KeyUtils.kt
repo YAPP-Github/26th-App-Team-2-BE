@@ -1,5 +1,7 @@
 package com.yapp.demo.auth.utils
 
+import com.yapp.demo.common.exception.CustomException
+import com.yapp.demo.common.exception.ErrorCode
 import java.math.BigInteger
 import java.security.KeyFactory
 import java.security.PrivateKey
@@ -12,25 +14,25 @@ fun toRSAPublicKey(
     modulus: String,
     exponent: String,
 ): PublicKey {
-    val encodedModulus =
-        Base64.getUrlDecoder().decode(modulus)
-    val encodedExponent =
-        Base64.getUrlDecoder().decode(exponent)
+    val decodedModulus = Base64.getUrlDecoder().decode(modulus)
+    val decodedExponent = Base64.getUrlDecoder().decode(exponent)
 
-    val spec =
+    val keySpec =
         RSAPublicKeySpec(
-            BigInteger(1, encodedModulus),
-            BigInteger(1, encodedExponent),
+            BigInteger(1, decodedModulus),
+            BigInteger(1, decodedExponent),
         )
 
-    return KeyFactory
-        .getInstance("RSA")
-        .generatePublic(spec)
+    return try {
+        KeyFactory.getInstance("RSA").generatePublic(keySpec)
+    } catch (e: Exception) {
+        throw CustomException(ErrorCode.INTERNAL_SERVER_ERROR)
+    }
 }
 
-fun parseECPrivateKey(keyContent: String): PrivateKey {
-    val keyBytes = Base64.getDecoder().decode(keyContent)
-    val keySpec = PKCS8EncodedKeySpec(keyBytes)
+fun parseECPrivateKey(key: String): PrivateKey {
+    val encodedKey = Base64.getDecoder().decode(key)
+    val keySpec = PKCS8EncodedKeySpec(encodedKey)
 
     return KeyFactory
         .getInstance("EC")
