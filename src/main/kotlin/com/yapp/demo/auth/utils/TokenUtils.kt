@@ -7,11 +7,15 @@ import com.yapp.demo.common.exception.ErrorCode
 import java.util.Base64
 
 fun parseHeaders(idToken: String): Map<String, String> {
+    if (idToken.isBlank() || idToken.count { it == '.' } < 2) {
+        throw CustomException(ErrorCode.TOKEN_INVALID)
+    }
+
     return try {
         val encodedHeader = idToken.substringBefore(".")
         val decodedHeader = String(Base64.getUrlDecoder().decode(encodedHeader))
         jacksonObjectMapper().readValue(decodedHeader, object : TypeReference<Map<String, String>>() {})
     } catch (e: Exception) {
-        throw CustomException(ErrorCode.INTERNAL_SERVER_ERROR)
+        throw CustomException(ErrorCode.TOKEN_INVALID)
     }
 }
