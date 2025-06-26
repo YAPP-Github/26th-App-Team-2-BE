@@ -8,6 +8,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class AppleAuthProviderTest {
     private lateinit var clientSecretGenerator: AppleClientSecretGenerator
@@ -44,7 +45,7 @@ class AppleAuthProviderTest {
     }
 
     @Test
-    fun `email이 없으면 empty로 반환한다`() {
+    fun `email이 없으면 빈값을 반환한다`() {
         val mockClaims = mock<Claims>()
         whenever(mockClaims.subject).thenReturn("yappo123")
         whenever(mockClaims["email"]).thenReturn(null)
@@ -54,6 +55,6 @@ class AppleAuthProviderTest {
         val userInfo = provider.getUserInfo("id-token")
 
         assertEquals("yappo123", userInfo.id)
-        assertEquals("empty", userInfo.email)
+        assertTrue(userInfo.email.isEmpty())
     }
 }
