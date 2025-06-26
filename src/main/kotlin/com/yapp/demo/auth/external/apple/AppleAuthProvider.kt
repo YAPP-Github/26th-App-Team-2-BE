@@ -21,7 +21,7 @@ class AppleAuthProvider(
 
         return OAuthUserInfo(
             id = claims.subject,
-            email = claims["email"] as? String ?: "empty",
+            email = claims["email"] as? String ?: "",
         )
     }
 

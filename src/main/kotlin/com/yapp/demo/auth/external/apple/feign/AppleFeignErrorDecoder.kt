@@ -13,7 +13,7 @@ private val logger = KotlinLogging.logger {}
 
 @Component
 class AppleFeignErrorDecoder : ErrorDecoder {
-    val objectMapper: ObjectMapper = ObjectMapper()
+    private val objectMapper: ObjectMapper = ObjectMapper()
 
     override fun decode(
         methodKey: String?,
