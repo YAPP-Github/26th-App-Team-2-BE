@@ -12,7 +12,7 @@ class ApplePrivateKeyLoader(private val appleProperties: AppleProperties) {
 
     private fun loadPrivateKey(): PrivateKey {
         val rawKey =
-            javaClass.getResource(appleProperties.headerField)
+            javaClass.getResource(appleProperties.authKeyPath)
                 ?.readText()
                 ?: throw CustomException(ErrorCode.INTERNAL_SERVER_ERROR)
 
