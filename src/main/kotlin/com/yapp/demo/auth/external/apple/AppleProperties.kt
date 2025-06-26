@@ -11,4 +11,5 @@ data class AppleProperties(
     var keyId: String = "",
     var audience: String = "",
     var authKeyPath: String = "",
+    var headerField: String = "kid",
 )

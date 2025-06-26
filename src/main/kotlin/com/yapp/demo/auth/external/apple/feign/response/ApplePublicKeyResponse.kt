@@ -5,7 +5,7 @@ import com.yapp.demo.common.exception.CustomException
 import com.yapp.demo.common.exception.ErrorCode
 
 data class ApplePublicKeyResponse(val keys: List<ApplePublicKey>) {
-    fun getMatchesKey(kid: String): ApplePublicKey {
+    fun getMatchedKey(kid: String): ApplePublicKey {
         return keys
             .firstOrNull { key -> key.kid == kid && key.algorithm == "RS256" }
             ?: throw CustomException(ErrorCode.UNAUTHORIZED)
