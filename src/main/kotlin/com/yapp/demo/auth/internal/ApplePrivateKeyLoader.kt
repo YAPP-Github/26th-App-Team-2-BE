@@ -1,4 +1,4 @@
-package com.yapp.demo.auth.external.apple
+package com.yapp.demo.auth.internal
 
 import com.yapp.demo.auth.utils.parseECPrivateKey
 import com.yapp.demo.common.exception.CustomException
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 import java.security.PrivateKey
 
 @Component
-class ApplePrivateKey(private val appleProperties: AppleProperties) {
+class ApplePrivateKeyLoader(private val appleProperties: AppleProperties) {
     val privateKey: PrivateKey = loadPrivateKey()
 
     private fun loadPrivateKey(): PrivateKey {

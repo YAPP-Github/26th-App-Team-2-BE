@@ -1,4 +1,4 @@
-package com.yapp.demo.auth.external.apple
+package com.yapp.demo.auth.internal
 
 import io.jsonwebtoken.Jwts
 import org.springframework.stereotype.Component
@@ -6,9 +6,9 @@ import java.time.ZonedDateTime
 import java.util.Date
 
 @Component
-class AppleClientSecretProvider(
+class AppleClientSecretGenerator(
     private val appleProperties: AppleProperties,
-    private val applePrivateKey: ApplePrivateKey,
+    private val applePrivateKeyLoader: ApplePrivateKeyLoader,
 ) {
     fun getClientSecret(): String {
         val expiration = ZonedDateTime.now().plusMinutes(5)
@@ -22,7 +22,7 @@ class AppleClientSecretProvider(
             .subject(appleProperties.clientId)
             .expiration(Date.from(expiration.toInstant()))
             .issuedAt(Date())
-            .signWith(applePrivateKey.privateKey, Jwts.SIG.ES256)
+            .signWith(applePrivateKeyLoader.privateKey, Jwts.SIG.ES256)
             .compact()
     }
 }

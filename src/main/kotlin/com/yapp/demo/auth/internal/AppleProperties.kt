@@ -1,4 +1,4 @@
-package com.yapp.demo.auth.external.apple
+package com.yapp.demo.auth.internal
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.stereotype.Component
