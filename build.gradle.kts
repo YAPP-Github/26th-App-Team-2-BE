@@ -26,6 +26,7 @@ repositories {
 
 val jwtVersion = "0.12.6"
 extra["springCloudVersion"] = "2025.0.0"
+val flywayVersion = "10.16.0"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -45,7 +46,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
 
     // Mysql
-    implementation("com.mysql:mysql-connector-j")
+    runtimeOnly("com.mysql:mysql-connector-j")
 
     // H2
     testImplementation("com.h2database:h2")
@@ -60,6 +61,10 @@ dependencies {
 
     // validation
     implementation("org.springframework.boot:spring-boot-starter-validation")
+
+    // flyway
+    implementation("org.flywaydb:flyway-core:$flywayVersion")
+    implementation("org.flywaydb:flyway-mysql:$flywayVersion")
 
     // test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
