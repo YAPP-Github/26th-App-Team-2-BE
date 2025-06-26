@@ -183,8 +183,8 @@ tasks.named<ProcessResources>("processTestResources") {
 
 tasks.register<Copy>("copy main env") {
     from("YAPP-ENV") {
-        include("*.yml")
-        exclude("application-test.yml")
+        include("*")
+        exclude("application-test.yml", "README.md")
     }
     into("src/main/resources")
 
