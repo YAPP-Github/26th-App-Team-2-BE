@@ -111,7 +111,7 @@ tasks.jacocoTestReport {
 }
 
 openapi3 {
-    setServer("http://localhost:8080")
+    setServer("/")
     title = "YAPP API"
     description = "YAPP API description"
     version = "0.1.0"
