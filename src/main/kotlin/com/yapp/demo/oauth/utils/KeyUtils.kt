@@ -14,8 +14,8 @@ fun toRSAPublicKey(
     modulus: String,
     exponent: String,
 ): PublicKey {
-    val decodedModulus = Base64.getUrlDecoder().decode(modulus)
-    val decodedExponent = Base64.getUrlDecoder().decode(exponent)
+    val decodedModulus = decodeUrl(modulus)
+    val decodedExponent = decodeUrl(exponent)
 
     val keySpec =
         RSAPublicKeySpec(
@@ -31,10 +31,24 @@ fun toRSAPublicKey(
 }
 
 fun parseECPrivateKey(key: String): PrivateKey {
-    val encodedKey = Base64.getDecoder().decode(key)
+    val encodedKey = decode(key)
     val keySpec = PKCS8EncodedKeySpec(encodedKey)
 
     return KeyFactory
         .getInstance("EC")
         .generatePrivate(keySpec)
 }
+
+private fun decodeUrl(src: String): ByteArray =
+    try {
+        Base64.getUrlDecoder().decode(src)
+    } catch (e: Exception) {
+        throw CustomException(ErrorCode.INTERNAL_SERVER_ERROR)
+    }
+
+private fun decode(src: String): ByteArray =
+    try {
+        Base64.getDecoder().decode(src)
+    } catch (e: Exception) {
+        throw CustomException(ErrorCode.INTERNAL_SERVER_ERROR)
+    }
