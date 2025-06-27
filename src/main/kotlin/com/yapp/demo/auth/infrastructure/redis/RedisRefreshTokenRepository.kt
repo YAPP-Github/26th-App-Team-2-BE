@@ -1,4 +1,4 @@
-package com.yapp.demo.auth.infrastructure.repository
+package com.yapp.demo.auth.infrastructure.redis
 
 import com.yapp.demo.auth.infrastructure.RefreshTokenRepository
 import com.yapp.demo.common.exception.CustomException

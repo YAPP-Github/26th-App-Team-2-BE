@@ -7,7 +7,7 @@ import com.yapp.demo.common.enums.Role
 import com.yapp.demo.common.enums.SocialProvider
 import com.yapp.demo.common.exception.CustomException
 import com.yapp.demo.common.exception.ErrorCode
-import com.yapp.demo.member.infrastructure.MemberReader
+import com.yapp.demo.member.infrastructure.jpa.MemberJpaReader
 import com.yapp.demo.member.model.Member
 import com.yapp.demo.member.model.MemberStatus
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -33,7 +33,7 @@ class JwtTokenProviderTest {
 
     private lateinit var jwtTokenProvider: JwtTokenProvider
 
-    private val memberReader = mock<MemberReader>()
+    private val memberReader = mock<MemberJpaReader>()
 
     @BeforeEach
     fun setUp() {

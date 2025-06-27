@@ -7,8 +7,8 @@ import com.yapp.demo.common.enums.Role
 import com.yapp.demo.common.enums.SocialProvider
 import com.yapp.demo.common.exception.CustomException
 import com.yapp.demo.common.exception.ErrorCode
-import com.yapp.demo.member.infrastructure.MemberReader
-import com.yapp.demo.member.infrastructure.MemberWriter
+import com.yapp.demo.member.infrastructure.jpa.MemberJpaReader
+import com.yapp.demo.member.infrastructure.jpa.MemberJpaWriter
 import com.yapp.demo.member.model.Member
 import com.yapp.demo.member.model.MemberStatus
 import com.yapp.demo.oauth.model.OAuthUserInfo
@@ -41,8 +41,8 @@ class AuthServiceTest {
 
     private val oauthProviders = listOf(mockProvider)
     private val jwtTokenProvider = mock<JwtTokenProvider>()
-    private val memberReader = mock<MemberReader>()
-    private val memberWriter = mock<MemberWriter>()
+    private val memberReader = mock<MemberJpaReader>()
+    private val memberWriter = mock<MemberJpaWriter>()
     private val refreshTokenRepository = mock<RefreshTokenRepository>()
     private val blackListRepository = mock<BlackListRepository>()
 
