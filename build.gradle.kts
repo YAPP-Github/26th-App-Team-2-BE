@@ -116,7 +116,7 @@ tasks.jacocoTestReport {
 }
 
 openapi3 {
-    setServer("http://localhost:8080")
+    setServer("/")
     title = "YAPP API"
     description = "YAPP API description"
     version = "0.1.0"
@@ -188,8 +188,8 @@ tasks.named<ProcessResources>("processTestResources") {
 
 tasks.register<Copy>("copy main env") {
     from("YAPP-ENV") {
-        include("*.yml")
-        exclude("application-test.yml")
+        include("*")
+        exclude("application-test.yml", "README.md")
     }
     into("src/main/resources")
 

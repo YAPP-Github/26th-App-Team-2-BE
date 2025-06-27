@@ -2,7 +2,6 @@ package com.yapp.demo.auth.service
 
 import com.yapp.demo.auth.dto.response.OAuthLoginResponse
 import com.yapp.demo.auth.dto.response.RefreshTokenResponse
-import com.yapp.demo.auth.external.OAuthProvider
 import com.yapp.demo.auth.infrastructure.BlackListRepository
 import com.yapp.demo.auth.infrastructure.RefreshTokenRepository
 import com.yapp.demo.common.constants.TOKEN_TYPE_REFRESH
@@ -11,9 +10,10 @@ import com.yapp.demo.common.enums.SocialProvider
 import com.yapp.demo.common.exception.CustomException
 import com.yapp.demo.common.exception.ErrorCode
 import com.yapp.demo.common.security.getMemberId
-import com.yapp.demo.member.infrastructure.MemberReader
-import com.yapp.demo.member.infrastructure.MemberWriter
+import com.yapp.demo.member.infrastructure.jpa.MemberJpaReader
+import com.yapp.demo.member.infrastructure.jpa.MemberJpaWriter
 import com.yapp.demo.member.model.Member
+import com.yapp.demo.oauth.service.OAuthProvider
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.Duration
@@ -22,8 +22,8 @@ import java.time.Duration
 class AuthService(
     private val jwtTokenProvider: JwtTokenProvider,
     private val oauthProviders: List<OAuthProvider>,
-    private val memberReader: MemberReader,
-    private val memberWriter: MemberWriter,
+    private val memberReader: MemberJpaReader,
+    private val memberWriter: MemberJpaWriter,
     private val refreshTokenRepository: RefreshTokenRepository,
     private val blackListRepository: BlackListRepository,
 ) : AuthUseCase {

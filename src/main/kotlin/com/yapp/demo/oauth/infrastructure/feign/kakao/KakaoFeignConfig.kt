@@ -1,4 +1,4 @@
-package com.yapp.demo.auth.external.kakao.feign
+package com.yapp.demo.oauth.infrastructure.feign.kakao
 
 import feign.Logger
 import feign.codec.ErrorDecoder

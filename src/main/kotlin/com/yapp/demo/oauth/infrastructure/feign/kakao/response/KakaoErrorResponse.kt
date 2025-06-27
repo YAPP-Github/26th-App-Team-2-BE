@@ -1,4 +1,4 @@
-package com.yapp.demo.auth.external.kakao.feign.response
+package com.yapp.demo.oauth.infrastructure.feign.kakao.response
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty

@@ -1,6 +1,6 @@
-package com.yapp.demo.auth.external.kakao.feign
+package com.yapp.demo.oauth.infrastructure.feign.kakao
 
-import com.yapp.demo.auth.external.kakao.feign.response.KakaoUserInfoResponse
+import com.yapp.demo.oauth.infrastructure.feign.kakao.response.KakaoUserInfoResponse
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestHeader

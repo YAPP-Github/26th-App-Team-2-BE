@@ -1,6 +1,6 @@
 package com.yapp.demo.common.filter
 
-import com.yapp.demo.auth.infrastructure.RedisBlackListRepository
+import com.yapp.demo.auth.infrastructure.redis.RedisBlackListRepository
 import com.yapp.demo.auth.service.JwtTokenProvider
 import com.yapp.demo.common.constants.TOKEN_TYPE_ACCESS
 import com.yapp.demo.common.exception.CustomException

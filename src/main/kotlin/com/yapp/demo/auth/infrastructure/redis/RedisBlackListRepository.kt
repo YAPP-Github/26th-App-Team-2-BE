@@ -1,5 +1,6 @@
-package com.yapp.demo.auth.infrastructure
+package com.yapp.demo.auth.infrastructure.redis
 
+import com.yapp.demo.auth.infrastructure.BlackListRepository
 import com.yapp.demo.common.exception.CustomException
 import com.yapp.demo.common.exception.ErrorCode
 import io.github.oshai.kotlinlogging.KotlinLogging

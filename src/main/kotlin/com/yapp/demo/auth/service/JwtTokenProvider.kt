@@ -5,7 +5,7 @@ import com.yapp.demo.common.constants.TOKEN_TYPE_ACCESS
 import com.yapp.demo.common.constants.TOKEN_TYPE_REFRESH
 import com.yapp.demo.common.exception.CustomException
 import com.yapp.demo.common.exception.ErrorCode
-import com.yapp.demo.member.infrastructure.MemberReader
+import com.yapp.demo.member.infrastructure.jpa.MemberJpaReader
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jws
@@ -22,7 +22,7 @@ import java.util.Date
 @Component
 class JwtTokenProvider(
     private val jwtProperties: JwtProperties,
-    private val memberReader: MemberReader,
+    private val memberReader: MemberJpaReader,
 ) {
     private val decodedSecretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtProperties.secret))
 

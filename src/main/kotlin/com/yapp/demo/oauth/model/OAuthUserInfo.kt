@@ -1,4 +1,4 @@
-package com.yapp.demo.auth.external
+package com.yapp.demo.oauth.model
 
 data class OAuthUserInfo(
     val id: String,

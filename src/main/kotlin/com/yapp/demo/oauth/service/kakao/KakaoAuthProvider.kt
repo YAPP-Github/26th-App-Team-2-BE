@@ -1,11 +1,11 @@
-package com.yapp.demo.auth.external.kakao
+package com.yapp.demo.oauth.service.kakao
 
-import com.yapp.demo.auth.external.OAuthProvider
-import com.yapp.demo.auth.external.OAuthUserInfo
-import com.yapp.demo.auth.external.kakao.feign.KakaoAuthFeignClient
-import com.yapp.demo.auth.external.kakao.feign.KakaoUserInfoFeignClient
-import com.yapp.demo.auth.external.kakao.feign.response.KakaoUserInfoResponse
 import com.yapp.demo.common.enums.SocialProvider
+import com.yapp.demo.oauth.infrastructure.feign.kakao.KakaoAuthFeignClient
+import com.yapp.demo.oauth.infrastructure.feign.kakao.KakaoUserInfoFeignClient
+import com.yapp.demo.oauth.infrastructure.feign.kakao.response.KakaoUserInfoResponse
+import com.yapp.demo.oauth.model.OAuthUserInfo
+import com.yapp.demo.oauth.service.OAuthProvider
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
