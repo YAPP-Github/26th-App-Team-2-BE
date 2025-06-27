@@ -1,6 +1,6 @@
 package com.yapp.demo.common.security.config
 
-import com.yapp.demo.auth.infrastructure.RedisBlackListRepository
+import com.yapp.demo.auth.infrastructure.repository.RedisBlackListRepository
 import com.yapp.demo.auth.service.JwtTokenProvider
 import com.yapp.demo.common.filter.JwtAuthenticationFilter
 import com.yapp.demo.common.security.exception.ForbiddenHandler

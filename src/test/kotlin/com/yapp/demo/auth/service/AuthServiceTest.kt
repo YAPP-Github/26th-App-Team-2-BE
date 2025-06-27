@@ -1,7 +1,5 @@
 package com.yapp.demo.auth.service
 
-import com.yapp.demo.auth.external.OAuthProvider
-import com.yapp.demo.auth.external.OAuthUserInfo
 import com.yapp.demo.auth.infrastructure.BlackListRepository
 import com.yapp.demo.auth.infrastructure.RefreshTokenRepository
 import com.yapp.demo.common.constants.TOKEN_TYPE_REFRESH
@@ -13,6 +11,8 @@ import com.yapp.demo.member.infrastructure.MemberReader
 import com.yapp.demo.member.infrastructure.MemberWriter
 import com.yapp.demo.member.model.Member
 import com.yapp.demo.member.model.MemberStatus
+import com.yapp.demo.oauth.model.OAuthUserInfo
+import com.yapp.demo.oauth.service.OAuthProvider
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

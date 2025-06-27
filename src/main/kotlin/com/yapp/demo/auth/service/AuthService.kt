@@ -2,7 +2,6 @@ package com.yapp.demo.auth.service
 
 import com.yapp.demo.auth.dto.response.OAuthLoginResponse
 import com.yapp.demo.auth.dto.response.RefreshTokenResponse
-import com.yapp.demo.auth.external.OAuthProvider
 import com.yapp.demo.auth.infrastructure.BlackListRepository
 import com.yapp.demo.auth.infrastructure.RefreshTokenRepository
 import com.yapp.demo.common.constants.TOKEN_TYPE_REFRESH
@@ -14,6 +13,7 @@ import com.yapp.demo.common.security.getMemberId
 import com.yapp.demo.member.infrastructure.MemberReader
 import com.yapp.demo.member.infrastructure.MemberWriter
 import com.yapp.demo.member.model.Member
+import com.yapp.demo.oauth.service.OAuthProvider
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.Duration
