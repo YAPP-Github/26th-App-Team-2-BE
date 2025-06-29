@@ -12,4 +12,8 @@ class MemberJpaWriter(
         val entity = MemberEntity.from(member)
         return memberRepository.save(entity).toDomain()
     }
+
+    override fun remove(member: Member) {
+        memberRepository.delete(MemberEntity.from(member))
+    }
 }
