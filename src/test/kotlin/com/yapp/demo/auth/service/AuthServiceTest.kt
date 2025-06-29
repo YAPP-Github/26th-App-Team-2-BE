@@ -16,9 +16,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito.`when`
-import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
@@ -26,7 +24,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder
 import java.time.Duration
 
-@ExtendWith(MockitoExtension::class)
 class AuthServiceTest {
     private val userInfo = OAuthUserInfo("id", "test@email.com")
     private val code = "authCode"
