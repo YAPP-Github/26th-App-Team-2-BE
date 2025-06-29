@@ -9,6 +9,7 @@ import com.yapp.demo.auth.dto.response.RefreshTokenResponse
 import com.yapp.demo.auth.service.AuthUseCase
 import com.yapp.demo.common.dto.ApiResponse
 import com.yapp.demo.common.enums.SocialProvider
+import com.yapp.demo.member.model.MemberState
 import com.yapp.demo.support.RestApiTestBase
 import com.yapp.demo.support.restdocs.NUMBER
 import com.yapp.demo.support.restdocs.OBJECT
@@ -24,6 +25,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import requestBody
 import responseBody
+import java.util.UUID
 
 class AuthControllerTest : RestApiTestBase() {
     @MockitoBean
@@ -31,10 +33,23 @@ class AuthControllerTest : RestApiTestBase() {
 
     @Test
     fun `로그인 API`() {
-        val request = OAuthLoginRequest(SocialProvider.KAKAO, "authorization-code")
-        val response = ApiResponse.success(OAuthLoginResponse("access-token", "refresh-token"))
+        val request =
+            OAuthLoginRequest(
+                SocialProvider.KAKAO,
+                "authorization-code",
+                UUID.randomUUID().toString(),
+            )
 
-        `when`(authUseCase.login(request.provider, request.authorizationCode))
+        val response =
+            ApiResponse.success(
+                OAuthLoginResponse(
+                    "access-token",
+                    "refresh-token",
+                    MemberState.ACTIVE.name,
+                ),
+            )
+
+        `when`(authUseCase.login(request))
             .thenReturn(response.data)
 
         val builder =
@@ -49,11 +64,13 @@ class AuthControllerTest : RestApiTestBase() {
                 requestBody(
                     "provider" type STRING means "소셜 로그인 타입",
                     "authorizationCode" type STRING means "인가 코드",
+                    "deviceId" type STRING means "모바일 디바이스 식별자",
                 ),
                 responseBody(
                     "data" type OBJECT means "응답 바디",
                     "data.accessToken" type STRING means "액세스 토큰",
                     "data.refreshToken" type STRING means "리프레시 토큰",
+                    "data.memberState" type STRING means "유저의 상태 ",
                     "code" type NUMBER means "HTTP 코드",
                 ),
             )

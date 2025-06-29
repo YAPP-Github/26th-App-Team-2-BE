@@ -1,5 +1,6 @@
 package com.yapp.demo.auth.service
 
+import com.yapp.demo.auth.dto.request.OAuthLoginRequest
 import com.yapp.demo.auth.dto.response.OAuthLoginResponse
 import com.yapp.demo.auth.dto.response.RefreshTokenResponse
 import com.yapp.demo.auth.infrastructure.BlackListRepository
@@ -10,8 +11,8 @@ import com.yapp.demo.common.enums.SocialProvider
 import com.yapp.demo.common.exception.CustomException
 import com.yapp.demo.common.exception.ErrorCode
 import com.yapp.demo.common.security.getMemberId
-import com.yapp.demo.member.infrastructure.jpa.MemberJpaReader
-import com.yapp.demo.member.infrastructure.jpa.MemberJpaWriter
+import com.yapp.demo.member.infrastructure.MemberReader
+import com.yapp.demo.member.infrastructure.MemberWriter
 import com.yapp.demo.member.model.Member
 import com.yapp.demo.oauth.service.OAuthProvider
 import org.springframework.stereotype.Service
@@ -22,31 +23,29 @@ import java.time.Duration
 class AuthService(
     private val jwtTokenProvider: JwtTokenProvider,
     private val oauthProviders: List<OAuthProvider>,
-    private val memberReader: MemberJpaReader,
-    private val memberWriter: MemberJpaWriter,
+    private val memberReader: MemberReader,
+    private val memberWriter: MemberWriter,
     private val refreshTokenRepository: RefreshTokenRepository,
     private val blackListRepository: BlackListRepository,
 ) : AuthUseCase {
     @Transactional
-    override fun login(
-        socialProvider: SocialProvider,
-        code: String,
-    ): OAuthLoginResponse {
+    override fun login(request: OAuthLoginRequest): OAuthLoginResponse {
         val authProvider =
-            findProvider(socialProvider)
+            findProvider(request.provider)
                 ?: throw CustomException(ErrorCode.BAD_REQUEST)
 
-        val authToken = authProvider.getAccessToken(code)
+        val authToken = authProvider.getAccessToken(request.authorizationCode)
         val userInfo = authProvider.getUserInfo(authToken)
 
-        var member = memberReader.findByAuthEmail(userInfo.email)
+        var member = memberReader.findByDeviceId(request.deviceId)
 
         if (member == null) {
             member =
                 memberWriter.save(
                     Member.create(
+                        deviceId = request.deviceId,
                         authEmail = userInfo.email,
-                        socialProvider = socialProvider,
+                        socialProvider = request.provider,
                         role = Role.USER,
                     ),
                 )
@@ -58,7 +57,7 @@ class AuthService(
 
         refreshTokenRepository.add(member.id, refreshToken, Duration.ofMillis(ttl))
 
-        return OAuthLoginResponse(accessToken, refreshToken)
+        return OAuthLoginResponse(accessToken, refreshToken, member.state.name)
     }
 
     override fun refreshToken(refreshToken: String): RefreshTokenResponse {
