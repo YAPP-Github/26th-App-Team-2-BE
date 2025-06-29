@@ -6,7 +6,6 @@ import com.yapp.demo.auth.dto.request.OAuthLoginRequest
 import com.yapp.demo.auth.dto.request.RefreshTokenRequest
 import com.yapp.demo.auth.dto.response.OAuthLoginResponse
 import com.yapp.demo.auth.dto.response.RefreshTokenResponse
-import com.yapp.demo.auth.service.AuthUseCase
 import com.yapp.demo.common.dto.ApiResponse
 import com.yapp.demo.common.enums.SocialProvider
 import com.yapp.demo.member.model.MemberState
@@ -21,16 +20,12 @@ import org.mockito.Mockito.`when`
 import org.mockito.kotlin.doNothing
 import org.springframework.http.MediaType
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
-import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import requestBody
 import responseBody
 import java.util.UUID
 
 class AuthControllerTest : RestApiTestBase() {
-    @MockitoBean
-    lateinit var authUseCase: AuthUseCase
-
     @Test
     fun `로그인 API`() {
         val request =

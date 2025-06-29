@@ -4,13 +4,13 @@ import com.yapp.demo.member.model.Member
 
 data class MemberResponse(
     val nickname: String?,
-    val status: String,
+    val state: String,
 ) {
     companion object {
         fun from(member: Member) =
             MemberResponse(
                 nickname = member.nickname,
-                status = member.state.name,
+                state = member.state.name,
             )
     }
 }
