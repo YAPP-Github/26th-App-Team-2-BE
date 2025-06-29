@@ -3,10 +3,9 @@ package com.yapp.demo.member.model
 import com.yapp.demo.common.exception.CustomException
 import com.yapp.demo.common.exception.ErrorCode.BAD_REQUEST
 
-enum class MemberStatus {
+enum class MemberState {
     HOLD,
     ACTIVE,
-    DELETED,
     ;
 
     companion object {

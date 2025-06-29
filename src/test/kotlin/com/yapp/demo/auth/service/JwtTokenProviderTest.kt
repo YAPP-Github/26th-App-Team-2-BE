@@ -9,7 +9,7 @@ import com.yapp.demo.common.exception.CustomException
 import com.yapp.demo.common.exception.ErrorCode
 import com.yapp.demo.member.infrastructure.jpa.MemberJpaReader
 import com.yapp.demo.member.model.Member
-import com.yapp.demo.member.model.MemberStatus
+import com.yapp.demo.member.model.MemberState
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.assertThrows
@@ -18,6 +18,7 @@ import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.mock
 import org.springframework.security.core.authority.SimpleGrantedAuthority
+import java.util.UUID
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
@@ -93,10 +94,11 @@ class JwtTokenProviderTest {
         val member =
             Member(
                 id = memberId,
+                deviceId = UUID.randomUUID().toString(),
                 authEmail = "email@email.com",
                 socialProvider = SocialProvider.KAKAO,
                 role = Role.USER,
-                status = MemberStatus.ACTIVE,
+                state = MemberState.ACTIVE,
             )
 
         `when`(memberReader.findById(memberId)).thenReturn(member)
