@@ -8,7 +8,6 @@ import com.yapp.demo.support.fixture.model.memberFixture
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
@@ -65,16 +64,5 @@ class MemberServiceTest {
         assertThat(result.nickname).isEqualTo(expected.nickname)
 
         SecurityContextHolder.clearContext()
-    }
-
-    @Test
-    fun `remove()는 유저를 삭제 한다`() {
-        val member = memberFixture(id = 1L, nickname = "brake-user")
-
-        `when`(memberReader.getById(memberId = member.id)).thenReturn(member)
-
-        assertDoesNotThrow {
-            memberService.remove(1L)
-        }
     }
 }

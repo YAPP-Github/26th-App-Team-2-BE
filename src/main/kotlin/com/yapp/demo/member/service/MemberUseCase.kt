@@ -6,6 +6,4 @@ interface MemberUseCase {
     fun getMember(memberId: Long): MemberResponse
 
     fun update(nickname: String): MemberResponse
-
-    fun remove(memberId: Long)
 }

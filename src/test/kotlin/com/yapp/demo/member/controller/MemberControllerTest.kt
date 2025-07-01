@@ -13,7 +13,6 @@ import com.yapp.demo.support.restdocs.toJsonString
 import com.yapp.demo.support.restdocs.type
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.`when`
-import org.mockito.kotlin.doNothing
 import org.springframework.http.MediaType
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -59,8 +58,6 @@ class MemberControllerTest : RestApiTestBase() {
 
     @Test
     fun `내정보 수정 API`() {
-        val memberId = 1L
-
         val request =
             UpdateNicknameRequest(
                 nickname = "modifiedNickname",
@@ -94,26 +91,5 @@ class MemberControllerTest : RestApiTestBase() {
                     "code" type NUMBER means "HTTP 코드",
                 ),
             )
-    }
-
-    @Test
-    fun `탈퇴 API`() {
-        val memberId = 1L
-
-        // SecurityContext 설정
-        val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), null)
-        SecurityContextHolder.getContext().authentication = authentication
-
-        doNothing().`when`(memberUseCase).remove(memberId)
-
-        val builder = RestDocumentationRequestBuilders.delete("/v1/members/me")
-
-        mockMvc.perform(builder)
-            .andExpect(status().isNoContent)
-            .andDocument(
-                "members-me-delete",
-            )
-
-        SecurityContextHolder.clearContext()
     }
 }

@@ -24,9 +24,4 @@ class MemberService(
 
         return MemberResponse.from(memberWriter.save(member))
     }
-
-    @Transactional
-    override fun remove(memberId: Long) {
-        memberWriter.remove(memberReader.getById(memberId))
-    }
 }
