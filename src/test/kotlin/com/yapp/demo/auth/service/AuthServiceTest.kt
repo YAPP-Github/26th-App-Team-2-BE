@@ -194,5 +194,7 @@ class AuthServiceTest {
         // then
         verify(mockProvider).revoke(credential)
         verify(memberWriter).delete(memberId)
+
+        SecurityContextHolder.clearContext()
     }
 }
