@@ -3,6 +3,7 @@ package com.yapp.demo.oauth.service.apple
 import com.yapp.demo.common.exception.CustomException
 import com.yapp.demo.common.exception.ErrorCode
 import com.yapp.demo.oauth.infrastructure.feign.apple.AppleAuthFeignClient
+import com.yapp.demo.oauth.infrastructure.feign.apple.response.AppleTokenResponse
 import com.yapp.demo.oauth.utils.parseHeaders
 import com.yapp.demo.oauth.utils.toRSAPublicKey
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -14,21 +15,21 @@ import java.security.PublicKey
 private val logger = KotlinLogging.logger {}
 
 @Component
-class AppleIdTokenProvider(
+class AppleTokenProvider(
     private val appleAuthFeignClient: AppleAuthFeignClient,
     private val appleProperties: AppleProperties,
 ) {
-    fun getIdToken(
+    fun getToken(
         code: String,
         clientSecret: String,
-    ): String {
+    ): AppleTokenResponse {
         return try {
             appleAuthFeignClient.generateTokens(
                 clientId = appleProperties.clientId,
                 clientSecret = clientSecret,
                 code = code,
                 grantType = APPLE_AUTH_GRANT_TYPE,
-            ).idToken
+            )
         } catch (e: Exception) {
             logger.error(e) { "[AppleAuthProvider.getIdToken] code=$code" }
             throw e

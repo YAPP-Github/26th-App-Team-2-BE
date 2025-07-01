@@ -8,15 +8,15 @@ import org.springframework.stereotype.Component
 @Component
 class AppleAuthProvider(
     private val appleClientSecretGenerator: AppleClientSecretGenerator,
-    private val appleIdTokenProvider: AppleIdTokenProvider,
+    private val appleTokenProvider: AppleTokenProvider,
 ) : OAuthProvider {
     override fun getAccessToken(code: String): String {
         val clientSecret = appleClientSecretGenerator.getClientSecret()
-        return appleIdTokenProvider.getIdToken(code, clientSecret)
+        return appleTokenProvider.getToken(code, clientSecret).idToken
     }
 
     override fun getUserInfo(token: String): OAuthUserInfo {
-        val claims = appleIdTokenProvider.verifyAndParse(token)
+        val claims = appleTokenProvider.verifyAndParse(token)
 
         return OAuthUserInfo(
             id = claims.subject,

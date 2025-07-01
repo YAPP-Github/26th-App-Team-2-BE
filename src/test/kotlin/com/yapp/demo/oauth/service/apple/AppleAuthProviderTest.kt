@@ -11,18 +11,18 @@ import kotlin.test.assertTrue
 
 class AppleAuthProviderTest {
     private lateinit var clientSecretGenerator: AppleClientSecretGenerator
-    private lateinit var idTokenProvider: AppleIdTokenProvider
+    private lateinit var tokenProvider: AppleTokenProvider
     private lateinit var provider: AppleAuthProvider
 
     @BeforeEach
     fun setUp() {
         clientSecretGenerator = mock()
-        idTokenProvider = mock()
+        tokenProvider = mock()
 
         provider =
             AppleAuthProvider(
                 appleClientSecretGenerator = clientSecretGenerator,
-                appleIdTokenProvider = idTokenProvider,
+                appleTokenProvider = tokenProvider,
             )
     }
 
@@ -33,7 +33,7 @@ class AppleAuthProviderTest {
         whenever(mockClaims.subject).thenReturn("yappo123")
         whenever(mockClaims["email"]).thenReturn("yappo@breake.com")
 
-        whenever(idTokenProvider.verifyAndParse("id-token")).thenReturn(mockClaims)
+        whenever(tokenProvider.verifyAndParse("id-token")).thenReturn(mockClaims)
 
         // when
         val userInfo: OAuthUserInfo = provider.getUserInfo("id-token")
@@ -49,7 +49,7 @@ class AppleAuthProviderTest {
         whenever(mockClaims.subject).thenReturn("yappo123")
         whenever(mockClaims["email"]).thenReturn(null)
 
-        whenever(idTokenProvider.verifyAndParse("id-token")).thenReturn(mockClaims)
+        whenever(tokenProvider.verifyAndParse("id-token")).thenReturn(mockClaims)
 
         val userInfo = provider.getUserInfo("id-token")
 
