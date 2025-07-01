@@ -51,7 +51,7 @@ class KakaoAuthProvider(
         )
     }
 
-    override fun revoke(code: String) {
+    override fun withdraw(code: String) {
         TODO("Not yet implemented")
     }
 

@@ -179,7 +179,7 @@ class AuthServiceTest {
     }
 
     @Test
-    fun `signOut은 OAuthProvider의 revoke가 호출하고 유저를 삭제한다`() {
+    fun `signOut은 OAuthProvider에 탈퇴 요청을 하고 유저를 삭제한다`() {
         // given
         val credential = "valid-credential"
         val socialProvider = SocialProvider.KAKAO
@@ -189,10 +189,10 @@ class AuthServiceTest {
         SecurityContextHolder.getContext().authentication = authentication
 
         // when
-        authService.signOut(socialProvider, credential)
+        authService.withdraw(socialProvider, credential)
 
         // then
-        verify(mockProvider).revoke(credential)
+        verify(mockProvider).withdraw(credential)
         verify(memberWriter).delete(memberId)
 
         SecurityContextHolder.clearContext()

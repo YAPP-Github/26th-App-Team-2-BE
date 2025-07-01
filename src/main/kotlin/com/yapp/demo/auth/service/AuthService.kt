@@ -86,7 +86,7 @@ class AuthService(
         blackListRepository.add(accessToken, Duration.ofMillis(ttl))
     }
 
-    override fun signOut(
+    override fun withdraw(
         socialProvider: SocialProvider,
         credential: String,
     ) {
@@ -94,7 +94,7 @@ class AuthService(
             findProvider(socialProvider)
                 ?: throw CustomException(ErrorCode.BAD_REQUEST)
 
-        authProvider.revoke(credential)
+        authProvider.withdraw(credential)
         memberWriter.delete(getMemberId())
     }
 

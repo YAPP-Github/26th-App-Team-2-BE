@@ -3,7 +3,7 @@ package com.yapp.demo.auth.controller
 import andDocument
 import com.yapp.demo.auth.dto.request.LogoutRequest
 import com.yapp.demo.auth.dto.request.OAuthLoginRequest
-import com.yapp.demo.auth.dto.request.OAuthSignOutRequest
+import com.yapp.demo.auth.dto.request.OAuthWithdrawRequest
 import com.yapp.demo.auth.dto.request.RefreshTokenRequest
 import com.yapp.demo.auth.dto.response.OAuthLoginResponse
 import com.yapp.demo.auth.dto.response.RefreshTokenResponse
@@ -112,12 +112,12 @@ class AuthControllerTest : RestApiTestBase() {
 
     @Test
     fun `탈퇴 API`() {
-        val request = OAuthSignOutRequest(SocialProvider.KAKAO, "credential")
+        val request = OAuthWithdrawRequest(SocialProvider.KAKAO, "credential")
 
-        doNothing().`when`(authUseCase).signOut(request.provider, request.credential)
+        doNothing().`when`(authUseCase).withdraw(request.provider, request.credential)
 
         val builder =
-            RestDocumentationRequestBuilders.post("/v1/auth/revoke")
+            RestDocumentationRequestBuilders.post("/v1/auth/withdraw")
                 .content(request.toJsonString())
                 .contentType(MediaType.APPLICATION_JSON)
 
