@@ -57,7 +57,20 @@ class AppleTokenProvider(
         return toRSAPublicKey(matched.modulus, matched.exponent)
     }
 
+    fun revokeToken(
+        token: String,
+        clientSecret: String,
+    ) {
+        appleAuthFeignClient.revokeToken(
+            clientId = appleProperties.clientId,
+            clientSecret = clientSecret,
+            token = token,
+            tokenTypeHint = TOKEN_TYPE,
+        )
+    }
+
     companion object {
         private const val APPLE_AUTH_GRANT_TYPE = "authorization_code"
+        private const val TOKEN_TYPE = "access_token"
     }
 }

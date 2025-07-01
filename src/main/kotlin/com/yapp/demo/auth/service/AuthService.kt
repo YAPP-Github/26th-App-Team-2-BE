@@ -86,6 +86,17 @@ class AuthService(
         blackListRepository.add(accessToken, Duration.ofMillis(ttl))
     }
 
+    override fun signOut(
+        socialProvider: SocialProvider,
+        credential: String,
+    ) {
+        val authProvider =
+            findProvider(socialProvider)
+                ?: throw CustomException(ErrorCode.BAD_REQUEST)
+
+        authProvider.revoke(credential)
+    }
+
     private fun findProvider(socialType: SocialProvider): OAuthProvider? =
         oauthProviders.firstOrNull { it.supports(socialType) }
 }

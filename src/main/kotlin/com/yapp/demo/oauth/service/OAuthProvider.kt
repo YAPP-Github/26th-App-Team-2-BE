@@ -8,5 +8,7 @@ interface OAuthProvider {
 
     fun getUserInfo(token: String): OAuthUserInfo
 
+    fun revoke(code: String)
+
     fun supports(socialType: SocialProvider): Boolean
 }

@@ -24,5 +24,12 @@ class AppleAuthProvider(
         )
     }
 
+    override fun revoke(code: String) {
+        val clientSecret = appleClientSecretGenerator.getClientSecret()
+        val accessToken = appleTokenProvider.getToken(code, clientSecret).accessToken
+
+        appleTokenProvider.revokeToken(accessToken, clientSecret)
+    }
+
     override fun supports(socialType: SocialProvider): Boolean = socialType == SocialProvider.APPLE
 }

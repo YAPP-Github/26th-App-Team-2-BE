@@ -2,6 +2,7 @@ package com.yapp.demo.auth.controller
 
 import com.yapp.demo.auth.dto.request.LogoutRequest
 import com.yapp.demo.auth.dto.request.OAuthLoginRequest
+import com.yapp.demo.auth.dto.request.OAuthSignOutRequest
 import com.yapp.demo.auth.dto.request.RefreshTokenRequest
 import com.yapp.demo.auth.dto.response.OAuthLoginResponse
 import com.yapp.demo.auth.dto.response.RefreshTokenResponse
@@ -43,5 +44,13 @@ class AuthController(
         request: LogoutRequest,
     ) {
         authUseCase.logout(request.accessToken)
+    }
+
+    @PostMapping("/revoke")
+    fun revoke(
+        @RequestBody @Valid
+        request: OAuthSignOutRequest,
+    ) {
+        authUseCase.signOut(request.provider, request.credential)
     }
 }
