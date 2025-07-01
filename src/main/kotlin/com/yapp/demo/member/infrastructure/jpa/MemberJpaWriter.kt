@@ -12,4 +12,8 @@ class MemberJpaWriter(
         val entity = MemberEntity.from(member)
         return memberRepository.save(entity).toDomain()
     }
+
+    override fun delete(memberId: Long) {
+        memberRepository.deleteById(memberId)
+    }
 }
