@@ -26,4 +26,15 @@ interface AppleAuthFeignClient {
 
     @GetMapping("/auth/keys")
     fun getApplePublicKeys(): ApplePublicKeyResponse
+
+    @PostMapping(
+        "/auth/revoke",
+        headers = ["Content-Type=application/x-www-form-urlencoded"],
+    )
+    fun revokeToken(
+        @RequestParam("client_id") clientId: String,
+        @RequestParam("client_secret") clientSecret: String,
+        @RequestParam("token") token: String,
+        @RequestParam("token_type_hint") tokenTypeHint: String,
+    )
 }
