@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam
 )
 interface AppleAuthFeignClient {
     @PostMapping(
-        "/auth/oauth2/v2/token",
+        "/auth/token",
         headers = ["Content-Type=application/x-www-form-urlencoded"],
     )
     fun generateTokens(
@@ -24,6 +24,6 @@ interface AppleAuthFeignClient {
         @RequestParam("grant_type") grantType: String,
     ): AppleTokenResponse
 
-    @GetMapping("/auth/oauth2/v2/keys")
+    @GetMapping("/auth/keys")
     fun getApplePublicKeys(): ApplePublicKeyResponse
 }
