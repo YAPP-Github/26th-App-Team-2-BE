@@ -4,6 +4,7 @@ import com.yapp.demo.common.exception.CustomException
 import com.yapp.demo.common.exception.ErrorCode
 import com.yapp.demo.member.infrastructure.MemberReader
 import com.yapp.demo.member.infrastructure.MemberWriter
+import com.yapp.demo.member.model.MemberState
 import com.yapp.demo.support.fixture.model.memberFixture
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
+import org.mockito.kotlin.any
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 
@@ -49,19 +51,20 @@ class MemberServiceTest {
     @Test
     fun `update()는 유저가 존재하면 유저 정보를 변경한다`() {
         val newNickname = "brake-user-modified"
-        val member = memberFixture(id = 1L, nickname = "brake-user")
+        val member = memberFixture(id = 1L, nickname = "brake-user", state = MemberState.HOLD)
         val expected = memberFixture(id = member.id, nickname = newNickname)
 
         // SecurityContext 설정
         val authentication = UsernamePasswordAuthenticationToken(member.id.toString(), null)
         SecurityContextHolder.getContext().authentication = authentication
 
-        `when`(memberReader.getById(memberId = member.id)).thenReturn(expected)
-        `when`(memberWriter.save(expected)).thenReturn(expected)
+        `when`(memberReader.getById(memberId = member.id)).thenReturn(member)
+        `when`(memberWriter.save(any())).thenReturn(expected)
 
         val result = memberService.update(newNickname)
 
         assertThat(result.nickname).isEqualTo(expected.nickname)
+        assertThat(result.state).isEqualTo(MemberState.ACTIVE.name)
 
         SecurityContextHolder.clearContext()
     }
