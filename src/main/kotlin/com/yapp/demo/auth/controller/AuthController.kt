@@ -26,7 +26,7 @@ class AuthController(
         @RequestBody @Valid
         request: OAuthLoginRequest,
     ): ApiResponse<OAuthLoginResponse> {
-        return ApiResponse.success(authUseCase.login(request.provider, request.authorizationCode))
+        return ApiResponse.success(authUseCase.login(request))
     }
 
     @PostMapping("/refresh")

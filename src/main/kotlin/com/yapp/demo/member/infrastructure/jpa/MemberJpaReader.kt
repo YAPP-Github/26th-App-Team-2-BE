@@ -11,6 +11,10 @@ import kotlin.jvm.optionals.getOrNull
 class MemberJpaReader(
     private val memberRepository: MemberRepository,
 ) : MemberReader {
+    override fun findByDeviceId(deviceId: String): Member? =
+        memberRepository.findByDeviceId(deviceId)
+            ?.toDomain()
+
     override fun findById(memberId: Long): Member? =
         memberRepository.findById(memberId)
             .getOrNull()
@@ -21,6 +25,4 @@ class MemberJpaReader(
             .getOrNull()
             ?.toDomain()
             ?: throw CustomException(ErrorCode.MEMBER_NOT_FOUND)
-
-    override fun findByAuthEmail(email: String): Member? = memberRepository.findByAuthEmail(email)?.toDomain()
 }

@@ -1,5 +1,6 @@
 package com.yapp.demo.auth.service
 
+import com.yapp.demo.auth.dto.request.OAuthLoginRequest
 import com.yapp.demo.auth.dto.response.OAuthLoginResponse
 import com.yapp.demo.auth.dto.response.RefreshTokenResponse
 import com.yapp.demo.auth.infrastructure.BlackListRepository
@@ -28,25 +29,23 @@ class AuthService(
     private val blackListRepository: BlackListRepository,
 ) : AuthUseCase {
     @Transactional
-    override fun login(
-        socialProvider: SocialProvider,
-        code: String,
-    ): OAuthLoginResponse {
+    override fun login(request: OAuthLoginRequest): OAuthLoginResponse {
         val authProvider =
-            findProvider(socialProvider)
+            findProvider(request.provider)
                 ?: throw CustomException(ErrorCode.BAD_REQUEST)
 
-        val authToken = authProvider.getAccessToken(code)
+        val authToken = authProvider.getAccessToken(request.authorizationCode)
         val userInfo = authProvider.getUserInfo(authToken)
 
-        var member = memberReader.findByAuthEmail(userInfo.email)
+        var member = memberReader.findByDeviceId(request.deviceId)
 
         if (member == null) {
             member =
                 memberWriter.save(
                     Member.create(
+                        deviceId = request.deviceId,
                         authEmail = userInfo.email,
-                        socialProvider = socialProvider,
+                        socialProvider = request.provider,
                         role = Role.USER,
                     ),
                 )
@@ -58,7 +57,7 @@ class AuthService(
 
         refreshTokenRepository.add(member.id, refreshToken, Duration.ofMillis(ttl))
 
-        return OAuthLoginResponse(accessToken, refreshToken)
+        return OAuthLoginResponse(accessToken, refreshToken, member.state.name)
     }
 
     override fun refreshToken(refreshToken: String): RefreshTokenResponse {

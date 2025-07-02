@@ -1,7 +1,10 @@
 package com.yapp.demo.support
 
 import com.yapp.demo.auth.controller.AuthController
+import com.yapp.demo.auth.service.AuthUseCase
 import com.yapp.demo.common.filter.JwtAuthenticationFilter
+import com.yapp.demo.member.controller.MemberController
+import com.yapp.demo.member.service.MemberUseCase
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
@@ -20,11 +23,18 @@ import org.springframework.web.context.WebApplicationContext
 @WebMvcTest(
     controllers = [
         AuthController::class,
+        MemberController::class,
     ],
 )
 abstract class RestApiTestBase {
     @MockitoBean
     lateinit var jwtAuthenticationFilter: JwtAuthenticationFilter
+
+    @MockitoBean
+    lateinit var authUseCase: AuthUseCase
+
+    @MockitoBean
+    lateinit var memberUseCase: MemberUseCase
 
     lateinit var mockMvc: MockMvc
 

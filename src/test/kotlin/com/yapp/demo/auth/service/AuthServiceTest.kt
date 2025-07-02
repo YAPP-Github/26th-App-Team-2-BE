@@ -1,34 +1,29 @@
 package com.yapp.demo.auth.service
 
+import com.yapp.demo.auth.dto.request.OAuthLoginRequest
 import com.yapp.demo.auth.infrastructure.BlackListRepository
 import com.yapp.demo.auth.infrastructure.RefreshTokenRepository
 import com.yapp.demo.common.constants.TOKEN_TYPE_REFRESH
-import com.yapp.demo.common.enums.Role
 import com.yapp.demo.common.enums.SocialProvider
 import com.yapp.demo.common.exception.CustomException
 import com.yapp.demo.common.exception.ErrorCode
 import com.yapp.demo.member.infrastructure.jpa.MemberJpaReader
 import com.yapp.demo.member.infrastructure.jpa.MemberJpaWriter
-import com.yapp.demo.member.model.Member
-import com.yapp.demo.member.model.MemberStatus
 import com.yapp.demo.oauth.model.OAuthUserInfo
 import com.yapp.demo.oauth.service.OAuthProvider
+import com.yapp.demo.support.fixture.model.memberFixture
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito.`when`
-import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import java.time.Duration
 
-@ExtendWith(MockitoExtension::class)
 class AuthServiceTest {
     private val userInfo = OAuthUserInfo("id", "test@email.com")
     private val code = "authCode"
@@ -62,23 +57,24 @@ class AuthServiceTest {
         val provider = SocialProvider.KAKAO
         val accessToken = "access-token"
         val refreshToken = "refresh-token"
-        val member =
-            Member(
-                id = 1L,
-                authEmail = userInfo.email,
-                socialProvider = provider,
-                role = Role.USER,
-                status = MemberStatus.ACTIVE,
+
+        val member = memberFixture(id = 1L, authEmail = userInfo.email)
+
+        val request =
+            OAuthLoginRequest(
+                provider = provider,
+                authorizationCode = code,
+                deviceId = member.deviceId,
             )
 
-        whenever(memberReader.findByAuthEmail(userInfo.email)).thenReturn(member)
+        `when`(memberReader.findByDeviceId(member.deviceId)).thenReturn(member)
 
-        whenever(jwtTokenProvider.generateAccessToken(member.id)).thenReturn(accessToken)
-        whenever(jwtTokenProvider.generateRefreshToken(member.id)).thenReturn(refreshToken)
-        whenever(jwtTokenProvider.extractExpiration(refreshToken)).thenReturn(60000L)
+        `when`(jwtTokenProvider.generateAccessToken(member.id)).thenReturn(accessToken)
+        `when`(jwtTokenProvider.generateRefreshToken(member.id)).thenReturn(refreshToken)
+        `when`(jwtTokenProvider.extractExpiration(refreshToken)).thenReturn(60000L)
 
         // when
-        val result = authService.login(provider, code)
+        val result = authService.login(request)
 
         // then
         assertThat(result.accessToken).isEqualTo(accessToken)
@@ -89,14 +85,7 @@ class AuthServiceTest {
     inner class RefreshTokenTest {
         private val refreshToken = "refresh-token"
         private val memberId = 1L
-        private val member =
-            Member(
-                id = memberId,
-                authEmail = userInfo.email,
-                socialProvider = SocialProvider.KAKAO,
-                role = Role.USER,
-                status = MemberStatus.ACTIVE,
-            )
+        private val member = memberFixture(id = 1, authEmail = userInfo.email)
 
         @Test
         fun `refresh는 새로운 리프레시 토큰과 액세스 토큰을 발급한다`() {
