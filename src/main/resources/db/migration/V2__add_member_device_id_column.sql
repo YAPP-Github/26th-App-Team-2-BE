@@ -1,2 +1,5 @@
 ALTER TABLE `member`
 ADD COLUMN device_id VARCHAR(255) NOT NULL AFTER member_id;
+
+ALTER TABLE `member`
+DROP COLUMN deleted_at;
