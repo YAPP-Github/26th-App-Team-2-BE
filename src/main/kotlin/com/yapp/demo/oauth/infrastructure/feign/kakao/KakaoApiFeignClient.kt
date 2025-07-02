@@ -1,5 +1,6 @@
 package com.yapp.demo.oauth.infrastructure.feign.kakao
 
+import com.yapp.demo.oauth.infrastructure.feign.kakao.response.KakaoUnlinkResponse
 import com.yapp.demo.oauth.infrastructure.feign.kakao.response.KakaoUserInfoResponse
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.GetMapping
@@ -25,5 +26,5 @@ interface KakaoApiFeignClient {
     )
     fun unlink(
         @RequestHeader("Authorization") accessToken: String,
-    ): KakaoUserInfoResponse
+    ): KakaoUnlinkResponse
 }
