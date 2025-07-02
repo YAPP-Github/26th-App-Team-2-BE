@@ -13,4 +13,9 @@ interface AuthUseCase {
     fun refreshToken(refreshToken: String): RefreshTokenResponse
 
     fun logout(accessToken: String)
+
+    fun withdraw(
+        socialProvider: SocialProvider,
+        credential: String,
+    )
 }

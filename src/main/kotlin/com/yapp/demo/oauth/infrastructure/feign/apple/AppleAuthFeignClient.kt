@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam
 )
 interface AppleAuthFeignClient {
     @PostMapping(
-        "/auth/oauth2/v2/token",
+        "/auth/token",
         headers = ["Content-Type=application/x-www-form-urlencoded"],
     )
     fun generateTokens(
@@ -24,6 +24,17 @@ interface AppleAuthFeignClient {
         @RequestParam("grant_type") grantType: String,
     ): AppleTokenResponse
 
-    @GetMapping("/auth/oauth2/v2/keys")
+    @GetMapping("/auth/keys")
     fun getApplePublicKeys(): ApplePublicKeyResponse
+
+    @PostMapping(
+        "/auth/revoke",
+        headers = ["Content-Type=application/x-www-form-urlencoded"],
+    )
+    fun revokeToken(
+        @RequestParam("client_id") clientId: String,
+        @RequestParam("client_secret") clientSecret: String,
+        @RequestParam("token") token: String,
+        @RequestParam("token_type_hint") tokenTypeHint: String,
+    )
 }

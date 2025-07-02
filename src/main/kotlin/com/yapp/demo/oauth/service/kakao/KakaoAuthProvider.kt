@@ -51,6 +51,10 @@ class KakaoAuthProvider(
         )
     }
 
+    override fun withdraw(code: String) {
+        TODO("Not yet implemented")
+    }
+
     override fun supports(socialType: SocialProvider): Boolean = socialType == SocialProvider.KAKAO
 
     companion object {

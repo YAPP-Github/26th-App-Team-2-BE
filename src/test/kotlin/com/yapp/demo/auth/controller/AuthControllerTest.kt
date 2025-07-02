@@ -3,6 +3,7 @@ package com.yapp.demo.auth.controller
 import andDocument
 import com.yapp.demo.auth.dto.request.LogoutRequest
 import com.yapp.demo.auth.dto.request.OAuthLoginRequest
+import com.yapp.demo.auth.dto.request.OAuthWithdrawRequest
 import com.yapp.demo.auth.dto.request.RefreshTokenRequest
 import com.yapp.demo.auth.dto.response.OAuthLoginResponse
 import com.yapp.demo.auth.dto.response.RefreshTokenResponse
@@ -105,6 +106,28 @@ class AuthControllerTest : RestApiTestBase() {
                 "auth-logout",
                 requestBody(
                     "accessToken" type STRING means "기존 액세스 토큰",
+                ),
+            )
+    }
+
+    @Test
+    fun `탈퇴 API`() {
+        val request = OAuthWithdrawRequest(SocialProvider.KAKAO, "credential")
+
+        doNothing().`when`(authUseCase).withdraw(request.provider, request.credential)
+
+        val builder =
+            RestDocumentationRequestBuilders.post("/v1/auth/withdraw")
+                .content(request.toJsonString())
+                .contentType(MediaType.APPLICATION_JSON)
+
+        mockMvc.perform(builder)
+            .andExpect(status().isOk)
+            .andDocument(
+                "auth-revoke",
+                requestBody(
+                    "provider" type STRING means "소셜 로그인 타입",
+                    "credential" type STRING means "인가 정보",
                 ),
             )
     }

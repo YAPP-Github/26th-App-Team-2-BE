@@ -2,6 +2,7 @@ package com.yapp.demo.auth.controller
 
 import com.yapp.demo.auth.dto.request.LogoutRequest
 import com.yapp.demo.auth.dto.request.OAuthLoginRequest
+import com.yapp.demo.auth.dto.request.OAuthWithdrawRequest
 import com.yapp.demo.auth.dto.request.RefreshTokenRequest
 import com.yapp.demo.auth.dto.response.OAuthLoginResponse
 import com.yapp.demo.auth.dto.response.RefreshTokenResponse
@@ -43,5 +44,13 @@ class AuthController(
         request: LogoutRequest,
     ) {
         authUseCase.logout(request.accessToken)
+    }
+
+    @PostMapping("/withdraw")
+    fun withdraw(
+        @RequestBody @Valid
+        request: OAuthWithdrawRequest,
+    ) {
+        authUseCase.withdraw(request.provider, request.credential)
     }
 }

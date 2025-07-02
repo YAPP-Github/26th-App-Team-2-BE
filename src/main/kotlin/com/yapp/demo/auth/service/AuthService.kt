@@ -10,8 +10,8 @@ import com.yapp.demo.common.enums.SocialProvider
 import com.yapp.demo.common.exception.CustomException
 import com.yapp.demo.common.exception.ErrorCode
 import com.yapp.demo.common.security.getMemberId
-import com.yapp.demo.member.infrastructure.jpa.MemberJpaReader
-import com.yapp.demo.member.infrastructure.jpa.MemberJpaWriter
+import com.yapp.demo.member.infrastructure.MemberReader
+import com.yapp.demo.member.infrastructure.MemberWriter
 import com.yapp.demo.member.model.Member
 import com.yapp.demo.oauth.service.OAuthProvider
 import org.springframework.stereotype.Service
@@ -22,8 +22,8 @@ import java.time.Duration
 class AuthService(
     private val jwtTokenProvider: JwtTokenProvider,
     private val oauthProviders: List<OAuthProvider>,
-    private val memberReader: MemberJpaReader,
-    private val memberWriter: MemberJpaWriter,
+    private val memberReader: MemberReader,
+    private val memberWriter: MemberWriter,
     private val refreshTokenRepository: RefreshTokenRepository,
     private val blackListRepository: BlackListRepository,
 ) : AuthUseCase {
@@ -84,6 +84,18 @@ class AuthService(
 
         val ttl = jwtTokenProvider.extractExpiration(accessToken)
         blackListRepository.add(accessToken, Duration.ofMillis(ttl))
+    }
+
+    override fun withdraw(
+        socialProvider: SocialProvider,
+        credential: String,
+    ) {
+        val authProvider =
+            findProvider(socialProvider)
+                ?: throw CustomException(ErrorCode.BAD_REQUEST)
+
+        authProvider.withdraw(credential)
+        memberWriter.delete(getMemberId())
     }
 
     private fun findProvider(socialType: SocialProvider): OAuthProvider? =
