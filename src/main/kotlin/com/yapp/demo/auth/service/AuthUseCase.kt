@@ -14,6 +14,6 @@ interface AuthUseCase {
 
     fun withdraw(
         socialProvider: SocialProvider,
-        credential: String,
+        code: String,
     )
 }

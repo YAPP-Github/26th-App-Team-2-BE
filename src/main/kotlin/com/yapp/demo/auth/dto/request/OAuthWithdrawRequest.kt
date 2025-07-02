@@ -8,5 +8,5 @@ data class OAuthWithdrawRequest(
     @field:NotNull(message = "소셜 로그인 타입은 필수 입니다.")
     val provider: SocialProvider,
     @field:NotBlank(message = "인가 정보는 필수 입니다.")
-    val credential: String,
+    val authorizationCode: String,
 )

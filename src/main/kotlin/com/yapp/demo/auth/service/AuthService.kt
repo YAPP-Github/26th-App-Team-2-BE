@@ -87,13 +87,13 @@ class AuthService(
 
     override fun withdraw(
         socialProvider: SocialProvider,
-        credential: String,
+        code: String,
     ) {
         val authProvider =
             findProvider(socialProvider)
                 ?: throw CustomException(ErrorCode.BAD_REQUEST)
 
-        authProvider.withdraw(credential)
+        authProvider.withdraw(code)
         memberWriter.delete(getMemberId())
     }
 

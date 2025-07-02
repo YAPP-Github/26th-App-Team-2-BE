@@ -51,6 +51,6 @@ class AuthController(
         @RequestBody @Valid
         request: OAuthWithdrawRequest,
     ) {
-        authUseCase.withdraw(request.provider, request.credential)
+        authUseCase.withdraw(request.provider, request.authorizationCode)
     }
 }
