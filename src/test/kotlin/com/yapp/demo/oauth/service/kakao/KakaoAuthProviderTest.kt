@@ -80,7 +80,15 @@ class KakaoAuthProviderTest {
                 refreshTokenExpiresIn = 2L,
             )
 
-        whenever(kakaoAuthFeignClient.getToken(any(), any(), any(), any())).thenReturn(response)
+        whenever(
+            kakaoAuthFeignClient.getToken(
+                "authorization_code",
+                kakaoProperties.clientId,
+                kakaoProperties.redirectUri,
+                code,
+            ),
+        ).thenReturn(response)
+
         whenever(kakaoApiFeignClient.unlink(response.accessToken)).thenReturn(KakaoUnlinkResponse(123L))
 
         assertDoesNotThrow { kakaoAuthProvider.withdraw(code) }
