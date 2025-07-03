@@ -44,7 +44,7 @@ class AuthService(
                 memberWriter.save(
                     Member.create(
                         deviceId = request.deviceId,
-                        authEmail = userInfo.email,
+                        oAuthUserInfo = userInfo,
                         socialProvider = request.provider,
                         role = Role.USER,
                     ),
@@ -87,13 +87,13 @@ class AuthService(
 
     override fun withdraw(
         socialProvider: SocialProvider,
-        code: String,
+        credential: String,
     ) {
         val authProvider =
             findProvider(socialProvider)
                 ?: throw CustomException(ErrorCode.BAD_REQUEST)
 
-        authProvider.withdraw(code)
+        authProvider.withdraw(credential)
         memberWriter.delete(getMemberId())
     }
 

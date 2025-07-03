@@ -24,9 +24,9 @@ class AppleAuthProvider(
         )
     }
 
-    override fun withdraw(code: String) {
+    override fun withdraw(credential: String) {
         val clientSecret = appleClientSecretGenerator.getClientSecret()
-        val accessToken = appleTokenProvider.getToken(code, clientSecret).accessToken
+        val accessToken = appleTokenProvider.getToken(credential, clientSecret).accessToken
 
         appleTokenProvider.revokeToken(accessToken, clientSecret)
     }

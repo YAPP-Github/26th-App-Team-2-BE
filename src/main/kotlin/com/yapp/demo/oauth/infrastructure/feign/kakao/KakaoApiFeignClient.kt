@@ -6,9 +6,10 @@ import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestHeader
+import org.springframework.web.bind.annotation.RequestParam
 
 @FeignClient(
-    value = "kakao-userinfo-client",
+    value = "kakao-api-client",
     url = "https://kapi.kakao.com",
     configuration = [KakaoFeignConfig::class],
 )
@@ -23,8 +24,11 @@ interface KakaoApiFeignClient {
 
     @PostMapping(
         "/v1/user/unlink",
+        headers = ["Content-Type=application/x-www-form-urlencoded;charset=utf-8"],
     )
     fun unlink(
-        @RequestHeader("Authorization") accessToken: String,
+        @RequestHeader("Authorization") adminKey: String,
+        @RequestParam("target_id_type") targetIdType: String,
+        @RequestParam("target_id") targetId: Long,
     ): KakaoUnlinkResponse
 }

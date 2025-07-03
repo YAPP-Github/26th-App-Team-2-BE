@@ -58,7 +58,7 @@ class AuthServiceTest {
         val accessToken = "access-token"
         val refreshToken = "refresh-token"
 
-        val member = memberFixture(id = 1L, authEmail = userInfo.email)
+        val member = memberFixture(id = 1L, oAuthUserInfo = userInfo)
 
         val request =
             OAuthLoginRequest(
@@ -85,7 +85,7 @@ class AuthServiceTest {
     inner class RefreshTokenTest {
         private val refreshToken = "refresh-token"
         private val memberId = 1L
-        private val member = memberFixture(id = 1, authEmail = userInfo.email)
+        private val member = memberFixture(id = 1, oAuthUserInfo = userInfo)
 
         @Test
         fun `refresh는 새로운 리프레시 토큰과 액세스 토큰을 발급한다`() {
