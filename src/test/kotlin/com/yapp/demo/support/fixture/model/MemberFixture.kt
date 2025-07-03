@@ -11,7 +11,7 @@ import java.util.UUID
 fun memberFixture(
     id: Long = 0L,
     nickname: String? = null,
-    oAuthUserInfo: OAuthUserInfo = OAuthUserInfo("oauth-id", "brake@kakao.com"),
+    oAuthUserInfo: OAuthUserInfo = OAuthUserInfo("11111", "brake@kakao.com"),
     deviceId: String = UUID.randomUUID().toString(),
     socialProvider: SocialProvider = SocialProvider.KAKAO,
     role: Role = Role.USER,
