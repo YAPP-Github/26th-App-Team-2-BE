@@ -8,8 +8,10 @@ import com.yapp.demo.auth.dto.response.OAuthLoginResponse
 import com.yapp.demo.auth.dto.response.RefreshTokenResponse
 import com.yapp.demo.auth.service.AuthUseCase
 import com.yapp.demo.common.dto.ApiResponse
+import com.yapp.demo.common.security.getMemberId
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -46,11 +48,11 @@ class AuthController(
         authUseCase.logout(request.accessToken)
     }
 
-    @PostMapping("/withdraw")
+    @DeleteMapping("/withdraw")
     fun withdraw(
         @RequestBody @Valid
         request: OAuthWithdrawRequest,
     ) {
-        authUseCase.withdraw(request.provider, request.authorizationCode)
+        authUseCase.withdraw(request.provider, request.authorizationCode ?: getMemberId().toString())
     }
 }
