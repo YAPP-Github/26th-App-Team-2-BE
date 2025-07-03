@@ -129,12 +129,12 @@ class AuthControllerTest : RestApiTestBase() {
         doNothing().`when`(authUseCase).withdraw(request.provider, request.authorizationCode!!)
 
         val builder =
-            RestDocumentationRequestBuilders.post("/v1/auth/withdraw")
+            RestDocumentationRequestBuilders.delete("/v1/auth/withdraw")
                 .content(request.toJsonString())
                 .contentType(MediaType.APPLICATION_JSON)
 
         mockMvc.perform(builder)
-            .andExpect(status().isOk)
+            .andExpect(status().isNoContent)
             .andDocument(
                 "auth-revoke",
                 requestBody(

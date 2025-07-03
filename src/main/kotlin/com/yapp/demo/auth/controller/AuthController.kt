@@ -49,6 +49,7 @@ class AuthController(
     }
 
     @DeleteMapping("/withdraw")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     fun withdraw(
         @RequestBody @Valid
         request: OAuthWithdrawRequest,
