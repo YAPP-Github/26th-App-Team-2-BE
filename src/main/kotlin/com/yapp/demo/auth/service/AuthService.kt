@@ -37,7 +37,7 @@ class AuthService(
         val authToken = authProvider.getAccessToken(request.authorizationCode)
         val userInfo = authProvider.getUserInfo(authToken)
 
-        val member = findOrCreateMember(request.deviceId, request.provider, userInfo)
+        val member = findOrCreateMember(request.deviceId, userInfo)
 
         val accessToken = jwtTokenProvider.generateAccessToken(member.id)
         val refreshToken = jwtTokenProvider.generateRefreshToken(member.id)
@@ -88,7 +88,6 @@ class AuthService(
     @Transactional
     fun findOrCreateMember(
         deviceId: String,
-        provider: SocialProvider,
         userInfo: OAuthUserInfo,
     ): Member {
         return memberReader.findByDeviceId(deviceId)
@@ -96,7 +95,6 @@ class AuthService(
                 Member.create(
                     deviceId = deviceId,
                     oAuthUserInfo = userInfo,
-                    socialProvider = provider,
                     role = Role.USER,
                 ),
             )

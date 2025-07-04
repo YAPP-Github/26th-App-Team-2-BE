@@ -44,6 +44,7 @@ class KakaoAuthProvider(
             }
 
         return OAuthUserInfo(
+            socialProvider = SocialProvider.KAKAO,
             id = userInfo.id,
             email = userInfo.kakaoAccount.email,
         )

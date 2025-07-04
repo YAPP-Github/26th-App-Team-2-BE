@@ -46,9 +46,8 @@ class MemberEntity(
         Member(
             id = memberId,
             deviceId = deviceId,
-            oAuthUserInfo = OAuthUserInfo(authId, authEmail),
+            oAuthUserInfo = OAuthUserInfo(socialProvider, authId, authEmail),
             nickname = nickname,
-            socialProvider = socialProvider,
             role = role,
             state = state,
             createdAt = requireNotNull(createdAt),
@@ -62,7 +61,7 @@ class MemberEntity(
                 authId = member.oAuthUserInfo.id,
                 authEmail = member.oAuthUserInfo.email,
                 nickname = member.nickname,
-                socialProvider = member.socialProvider,
+                socialProvider = member.oAuthUserInfo.socialProvider,
                 role = member.role,
                 state = member.state,
             )

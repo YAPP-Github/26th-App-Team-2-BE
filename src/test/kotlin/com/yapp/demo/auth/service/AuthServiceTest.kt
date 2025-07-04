@@ -25,7 +25,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import java.time.Duration
 
 class AuthServiceTest {
-    private val userInfo = OAuthUserInfo("id", "test@email.com")
+    private val userInfo = OAuthUserInfo(SocialProvider.KAKAO, "id", "test@email.com")
     private val code = "authCode"
     private val mockProvider =
         mock<OAuthProvider> {

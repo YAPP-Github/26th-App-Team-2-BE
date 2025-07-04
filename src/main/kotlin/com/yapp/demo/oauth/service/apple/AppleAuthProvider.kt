@@ -19,6 +19,7 @@ class AppleAuthProvider(
         val claims = appleTokenProvider.verifyAndParse(token)
 
         return OAuthUserInfo(
+            SocialProvider.APPLE,
             id = claims.subject,
             email = claims["email"] as? String ?: "",
         )
