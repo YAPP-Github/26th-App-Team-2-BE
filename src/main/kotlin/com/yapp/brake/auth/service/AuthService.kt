@@ -17,7 +17,6 @@ import com.yapp.brake.member.model.Member
 import com.yapp.brake.oauth.model.OAuthUserInfo
 import com.yapp.brake.oauth.service.OAuthProvider
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 import java.time.Duration
 
 @Service
@@ -85,8 +84,7 @@ class AuthService(
         memberWriter.delete(getMemberId())
     }
 
-    @Transactional
-    fun findOrCreateMember(
+    private fun findOrCreateMember(
         deviceId: String,
         userInfo: OAuthUserInfo,
     ): Member {
