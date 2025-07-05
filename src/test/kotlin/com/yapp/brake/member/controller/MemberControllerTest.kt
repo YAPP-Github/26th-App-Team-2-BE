@@ -9,6 +9,7 @@ import com.yapp.brake.support.RestApiTestBase
 import com.yapp.brake.support.restdocs.NUMBER
 import com.yapp.brake.support.restdocs.OBJECT
 import com.yapp.brake.support.restdocs.STRING
+import com.yapp.brake.support.restdocs.Tag
 import com.yapp.brake.support.restdocs.toJsonString
 import com.yapp.brake.support.restdocs.type
 import org.junit.jupiter.api.Test
@@ -45,6 +46,7 @@ class MemberControllerTest : RestApiTestBase() {
             .andExpect(status().isOk)
             .andDocument(
                 "members-me-get",
+                Tag.MEMBER,
                 responseBody(
                     "data" type OBJECT means "응답 바디",
                     "data.nickname" type STRING means "닉네임",
@@ -81,6 +83,7 @@ class MemberControllerTest : RestApiTestBase() {
             .andExpect(status().isOk)
             .andDocument(
                 "members-me-update",
+                Tag.MEMBER,
                 requestBody(
                     "nickname" type STRING means "변경하려는 닉네임",
                 ),

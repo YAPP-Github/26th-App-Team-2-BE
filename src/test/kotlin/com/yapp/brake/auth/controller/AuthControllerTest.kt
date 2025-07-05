@@ -14,6 +14,7 @@ import com.yapp.brake.support.RestApiTestBase
 import com.yapp.brake.support.restdocs.NUMBER
 import com.yapp.brake.support.restdocs.OBJECT
 import com.yapp.brake.support.restdocs.STRING
+import com.yapp.brake.support.restdocs.Tag
 import com.yapp.brake.support.restdocs.toJsonString
 import com.yapp.brake.support.restdocs.type
 import org.junit.jupiter.api.Test
@@ -57,6 +58,7 @@ class AuthControllerTest : RestApiTestBase() {
             .andExpect(status().isOk)
             .andDocument(
                 "auth-login",
+                Tag.AUTH,
                 requestBody(
                     "provider" type STRING means "소셜 로그인 타입",
                     "authorizationCode" type STRING means "인가 코드",
@@ -89,6 +91,7 @@ class AuthControllerTest : RestApiTestBase() {
             .andExpect(status().isOk)
             .andDocument(
                 "auth-refresh",
+                Tag.AUTH,
                 requestBody(
                     "refreshToken" type STRING means "기존 리프레시 토큰",
                 ),
@@ -116,6 +119,7 @@ class AuthControllerTest : RestApiTestBase() {
             .andExpect(status().isNoContent)
             .andDocument(
                 "auth-logout",
+                Tag.AUTH,
                 requestBody(
                     "accessToken" type STRING means "기존 액세스 토큰",
                 ),
@@ -137,6 +141,7 @@ class AuthControllerTest : RestApiTestBase() {
             .andExpect(status().isNoContent)
             .andDocument(
                 "auth-revoke",
+                Tag.AUTH,
                 requestBody(
                     "provider" type STRING means "소셜 로그인 타입",
                     "authorizationCode" type STRING means "인가 정보",

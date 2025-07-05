@@ -1,4 +1,7 @@
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document
+import com.epages.restdocs.apispec.ResourceDocumentation.resource
+import com.epages.restdocs.apispec.ResourceSnippetParameters
+import com.yapp.brake.support.restdocs.Tag
 import org.springframework.restdocs.operation.preprocess.Preprocessors
 import org.springframework.restdocs.snippet.Attributes
 import org.springframework.restdocs.snippet.Attributes.Attribute
@@ -42,13 +45,22 @@ internal object RestDocsUtils {
  * 이 함수는 요청과 응답의 예시를 출력하고 문서화할 때 사용됩니다.
  *
  * @param identifier 문서화할 문서의 고유 식별자
+ * @param tag API를 그룹화할 태그
  * @param snippets RestDocs 스니펫 배열
  * @return 문서화된 `ResultActions` 객체
  */
 fun ResultActions.andDocument(
     identifier: String,
+    tag: Tag,
     vararg snippets: Snippet,
 ): ResultActions {
+    val tagResource =
+        resource(
+            ResourceSnippetParameters.builder()
+                .tag(tag.name)
+                .build(),
+        )
+
     return andDo(
         document(
             // 문서화 식별자
@@ -58,6 +70,7 @@ fun ResultActions.andDocument(
             // 응답을 보기 좋게 포맷
             Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
             // 스니펫을 추가하여 문서화
+            tagResource,
             *snippets,
         ),
     )
