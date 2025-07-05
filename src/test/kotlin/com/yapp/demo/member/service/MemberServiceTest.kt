@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.mock
-import org.mockito.Mockito.`when`
 import org.mockito.kotlin.any
+import org.mockito.kotlin.whenever
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 
@@ -27,7 +27,7 @@ class MemberServiceTest {
         fun `getMember()는 유저가 존재하면 식별자로 조회가 가능하다`() {
             val expected = memberFixture(id = 1L, nickname = "brake-user")
 
-            `when`(memberReader.getById(memberId = expected.id)).thenReturn(expected)
+            whenever(memberReader.getById(memberId = expected.id)).thenReturn(expected)
 
             val result = memberService.getMember(expected.id)
 
@@ -37,7 +37,7 @@ class MemberServiceTest {
         @Test
         fun `getMember()는 유저가 존재하지 않으면 예외를 던진다`() {
             val invalidId = 12124124L
-            `when`(memberReader.getById(invalidId)).thenThrow(CustomException(ErrorCode.MEMBER_NOT_FOUND))
+            whenever(memberReader.getById(invalidId)).thenThrow(CustomException(ErrorCode.MEMBER_NOT_FOUND))
 
             val result =
                 assertThrows<CustomException> {
@@ -58,8 +58,8 @@ class MemberServiceTest {
         val authentication = UsernamePasswordAuthenticationToken(member.id.toString(), null)
         SecurityContextHolder.getContext().authentication = authentication
 
-        `when`(memberReader.getById(memberId = member.id)).thenReturn(member)
-        `when`(memberWriter.save(any())).thenReturn(expected)
+        whenever(memberReader.getById(memberId = member.id)).thenReturn(member)
+        whenever(memberWriter.save(any())).thenReturn(expected)
 
         val result = memberService.update(newNickname)
 

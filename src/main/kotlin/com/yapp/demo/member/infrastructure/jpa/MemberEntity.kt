@@ -5,6 +5,7 @@ import com.yapp.demo.common.enums.SocialProvider
 import com.yapp.demo.common.persistence.Auditable
 import com.yapp.demo.member.model.Member
 import com.yapp.demo.member.model.MemberState
+import com.yapp.demo.oauth.model.OAuthUserInfo
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
@@ -20,6 +21,7 @@ class MemberEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val memberId: Long = 0L,
     val deviceId: String,
+    val authId: String,
     val authEmail: String,
     @Enumerated(EnumType.STRING)
     val socialProvider: SocialProvider,
@@ -44,9 +46,8 @@ class MemberEntity(
         Member(
             id = memberId,
             deviceId = deviceId,
-            authEmail = authEmail,
+            oAuthUserInfo = OAuthUserInfo(socialProvider, authId, authEmail),
             nickname = nickname,
-            socialProvider = socialProvider,
             role = role,
             state = state,
             createdAt = requireNotNull(createdAt),
@@ -57,9 +58,10 @@ class MemberEntity(
         fun from(member: Member) =
             MemberEntity(
                 deviceId = member.deviceId,
-                authEmail = member.authEmail,
+                authId = member.oAuthUserInfo.id,
+                authEmail = member.oAuthUserInfo.email,
                 nickname = member.nickname,
-                socialProvider = member.socialProvider,
+                socialProvider = member.oAuthUserInfo.socialProvider,
                 role = member.role,
                 state = member.state,
             )

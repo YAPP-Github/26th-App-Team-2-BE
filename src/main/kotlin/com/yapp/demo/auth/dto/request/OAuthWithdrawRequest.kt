@@ -1,12 +1,12 @@
 package com.yapp.demo.auth.dto.request
 
 import com.yapp.demo.common.enums.SocialProvider
-import jakarta.validation.constraints.NotBlank
+import jakarta.annotation.Nullable
 import jakarta.validation.constraints.NotNull
 
 data class OAuthWithdrawRequest(
     @field:NotNull(message = "소셜 로그인 타입은 필수 입니다.")
     val provider: SocialProvider,
-    @field:NotBlank(message = "인가 정보는 필수 입니다.")
-    val credential: String,
+    @field:Nullable
+    val authorizationCode: String? = null,
 )

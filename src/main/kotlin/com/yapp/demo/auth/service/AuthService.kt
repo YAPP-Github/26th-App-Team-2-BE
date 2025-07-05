@@ -14,6 +14,7 @@ import com.yapp.demo.common.security.getMemberId
 import com.yapp.demo.member.infrastructure.MemberReader
 import com.yapp.demo.member.infrastructure.MemberWriter
 import com.yapp.demo.member.model.Member
+import com.yapp.demo.oauth.model.OAuthUserInfo
 import com.yapp.demo.oauth.service.OAuthProvider
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -28,7 +29,6 @@ class AuthService(
     private val refreshTokenRepository: RefreshTokenRepository,
     private val blackListRepository: BlackListRepository,
 ) : AuthUseCase {
-    @Transactional
     override fun login(request: OAuthLoginRequest): OAuthLoginResponse {
         val authProvider =
             findProvider(request.provider)
@@ -37,19 +37,7 @@ class AuthService(
         val authToken = authProvider.getAccessToken(request.authorizationCode)
         val userInfo = authProvider.getUserInfo(authToken)
 
-        var member = memberReader.findByDeviceId(request.deviceId)
-
-        if (member == null) {
-            member =
-                memberWriter.save(
-                    Member.create(
-                        deviceId = request.deviceId,
-                        authEmail = userInfo.email,
-                        socialProvider = request.provider,
-                        role = Role.USER,
-                    ),
-                )
-        }
+        val member = findOrCreateMember(request.deviceId, userInfo)
 
         val accessToken = jwtTokenProvider.generateAccessToken(member.id)
         val refreshToken = jwtTokenProvider.generateRefreshToken(member.id)
@@ -95,6 +83,21 @@ class AuthService(
 
         authProvider.withdraw(credential)
         memberWriter.delete(getMemberId())
+    }
+
+    @Transactional
+    fun findOrCreateMember(
+        deviceId: String,
+        userInfo: OAuthUserInfo,
+    ): Member {
+        return memberReader.findByDeviceId(deviceId)
+            ?: memberWriter.save(
+                Member.create(
+                    deviceId = deviceId,
+                    oAuthUserInfo = userInfo,
+                    role = Role.USER,
+                ),
+            )
     }
 
     private fun findProvider(socialType: SocialProvider): OAuthProvider? =

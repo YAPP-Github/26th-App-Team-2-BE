@@ -126,20 +126,20 @@ class AuthControllerTest : RestApiTestBase() {
     fun `탈퇴 API`() {
         val request = OAuthWithdrawRequest(SocialProvider.KAKAO, "credential")
 
-        doNothing().`when`(authUseCase).withdraw(request.provider, request.credential)
+        doNothing().`when`(authUseCase).withdraw(request.provider, request.authorizationCode!!)
 
         val builder =
-            RestDocumentationRequestBuilders.post("/v1/auth/withdraw")
+            RestDocumentationRequestBuilders.delete("/v1/auth/withdraw")
                 .content(request.toJsonString())
                 .contentType(MediaType.APPLICATION_JSON)
 
         mockMvc.perform(builder)
-            .andExpect(status().isOk)
+            .andExpect(status().isNoContent)
             .andDocument(
                 "auth-revoke",
                 requestBody(
                     "provider" type STRING means "소셜 로그인 타입",
-                    "credential" type STRING means "인가 정보",
+                    "authorizationCode" type STRING means "인가 정보",
                 ),
             )
     }

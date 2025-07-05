@@ -8,7 +8,7 @@ interface OAuthProvider {
 
     fun getUserInfo(token: String): OAuthUserInfo
 
-    fun withdraw(code: String)
+    fun withdraw(credential: String)
 
     fun supports(socialType: SocialProvider): Boolean
 }

@@ -16,16 +16,16 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.mockito.Mockito.`when`
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import java.time.Duration
 
 class AuthServiceTest {
-    private val userInfo = OAuthUserInfo("id", "test@email.com")
+    private val userInfo = OAuthUserInfo(SocialProvider.KAKAO, "id", "test@email.com")
     private val code = "authCode"
     private val mockProvider =
         mock<OAuthProvider> {
@@ -58,7 +58,7 @@ class AuthServiceTest {
         val accessToken = "access-token"
         val refreshToken = "refresh-token"
 
-        val member = memberFixture(id = 1L, authEmail = userInfo.email)
+        val member = memberFixture(id = 1L, oAuthUserInfo = userInfo)
 
         val request =
             OAuthLoginRequest(
@@ -67,11 +67,11 @@ class AuthServiceTest {
                 deviceId = member.deviceId,
             )
 
-        `when`(memberReader.findByDeviceId(member.deviceId)).thenReturn(member)
+        whenever(memberReader.findByDeviceId(member.deviceId)).thenReturn(member)
 
-        `when`(jwtTokenProvider.generateAccessToken(member.id)).thenReturn(accessToken)
-        `when`(jwtTokenProvider.generateRefreshToken(member.id)).thenReturn(refreshToken)
-        `when`(jwtTokenProvider.extractExpiration(refreshToken)).thenReturn(60000L)
+        whenever(jwtTokenProvider.generateAccessToken(member.id)).thenReturn(accessToken)
+        whenever(jwtTokenProvider.generateRefreshToken(member.id)).thenReturn(refreshToken)
+        whenever(jwtTokenProvider.extractExpiration(refreshToken)).thenReturn(60000L)
 
         // when
         val result = authService.login(request)
@@ -85,18 +85,18 @@ class AuthServiceTest {
     inner class RefreshTokenTest {
         private val refreshToken = "refresh-token"
         private val memberId = 1L
-        private val member = memberFixture(id = 1, authEmail = userInfo.email)
+        private val member = memberFixture(id = 1, oAuthUserInfo = userInfo)
 
         @Test
         fun `refresh는 새로운 리프레시 토큰과 액세스 토큰을 발급한다`() {
             val newAccessToken = "new-access-token"
             val newRefreshToken = "new-refresh-token"
 
-            `when`(jwtTokenProvider.extractMemberId(refreshToken, TOKEN_TYPE_REFRESH)).thenReturn(member.id)
-            `when`(memberReader.getById(member.id)).thenReturn(member)
-            `when`(refreshTokenRepository.get(member.id)).thenReturn(refreshToken)
-            `when`(jwtTokenProvider.generateRefreshToken(member.id)).thenReturn(newRefreshToken)
-            `when`(jwtTokenProvider.generateAccessToken(member.id)).thenReturn(newAccessToken)
+            whenever(jwtTokenProvider.extractMemberId(refreshToken, TOKEN_TYPE_REFRESH)).thenReturn(member.id)
+            whenever(memberReader.getById(member.id)).thenReturn(member)
+            whenever(refreshTokenRepository.get(member.id)).thenReturn(refreshToken)
+            whenever(jwtTokenProvider.generateRefreshToken(member.id)).thenReturn(newRefreshToken)
+            whenever(jwtTokenProvider.generateAccessToken(member.id)).thenReturn(newAccessToken)
 
             val result = authService.refreshToken(refreshToken)
 
@@ -106,8 +106,8 @@ class AuthServiceTest {
 
         @Test
         fun `refresh는 유저가 존재하지 않으면 예외를 던진다`() {
-            `when`(jwtTokenProvider.extractMemberId(refreshToken, TOKEN_TYPE_REFRESH)).thenReturn(memberId)
-            `when`(memberReader.getById(memberId)).thenThrow(CustomException(ErrorCode.MEMBER_NOT_FOUND))
+            whenever(jwtTokenProvider.extractMemberId(refreshToken, TOKEN_TYPE_REFRESH)).thenReturn(memberId)
+            whenever(memberReader.getById(memberId)).thenThrow(CustomException(ErrorCode.MEMBER_NOT_FOUND))
 
             val exception =
                 assertThrows<CustomException> {
@@ -119,9 +119,9 @@ class AuthServiceTest {
 
         @Test
         fun `refresh는 기존 토큰이 저장소에 존재하지 않으면 예외를 던진다`() {
-            `when`(jwtTokenProvider.extractMemberId(refreshToken, TOKEN_TYPE_REFRESH)).thenReturn(member.id)
-            `when`(memberReader.getById(member.id)).thenReturn(member)
-            `when`(refreshTokenRepository.get(member.id)).thenThrow(CustomException(ErrorCode.TOKEN_NOT_FOUND))
+            whenever(jwtTokenProvider.extractMemberId(refreshToken, TOKEN_TYPE_REFRESH)).thenReturn(member.id)
+            whenever(memberReader.getById(member.id)).thenReturn(member)
+            whenever(refreshTokenRepository.get(member.id)).thenThrow(CustomException(ErrorCode.TOKEN_NOT_FOUND))
 
             val exception =
                 assertThrows<CustomException> {
@@ -133,9 +133,9 @@ class AuthServiceTest {
 
         @Test
         fun `refresh는 기존 토큰이 저장소의 토큰과 일치하지 않으면 예외를 던진다`() {
-            `when`(jwtTokenProvider.extractMemberId(refreshToken, TOKEN_TYPE_REFRESH)).thenReturn(member.id)
-            `when`(memberReader.getById(member.id)).thenReturn(member)
-            `when`(refreshTokenRepository.get(member.id)).thenReturn("another-token")
+            whenever(jwtTokenProvider.extractMemberId(refreshToken, TOKEN_TYPE_REFRESH)).thenReturn(member.id)
+            whenever(memberReader.getById(member.id)).thenReturn(member)
+            whenever(refreshTokenRepository.get(member.id)).thenReturn("another-token")
 
             val exception =
                 assertThrows<CustomException> {
@@ -156,7 +156,7 @@ class AuthServiceTest {
         val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), null)
         SecurityContextHolder.getContext().authentication = authentication
 
-        `when`(jwtTokenProvider.extractExpiration(accessToken)).thenReturn(ttl)
+        whenever(jwtTokenProvider.extractExpiration(accessToken)).thenReturn(ttl)
         // when
         authService.logout(accessToken)
 
