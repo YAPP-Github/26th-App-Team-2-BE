@@ -11,7 +11,7 @@ plugins {
     id("com.epages.restdocs-api-spec") version "0.19.4"
 }
 
-group = "com.yapp"
+group = "com.brake"
 version = "0.0.1-SNAPSHOT"
 
 java {
@@ -117,8 +117,8 @@ tasks.jacocoTestReport {
 
 openapi3 {
     setServer("/")
-    title = "YAPP API"
-    description = "YAPP API description"
+    title = "Brake API"
+    description = "Brake API description"
     version = "0.1.0"
     format = "yaml"
 }
