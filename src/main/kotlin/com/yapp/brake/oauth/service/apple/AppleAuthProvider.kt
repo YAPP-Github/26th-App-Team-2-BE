@@ -1,0 +1,36 @@
+package com.yapp.brake.oauth.service.apple
+
+import com.yapp.brake.common.enums.SocialProvider
+import com.yapp.brake.oauth.model.OAuthUserInfo
+import com.yapp.brake.oauth.service.OAuthProvider
+import org.springframework.stereotype.Component
+
+@Component
+class AppleAuthProvider(
+    private val appleClientSecretGenerator: AppleClientSecretGenerator,
+    private val appleTokenProvider: AppleTokenProvider,
+) : OAuthProvider {
+    override fun getAccessToken(code: String): String {
+        val clientSecret = appleClientSecretGenerator.getClientSecret()
+        return appleTokenProvider.getToken(code, clientSecret).idToken
+    }
+
+    override fun getUserInfo(token: String): OAuthUserInfo {
+        val claims = appleTokenProvider.verifyAndParse(token)
+
+        return OAuthUserInfo(
+            SocialProvider.APPLE,
+            id = claims.subject,
+            email = claims["email"] as? String ?: "",
+        )
+    }
+
+    override fun withdraw(credential: String) {
+        val clientSecret = appleClientSecretGenerator.getClientSecret()
+        val accessToken = appleTokenProvider.getToken(credential, clientSecret).accessToken
+
+        appleTokenProvider.revokeToken(accessToken, clientSecret)
+    }
+
+    override fun supports(socialType: SocialProvider): Boolean = socialType == SocialProvider.APPLE
+}
