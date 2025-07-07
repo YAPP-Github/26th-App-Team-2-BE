@@ -5,8 +5,6 @@ import com.yapp.brake.outbox.model.Outbox
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 import java.time.LocalDateTime
@@ -15,8 +13,7 @@ import java.time.LocalDateTime
 @Entity
 class OutboxEntity(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val outboxId: Long = 0L,
+    val outboxId: String,
     @Enumerated(EnumType.STRING)
     val eventType: EventType,
     val payload: String,

@@ -13,6 +13,6 @@ class OutboxJpaReader(
 ) : OutboxReader {
     override fun findAll(pageSize: Int): List<Outbox> {
         val pageable = Pageable.ofSize(pageSize)
-        return outboxRepository.findAllByOrderByOutboxIdAsc(pageable).map { it.toDomain() }
+        return outboxRepository.findAllByOrderByCreatedAtAsc(pageable).map { it.toDomain() }
     }
 }
