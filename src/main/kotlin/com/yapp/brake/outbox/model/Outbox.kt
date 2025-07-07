@@ -8,7 +8,7 @@ data class Outbox(
     val outboxId: String,
     val eventType: EventType,
     val payload: String,
-    val createdAt: LocalDateTime? = null,
+    val createdAt: LocalDateTime,
 ) {
     companion object {
         fun create(
@@ -18,6 +18,7 @@ data class Outbox(
             outboxId = UUID.randomUUID().toString(),
             eventType = eventType,
             payload = payload,
+            createdAt = LocalDateTime.now(),
         )
     }
 }

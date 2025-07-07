@@ -33,7 +33,7 @@ class OutboxEntity(
                 outboxId = outbox.outboxId,
                 eventType = outbox.eventType,
                 payload = outbox.payload,
-                createdAt = LocalDateTime.now(),
+                createdAt = outbox.createdAt,
             )
     }
 }
