@@ -3,7 +3,6 @@ package com.yapp.brake.auth.controller
 import andDocument
 import com.yapp.brake.auth.dto.request.LogoutRequest
 import com.yapp.brake.auth.dto.request.OAuthLoginRequest
-import com.yapp.brake.auth.dto.request.OAuthWithdrawRequest
 import com.yapp.brake.auth.dto.request.RefreshTokenRequest
 import com.yapp.brake.auth.dto.response.OAuthLoginResponse
 import com.yapp.brake.auth.dto.response.RefreshTokenResponse
@@ -122,29 +121,6 @@ class AuthControllerTest : RestApiTestBase() {
                 Tag.AUTH,
                 requestBody(
                     "accessToken" type STRING means "기존 액세스 토큰",
-                ),
-            )
-    }
-
-    @Test
-    fun `탈퇴 API`() {
-        val request = OAuthWithdrawRequest(SocialProvider.KAKAO, "credential")
-
-        doNothing().`when`(authUseCase).withdraw(request.provider, request.authorizationCode!!)
-
-        val builder =
-            RestDocumentationRequestBuilders.delete("/v1/auth/withdraw")
-                .content(request.toJsonString())
-                .contentType(MediaType.APPLICATION_JSON)
-
-        mockMvc.perform(builder)
-            .andExpect(status().isNoContent)
-            .andDocument(
-                "auth-revoke",
-                Tag.AUTH,
-                requestBody(
-                    "provider" type STRING means "소셜 로그인 타입",
-                    "authorizationCode" type STRING means "인가 정보",
                 ),
             )
     }

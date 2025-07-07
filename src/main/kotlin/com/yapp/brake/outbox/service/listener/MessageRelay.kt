@@ -1,4 +1,4 @@
-package com.yapp.brake.outbox.service
+package com.yapp.brake.outbox.service.listener
 
 import com.yapp.brake.common.event.Event
 import com.yapp.brake.outbox.infrastructure.OutboxReader
@@ -50,7 +50,6 @@ class MessageRelay(
             val event = Event.fromJson(outbox.payload) ?: return
 
             applicationEventPublisher.publishEvent(event.payload)
-
             outboxWriter.delete(outbox)
         } catch (e: Exception) {
             logger.error(e) { "[MessageRelay.publishEvent] outbox=$outbox" }

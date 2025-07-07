@@ -1,7 +1,6 @@
 package com.yapp.brake.oauth.service.kakao
 
 import com.yapp.brake.common.enums.SocialProvider
-import com.yapp.brake.member.infrastructure.MemberReader
 import com.yapp.brake.oauth.infrastructure.feign.kakao.KakaoApiFeignClient
 import com.yapp.brake.oauth.infrastructure.feign.kakao.KakaoAuthFeignClient
 import com.yapp.brake.oauth.infrastructure.feign.kakao.response.KakaoUserInfoResponse
@@ -17,7 +16,6 @@ class KakaoAuthProvider(
     private val kakaoProperties: KakaoProperties,
     private val kakaoAuthFeignClient: KakaoAuthFeignClient,
     private val kakaoApiFeignClient: KakaoApiFeignClient,
-    private val memberReader: MemberReader,
 ) : OAuthProvider {
     override fun getAccessToken(code: String): String {
         return try {
@@ -52,12 +50,10 @@ class KakaoAuthProvider(
 
     override fun withdraw(credential: String) {
         try {
-            val member = memberReader.getById(credential.toLong())
-
             kakaoApiFeignClient.unlink(
                 adminKey = "$KAKAO_UNLINK_HEADER_PREFIX${kakaoProperties.adminKey}",
                 targetIdType = KAKAO_UNLINK_TARGET_ID_TYPE,
-                targetId = member.oAuthUserInfo.id.toLong(),
+                targetId = credential.toLong(),
             )
         } catch (e: Exception) {
             logger.error(e) { "[KakaoAuthProvider.withdraw] code=$credential" }

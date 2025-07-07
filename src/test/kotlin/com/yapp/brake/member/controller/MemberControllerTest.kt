@@ -14,6 +14,7 @@ import com.yapp.brake.support.restdocs.toJsonString
 import com.yapp.brake.support.restdocs.type
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.`when`
+import org.mockito.kotlin.doNothing
 import org.springframework.http.MediaType
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -94,5 +95,26 @@ class MemberControllerTest : RestApiTestBase() {
                     "code" type NUMBER means "HTTP 코드",
                 ),
             )
+    }
+
+    @Test
+    fun `탈퇴 API`() {
+        val memberId = 1L
+        val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), null)
+        SecurityContextHolder.getContext().authentication = authentication
+
+        doNothing().`when`(memberUseCase).delete(memberId)
+
+        val builder =
+            RestDocumentationRequestBuilders.delete("/v1/members/me")
+
+        mockMvc.perform(builder)
+            .andExpect(status().isNoContent)
+            .andDocument(
+                "member-delete",
+                Tag.MEMBER,
+            )
+
+        SecurityContextHolder.clearContext()
     }
 }

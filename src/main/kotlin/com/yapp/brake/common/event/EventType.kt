@@ -1,6 +1,6 @@
 package com.yapp.brake.common.event
 
-import com.yapp.brake.common.event.payload.AuthWithdrawEventPayload
+import com.yapp.brake.common.event.payload.MemberDeletedEventPayload
 import io.github.oshai.kotlinlogging.KotlinLogging
 
 private val logger = KotlinLogging.logger { }
@@ -8,7 +8,7 @@ private val logger = KotlinLogging.logger { }
 enum class EventType(
     val payloadClass: Class<out EventPayload>,
 ) {
-    AUTH_WITHDRAW(AuthWithdrawEventPayload::class.java),
+    MEMBER_DELETED(MemberDeletedEventPayload::class.java),
     ;
 
     companion object {

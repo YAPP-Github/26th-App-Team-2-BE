@@ -8,8 +8,6 @@ import com.yapp.brake.auth.infrastructure.RefreshTokenRepository
 import com.yapp.brake.common.constants.TOKEN_TYPE_REFRESH
 import com.yapp.brake.common.enums.Role
 import com.yapp.brake.common.enums.SocialProvider
-import com.yapp.brake.common.event.EventType
-import com.yapp.brake.common.event.payload.AuthWithdrawEventPayload
 import com.yapp.brake.common.exception.CustomException
 import com.yapp.brake.common.exception.ErrorCode
 import com.yapp.brake.common.security.getMemberId
@@ -18,7 +16,6 @@ import com.yapp.brake.member.infrastructure.MemberWriter
 import com.yapp.brake.member.model.Member
 import com.yapp.brake.oauth.model.OAuthUserInfo
 import com.yapp.brake.oauth.service.OAuthProvider
-import com.yapp.brake.outbox.infrastructure.event.OutboxEventPublisher
 import org.springframework.stereotype.Service
 import java.time.Duration
 
@@ -30,7 +27,6 @@ class AuthService(
     private val memberWriter: MemberWriter,
     private val refreshTokenRepository: RefreshTokenRepository,
     private val blackListRepository: BlackListRepository,
-    private val outboxEventPublisher: OutboxEventPublisher,
 ) : AuthUseCase {
     override fun login(request: OAuthLoginRequest): OAuthLoginResponse {
         val authProvider =
@@ -76,18 +72,14 @@ class AuthService(
         blackListRepository.add(accessToken, Duration.ofMillis(ttl))
     }
 
+    /***
+     * 삭제 예정
+     */
     override fun withdraw(
         socialProvider: SocialProvider,
         credential: String,
     ) {
-        val authProvider =
-            findProvider(socialProvider)
-                ?: throw CustomException(ErrorCode.BAD_REQUEST)
-
-        authProvider.withdraw(credential)
-
-        val eventPayload = AuthWithdrawEventPayload(getMemberId())
-        outboxEventPublisher.publish(EventType.AUTH_WITHDRAW, eventPayload)
+        TODO("Not yet implemented")
     }
 
     private fun findOrCreateMember(

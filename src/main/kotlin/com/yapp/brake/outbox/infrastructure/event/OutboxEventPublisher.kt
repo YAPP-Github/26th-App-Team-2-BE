@@ -16,11 +16,11 @@ class OutboxEventPublisher(
         type: EventType,
         payload: EventPayload,
     ) {
-        val payload =
+        val event =
             Event.of(type, payload)
                 .toJson() ?: throw IllegalStateException("serialize fail")
 
-        val outbox = Outbox.create(type, payload)
+        val outbox = Outbox.create(type, event)
 
         applicationEventPublisher.publishEvent(OutboxEvent.of(outbox))
     }

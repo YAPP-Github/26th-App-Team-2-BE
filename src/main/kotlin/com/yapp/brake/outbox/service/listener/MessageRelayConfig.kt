@@ -1,4 +1,4 @@
-package com.yapp.brake.outbox.service
+package com.yapp.brake.outbox.service.listener
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -12,6 +12,7 @@ import java.util.concurrent.Executors
 @Configuration
 @EnableScheduling
 class MessageRelayConfig {
+    @Bean
     fun messageRelayPublishEventExecutor(): Executor =
         ThreadPoolTaskExecutor()
             .apply {
