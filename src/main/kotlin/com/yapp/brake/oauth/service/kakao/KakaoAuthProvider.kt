@@ -55,7 +55,7 @@ class KakaoAuthProvider(
             val member = memberReader.getById(credential.toLong())
 
             kakaoApiFeignClient.unlink(
-                adminKey = "$KAKAO_UNLINK_HEADER_PREFIX${kakaoProperties.clientId}",
+                adminKey = "$KAKAO_UNLINK_HEADER_PREFIX${kakaoProperties.adminKey}",
                 targetIdType = KAKAO_UNLINK_TARGET_ID_TYPE,
                 targetId = member.oAuthUserInfo.id.toLong(),
             )
@@ -70,6 +70,6 @@ class KakaoAuthProvider(
         private const val KAKAO_AUTH_GRANT_TYPE = "authorization_code"
         private const val KAKAO_AUTH_HEADER_PREFIX = "Bearer "
         private const val KAKAO_UNLINK_HEADER_PREFIX = "KakaoAK "
-        private const val KAKAO_UNLINK_TARGET_ID_TYPE = "user_id "
+        private const val KAKAO_UNLINK_TARGET_ID_TYPE = "user_id"
     }
 }
