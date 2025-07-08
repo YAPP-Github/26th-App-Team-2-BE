@@ -5,11 +5,11 @@ import org.springframework.core.task.TaskDecorator
 
 class TaskLoggingDecorator : TaskDecorator {
     override fun decorate(runnable: Runnable): Runnable {
-        val contextMap: Map<String, String> = MDC.getCopyOfContextMap()
+        val contextMap: Map<String, String>? = MDC.getCopyOfContextMap()
 
         return Runnable {
             try {
-                MDC.setContextMap(contextMap)
+                contextMap?.let { MDC.setContextMap(it) }
                 runnable.run()
             } finally {
                 MDC.clear()
