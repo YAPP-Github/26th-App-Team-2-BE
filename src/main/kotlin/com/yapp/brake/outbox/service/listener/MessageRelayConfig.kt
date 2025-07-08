@@ -1,5 +1,6 @@
 package com.yapp.brake.outbox.service.listener
 
+import com.yapp.brake.common.decorator.TaskLoggingDecorator
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.scheduling.annotation.EnableAsync
@@ -24,6 +25,7 @@ class MessageRelayConfig {
                 setWaitForTasksToCompleteOnShutdown(true)
                 setAwaitTerminationSeconds(AWAIT_TERMINATION_SECONDS)
                 setRejectedExecutionHandler(CallerRunsPolicy())
+                setTaskDecorator(TaskLoggingDecorator())
             }
 
     @Bean
