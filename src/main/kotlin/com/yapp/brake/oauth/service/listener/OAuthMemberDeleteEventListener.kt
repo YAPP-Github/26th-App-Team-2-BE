@@ -1,4 +1,4 @@
-package com.yapp.brake.auth.service.listener
+package com.yapp.brake.oauth.service.listener
 
 import com.yapp.brake.common.enums.SocialProvider
 import com.yapp.brake.common.event.payload.MemberDeletedEventPayload
@@ -9,7 +9,7 @@ import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Component
 
 @Component
-class AuthMemberDeleteEventListener(
+class OAuthMemberDeleteEventListener(
     private val oauthProviders: List<OAuthProvider>,
 ) {
     @EventListener
