@@ -128,9 +128,9 @@ class AuthControllerTest : RestApiTestBase() {
 
     @Test
     fun `탈퇴 API`() {
-        val request = OAuthWithdrawRequest(SocialProvider.KAKAO, "credential")
+        val request = OAuthWithdrawRequest(SocialProvider.KAKAO)
 
-        doNothing().`when`(authUseCase).withdraw(request.provider, request.authorizationCode!!)
+        doNothing().`when`(authUseCase).withdraw(request.provider)
 
         val builder =
             RestDocumentationRequestBuilders.delete("/v1/auth/withdraw")

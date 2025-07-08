@@ -71,6 +71,6 @@ class AppleTokenProvider(
 
     companion object {
         private const val APPLE_AUTH_GRANT_TYPE = "authorization_code"
-        private const val TOKEN_TYPE = "access_token"
+        private const val TOKEN_TYPE = "refresh_token"
     }
 }

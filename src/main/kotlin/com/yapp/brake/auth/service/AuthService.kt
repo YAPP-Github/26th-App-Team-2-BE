@@ -33,8 +33,7 @@ class AuthService(
             findProvider(request.provider)
                 ?: throw CustomException(ErrorCode.BAD_REQUEST)
 
-        val authToken = authProvider.getAccessToken(request.authorizationCode)
-        val userInfo = authProvider.getUserInfo(authToken)
+        val userInfo = authProvider.getOAuthUserInfo(request.authorizationCode)
 
         val member = findOrCreateMember(request.deviceId, userInfo)
 
@@ -72,15 +71,14 @@ class AuthService(
         blackListRepository.add(accessToken, Duration.ofMillis(ttl))
     }
 
-    override fun withdraw(
-        socialProvider: SocialProvider,
-        credential: String,
-    ) {
+    override fun withdraw(socialProvider: SocialProvider) {
         val authProvider =
             findProvider(socialProvider)
                 ?: throw CustomException(ErrorCode.BAD_REQUEST)
 
-        authProvider.withdraw(credential)
+        val member = memberReader.getById(getMemberId())
+        authProvider.withdraw(member.oAuthUserInfo)
+
         memberWriter.delete(getMemberId())
     }
 

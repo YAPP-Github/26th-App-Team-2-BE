@@ -1,11 +1,13 @@
 package com.yapp.brake.oauth.service.kakao
 
+import com.yapp.brake.common.enums.SocialProvider
 import com.yapp.brake.member.infrastructure.MemberReader
 import com.yapp.brake.oauth.infrastructure.feign.kakao.KakaoApiFeignClient
 import com.yapp.brake.oauth.infrastructure.feign.kakao.KakaoAuthFeignClient
 import com.yapp.brake.oauth.infrastructure.feign.kakao.response.KakaoTokenResponse
 import com.yapp.brake.oauth.infrastructure.feign.kakao.response.KakaoUnlinkResponse
 import com.yapp.brake.oauth.infrastructure.feign.kakao.response.KakaoUserInfoResponse
+import com.yapp.brake.oauth.model.OAuthUserInfo
 import com.yapp.brake.support.fixture.model.memberFixture
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -29,9 +31,9 @@ class KakaoAuthProviderTest {
         )
 
     @Test
-    fun `액세스 토큰을 조회한다`() {
+    fun `유저 정보를 조회한다`() {
         val code = "authorizationCode"
-        val response =
+        val tokenResponse =
             KakaoTokenResponse(
                 accessToken = "accessToken",
                 tokenType = "access",
@@ -39,6 +41,11 @@ class KakaoAuthProviderTest {
                 expiresIn = 1L,
                 scope = null,
                 refreshTokenExpiresIn = 2L,
+            )
+        val expected =
+            KakaoUserInfoResponse(
+                id = "kakao-id",
+                kakaoAccount = KakaoUserInfoResponse.KakaoAccount("kakao@email.com"),
             )
 
         whenever(
@@ -48,27 +55,12 @@ class KakaoAuthProviderTest {
                 kakaoProperties.redirectUri,
                 code,
             ),
-        ).thenReturn(response)
-
-        val result = kakaoAuthProvider.getAccessToken(code)
-
-        assertThat(result).isEqualTo(response.accessToken)
-    }
-
-    @Test
-    fun `유저 정보를 조회한다`() {
-        val accessToken = "access-token"
-        val expected =
-            KakaoUserInfoResponse(
-                id = "kakao-id",
-                kakaoAccount = KakaoUserInfoResponse.KakaoAccount("kakao@email.com"),
-            )
-
+        ).thenReturn(tokenResponse)
         whenever(kakaoApiFeignClient.getUserInfo(any())).thenReturn(expected)
 
-        val result = kakaoAuthProvider.getUserInfo(accessToken)
+        val result = kakaoAuthProvider.getOAuthUserInfo(code)
 
-        assertThat(result.id).isEqualTo(expected.id)
+        assertThat(result.credential).isEqualTo(expected.id)
         assertThat(result.email).isEqualTo(expected.kakaoAccount.email)
     }
 
@@ -76,18 +68,19 @@ class KakaoAuthProviderTest {
     fun `탈퇴를 위해 연결을 끊는다`() {
         val credential = "12345"
         val member = memberFixture(id = credential.toLong())
+        val oAuthUserInfo = OAuthUserInfo(SocialProvider.KAKAO, credential, "email@brake.com")
         whenever(memberReader.getById(credential.toLong())).thenReturn(member)
 
         whenever(
             kakaoApiFeignClient.unlink(
                 "adminKey",
                 "tagetIdType",
-                member.oAuthUserInfo.id.toLong(),
+                member.oAuthUserInfo.credential.toLong(),
             ),
         ).thenReturn(
             KakaoUnlinkResponse(123L),
         )
 
-        assertDoesNotThrow { kakaoAuthProvider.withdraw(credential) }
+        assertDoesNotThrow { kakaoAuthProvider.withdraw(oAuthUserInfo) }
     }
 }

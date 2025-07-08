@@ -12,8 +12,5 @@ interface AuthUseCase {
 
     fun logout(accessToken: String)
 
-    fun withdraw(
-        socialProvider: SocialProvider,
-        credential: String,
-    )
+    fun withdraw(socialProvider: SocialProvider)
 }

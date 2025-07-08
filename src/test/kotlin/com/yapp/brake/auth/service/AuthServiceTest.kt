@@ -30,8 +30,7 @@ class AuthServiceTest {
     private val mockProvider =
         mock<OAuthProvider> {
             on { supports(SocialProvider.KAKAO) } doReturn true
-            on { getAccessToken(code) } doReturn "token"
-            on { getUserInfo("token") } doReturn userInfo
+            on { getOAuthUserInfo(code) } doReturn userInfo
         }
 
     private val oauthProviders = listOf(mockProvider)
@@ -170,19 +169,19 @@ class AuthServiceTest {
     @Test
     fun `signOut은 OAuthProvider에 탈퇴 요청을 하고 유저를 삭제한다`() {
         // given
-        val credential = "valid-credential"
-        val socialProvider = SocialProvider.KAKAO
-        val memberId = 1L
+        val member = memberFixture(id = 1L)
+        val oAuthUserInfo = member.oAuthUserInfo
 
-        val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), null)
+        val authentication = UsernamePasswordAuthenticationToken(member.id.toString(), null)
         SecurityContextHolder.getContext().authentication = authentication
+        whenever(memberReader.getById(member.id)).thenReturn(member)
 
         // when
-        authService.withdraw(socialProvider, credential)
+        authService.withdraw(oAuthUserInfo.socialProvider)
 
         // then
-        verify(mockProvider).withdraw(credential)
-        verify(memberWriter).delete(memberId)
+        verify(mockProvider).withdraw(oAuthUserInfo)
+        verify(memberWriter).delete(member.id)
 
         SecurityContextHolder.clearContext()
     }
