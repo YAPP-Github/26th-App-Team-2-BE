@@ -17,8 +17,8 @@ import com.yapp.brake.support.restdocs.Tag
 import com.yapp.brake.support.restdocs.toJsonString
 import com.yapp.brake.support.restdocs.type
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.`when`
 import org.mockito.kotlin.doNothing
+import org.mockito.kotlin.whenever
 import org.springframework.http.MediaType
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
@@ -45,7 +45,7 @@ class AuthControllerTest : RestApiTestBase() {
                 ),
             )
 
-        `when`(authUseCase.login(request))
+        whenever(authUseCase.login(request))
             .thenReturn(response.data)
 
         val builder =
@@ -78,7 +78,7 @@ class AuthControllerTest : RestApiTestBase() {
         val request = RefreshTokenRequest("refreshToken")
         val response = ApiResponse.success(RefreshTokenResponse("access-token", "refresh-token"))
 
-        `when`(authUseCase.refreshToken(request.refreshToken))
+        whenever(authUseCase.refreshToken(request.refreshToken))
             .thenReturn(response.data)
 
         val builder =
@@ -107,7 +107,7 @@ class AuthControllerTest : RestApiTestBase() {
     fun `로그아웃 API`() {
         val request = LogoutRequest("accessToken")
 
-        doNothing().`when`(authUseCase).logout(request.accessToken)
+        doNothing().whenever(authUseCase).logout(request.accessToken)
 
         val builder =
             RestDocumentationRequestBuilders.post("/v1/auth/logout")
