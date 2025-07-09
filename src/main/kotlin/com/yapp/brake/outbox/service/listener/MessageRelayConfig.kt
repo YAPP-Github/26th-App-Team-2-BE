@@ -8,7 +8,6 @@ import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
-import java.util.concurrent.ThreadPoolExecutor.CallerRunsPolicy
 
 @EnableAsync
 @Configuration
@@ -24,7 +23,6 @@ class MessageRelayConfig {
                 setThreadNamePrefix("pub-event-")
                 setWaitForTasksToCompleteOnShutdown(true)
                 setAwaitTerminationSeconds(AWAIT_TERMINATION_SECONDS)
-                setRejectedExecutionHandler(CallerRunsPolicy())
                 setTaskDecorator(TaskLoggingDecorator())
             }
 
