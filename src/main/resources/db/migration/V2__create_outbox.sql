@@ -1,5 +1,6 @@
 CREATE TABLE outbox (
     outbox_id   CHAR(36)     NOT NULL PRIMARY KEY,
+    target_listener  VARCHAR(100)  NOT NULL,
     event_type  VARCHAR(100)  NOT NULL,
     payload     VARCHAR(5000) NOT NULL,
     created_at  DATETIME      NOT NULL

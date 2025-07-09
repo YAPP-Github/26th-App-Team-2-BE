@@ -14,6 +14,7 @@ import java.time.LocalDateTime
 class OutboxEntity(
     @Id
     val outboxId: String,
+    val handler: String,
     @Enumerated(EnumType.STRING)
     val eventType: EventType,
     val payload: String,
@@ -22,6 +23,7 @@ class OutboxEntity(
     fun toDomain() =
         Outbox(
             outboxId = outboxId,
+            handler = handler,
             eventType = eventType,
             payload = payload,
             createdAt = createdAt,
@@ -31,6 +33,7 @@ class OutboxEntity(
         fun from(outbox: Outbox) =
             OutboxEntity(
                 outboxId = outbox.outboxId,
+                handler = outbox.handler,
                 eventType = outbox.eventType,
                 payload = outbox.payload,
                 createdAt = outbox.createdAt,

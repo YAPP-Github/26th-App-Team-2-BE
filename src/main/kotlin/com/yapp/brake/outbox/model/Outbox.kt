@@ -6,15 +6,18 @@ import java.util.UUID
 
 data class Outbox(
     val outboxId: String,
+    val handler: String,
     val eventType: EventType,
     val payload: String,
     val createdAt: LocalDateTime,
 ) {
     companion object {
         fun create(
+            handler: String,
             eventType: EventType,
             payload: String,
         ) = Outbox(
+            handler = handler,
             outboxId = UUID.randomUUID().toString(),
             eventType = eventType,
             payload = payload,
