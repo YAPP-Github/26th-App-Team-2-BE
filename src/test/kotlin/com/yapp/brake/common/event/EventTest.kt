@@ -20,9 +20,6 @@ class EventTest {
 
         val event = Event.of(EventType.MEMBER_DELETED, payload)
         val json = event.toJson()
-
-        // println("json = $json")
-
         val result = Event.fromJson(json)
 
         assertThat(result!!.type).isEqualTo(event.type)
