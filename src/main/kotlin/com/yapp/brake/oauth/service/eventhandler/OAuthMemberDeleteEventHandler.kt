@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component
 class OAuthMemberDeleteEventHandler(
     private val oauthProviders: List<OAuthProvider>,
 ) : EventPayloadHandler<MemberDeletedEventPayload> {
+    override val eventType: EventType = EventType.MEMBER_DELETED
+
     override fun handle(payload: MemberDeletedEventPayload) {
         val authProvider =
             findProvider(SocialProvider.from(payload.socialProvider))
@@ -20,8 +22,6 @@ class OAuthMemberDeleteEventHandler(
 
         authProvider.withdraw(payload.authId)
     }
-
-    override fun getEventType(): EventType = EventType.MEMBER_DELETED
 
     private fun findProvider(socialType: SocialProvider): OAuthProvider? =
         oauthProviders.firstOrNull { it.supports(socialType) }

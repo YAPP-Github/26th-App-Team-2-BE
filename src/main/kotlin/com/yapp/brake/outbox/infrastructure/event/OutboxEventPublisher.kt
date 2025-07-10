@@ -14,7 +14,9 @@ class OutboxEventPublisher(
     private val eventHandlers: List<EventPayloadHandler<*>>,
     private val applicationEventPublisher: ApplicationEventPublisher,
 ) {
-    private val handlerMap = eventHandlers.associateBy { it::class.java.name }
+    private val handlerMap: Map<EventType, List<EventPayloadHandler<EventPayload>>> =
+        eventHandlers.filterIsInstance<EventPayloadHandler<EventPayload>>()
+            .groupBy { it.eventType }
 
     fun publish(
         type: EventType,
@@ -25,8 +27,8 @@ class OutboxEventPublisher(
                 .toJson() ?: throw IllegalStateException("serialize fail")
 
         val outboxes =
-            handlerMap.filter { (_, handler) -> handler.getEventType() == type }
-                .map { (handlerName, _) -> Outbox.create(handlerName, type, event) }
+            handlerMap[type].orEmpty()
+                .map { handler -> Outbox.create(handler::class.java.name, type, event) }
 
         outboxes.forEach { applicationEventPublisher.publishEvent(OutboxEvent.of(it)) }
     }

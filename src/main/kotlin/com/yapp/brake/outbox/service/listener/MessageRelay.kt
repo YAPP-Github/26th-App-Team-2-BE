@@ -23,7 +23,9 @@ class MessageRelay(
     private val outboxWriter: OutboxWriter,
     private val eventHandlers: List<EventPayloadHandler<*>>,
 ) {
-    private val handlerMap = eventHandlers.associateBy { it::class.java.name }
+    private val handlerMap =
+        eventHandlers.filterIsInstance<EventPayloadHandler<EventPayload>>()
+            .associateBy { it::class.java.name }
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     fun createOutbox(outboxEvent: OutboxEvent) {
@@ -51,10 +53,9 @@ class MessageRelay(
     private fun handleEvent(outbox: Outbox) {
         try {
             val event = Event.fromJson(outbox.payload) ?: return
-            val handler = handlerMap[requireNotNull(outbox.handler)] ?: return
+            val handler = handlerMap[outbox.handler] ?: return
 
-            @Suppress("UNCHECKED_CAST")
-            (handler as EventPayloadHandler<EventPayload>).handle(event.payload)
+            handler.handle(event.payload)
 
             outboxWriter.delete(outbox)
         } catch (e: Exception) {
