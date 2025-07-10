@@ -72,16 +72,14 @@ class AuthService(
         blackListRepository.add(accessToken, Duration.ofMillis(ttl))
     }
 
+    /***
+     * 삭제 예정
+     */
     override fun withdraw(
         socialProvider: SocialProvider,
         credential: String,
     ) {
-        val authProvider =
-            findProvider(socialProvider)
-                ?: throw CustomException(ErrorCode.BAD_REQUEST)
-
-        authProvider.withdraw(credential)
-        memberWriter.delete(getMemberId())
+        TODO("Not yet implemented")
     }
 
     private fun findOrCreateMember(

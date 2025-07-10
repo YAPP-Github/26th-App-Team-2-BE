@@ -3,7 +3,6 @@ package com.yapp.brake.auth.controller
 import andDocument
 import com.yapp.brake.auth.dto.request.LogoutRequest
 import com.yapp.brake.auth.dto.request.OAuthLoginRequest
-import com.yapp.brake.auth.dto.request.OAuthWithdrawRequest
 import com.yapp.brake.auth.dto.request.RefreshTokenRequest
 import com.yapp.brake.auth.dto.response.OAuthLoginResponse
 import com.yapp.brake.auth.dto.response.RefreshTokenResponse
@@ -18,8 +17,8 @@ import com.yapp.brake.support.restdocs.Tag
 import com.yapp.brake.support.restdocs.toJsonString
 import com.yapp.brake.support.restdocs.type
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.`when`
 import org.mockito.kotlin.doNothing
+import org.mockito.kotlin.whenever
 import org.springframework.http.MediaType
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
@@ -46,7 +45,7 @@ class AuthControllerTest : RestApiTestBase() {
                 ),
             )
 
-        `when`(authUseCase.login(request))
+        whenever(authUseCase.login(request))
             .thenReturn(response.data)
 
         val builder =
@@ -79,7 +78,7 @@ class AuthControllerTest : RestApiTestBase() {
         val request = RefreshTokenRequest("refreshToken")
         val response = ApiResponse.success(RefreshTokenResponse("access-token", "refresh-token"))
 
-        `when`(authUseCase.refreshToken(request.refreshToken))
+        whenever(authUseCase.refreshToken(request.refreshToken))
             .thenReturn(response.data)
 
         val builder =
@@ -108,7 +107,7 @@ class AuthControllerTest : RestApiTestBase() {
     fun `로그아웃 API`() {
         val request = LogoutRequest("accessToken")
 
-        doNothing().`when`(authUseCase).logout(request.accessToken)
+        doNothing().whenever(authUseCase).logout(request.accessToken)
 
         val builder =
             RestDocumentationRequestBuilders.post("/v1/auth/logout")
@@ -122,29 +121,6 @@ class AuthControllerTest : RestApiTestBase() {
                 Tag.AUTH,
                 requestBody(
                     "accessToken" type STRING means "기존 액세스 토큰",
-                ),
-            )
-    }
-
-    @Test
-    fun `탈퇴 API`() {
-        val request = OAuthWithdrawRequest(SocialProvider.KAKAO, "credential")
-
-        doNothing().`when`(authUseCase).withdraw(request.provider, request.authorizationCode!!)
-
-        val builder =
-            RestDocumentationRequestBuilders.delete("/v1/auth/withdraw")
-                .content(request.toJsonString())
-                .contentType(MediaType.APPLICATION_JSON)
-
-        mockMvc.perform(builder)
-            .andExpect(status().isNoContent)
-            .andDocument(
-                "auth-revoke",
-                Tag.AUTH,
-                requestBody(
-                    "provider" type STRING means "소셜 로그인 타입",
-                    "authorizationCode" type STRING means "인가 정보",
                 ),
             )
     }

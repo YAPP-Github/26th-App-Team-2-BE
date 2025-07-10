@@ -8,4 +8,5 @@ import org.springframework.stereotype.Component
 data class KakaoProperties(
     var clientId: String = "",
     var redirectUri: String = "",
+    var adminKey: String = "",
 )

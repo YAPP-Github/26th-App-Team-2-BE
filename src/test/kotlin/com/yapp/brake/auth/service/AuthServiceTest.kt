@@ -166,24 +166,4 @@ class AuthServiceTest {
 
         SecurityContextHolder.clearContext()
     }
-
-    @Test
-    fun `signOut은 OAuthProvider에 탈퇴 요청을 하고 유저를 삭제한다`() {
-        // given
-        val credential = "valid-credential"
-        val socialProvider = SocialProvider.KAKAO
-        val memberId = 1L
-
-        val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), null)
-        SecurityContextHolder.getContext().authentication = authentication
-
-        // when
-        authService.withdraw(socialProvider, credential)
-
-        // then
-        verify(mockProvider).withdraw(credential)
-        verify(memberWriter).delete(memberId)
-
-        SecurityContextHolder.clearContext()
-    }
 }
