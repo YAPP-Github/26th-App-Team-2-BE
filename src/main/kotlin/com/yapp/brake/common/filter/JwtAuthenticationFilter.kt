@@ -23,7 +23,8 @@ class JwtAuthenticationFilter(
         return path == "/health" ||
             path.startsWith("/v1/auth/login") ||
             path.startsWith("/static/swagger") ||
-            path.startsWith("/v1/swagger")
+            path.startsWith("/v1/swagger") ||
+            path.startsWith("/actuator")
     }
 
     override fun doFilterInternal(
