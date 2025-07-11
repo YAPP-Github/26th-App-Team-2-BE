@@ -53,11 +53,11 @@ jobs:
             }
 
       - name: Log created issue
-        run: echo "Jira Issue ${{ steps.issue-parser.outputs.parentKey }}/${{ steps.create.outputs.issue }} was created"
+        run: echo "Jira Issue ${{ steps.issue-parser.outputs.issueparser_parentKey }}/${{ steps.create.outputs.issue }} was created"
 
       - name: Create branch with Ticket number
         run: |
-          LABELS="${{ steps.issue-parser.outputs.issueLabel }}"
+          LABELS="${{ steps.issue-parser.outputs.issueparser_issueLabel }}"
           BRANCH_PREFIX="${LABELS%%,*}"
           ISSUE_NUMBER="${{ steps.create.outputs.issue }}"
           BRANCH_NAME="${BRANCH_PREFIX}/${ISSUE_NUMBER}"
