@@ -6,7 +6,7 @@ import com.yapp.brake.oauth.model.OAuthUserInfo
 interface OAuthProvider {
     fun getOAuthUserInfo(code: String): OAuthUserInfo
 
-    fun withdraw(oAuthUserInfo: OAuthUserInfo)
+    fun withdraw(credential: String)
 
     fun supports(socialType: SocialProvider): Boolean
 }

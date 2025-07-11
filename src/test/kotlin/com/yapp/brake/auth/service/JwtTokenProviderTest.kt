@@ -12,9 +12,9 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import kotlin.test.Test
 import kotlin.test.assertTrue
@@ -90,7 +90,7 @@ class JwtTokenProviderTest {
         val memberId = 123L
         val member = memberFixture(id = memberId)
 
-        `when`(memberReader.findById(memberId)).thenReturn(member)
+        whenever(memberReader.findById(memberId)).thenReturn(member)
 
         // when
         val authentication = jwtTokenProvider.getAuthentication(memberId)

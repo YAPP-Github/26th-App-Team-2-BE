@@ -22,9 +22,9 @@ class AppleAuthProvider(
         )
     }
 
-    override fun withdraw(oAuthUserInfo: OAuthUserInfo) {
+    override fun withdraw(credential: String) {
         val clientSecret = appleClientSecretGenerator.getClientSecret()
-        appleTokenProvider.revokeToken(oAuthUserInfo.credential, clientSecret)
+        appleTokenProvider.revokeToken(credential, clientSecret)
     }
 
     override fun supports(socialType: SocialProvider): Boolean = socialType == SocialProvider.APPLE

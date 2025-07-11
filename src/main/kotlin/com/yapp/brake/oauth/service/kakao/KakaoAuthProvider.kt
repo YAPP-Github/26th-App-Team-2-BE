@@ -1,7 +1,6 @@
 package com.yapp.brake.oauth.service.kakao
 
 import com.yapp.brake.common.enums.SocialProvider
-import com.yapp.brake.member.infrastructure.MemberReader
 import com.yapp.brake.oauth.infrastructure.feign.kakao.KakaoApiFeignClient
 import com.yapp.brake.oauth.infrastructure.feign.kakao.KakaoAuthFeignClient
 import com.yapp.brake.oauth.infrastructure.feign.kakao.response.KakaoUserInfoResponse
@@ -17,7 +16,6 @@ class KakaoAuthProvider(
     private val kakaoProperties: KakaoProperties,
     private val kakaoAuthFeignClient: KakaoAuthFeignClient,
     private val kakaoApiFeignClient: KakaoApiFeignClient,
-    private val memberReader: MemberReader,
 ) : OAuthProvider {
     override fun getOAuthUserInfo(code: String): OAuthUserInfo {
         val accessToken =
@@ -53,15 +51,15 @@ class KakaoAuthProvider(
         )
     }
 
-    override fun withdraw(oAuthUserInfo: OAuthUserInfo) {
+    override fun withdraw(credential: String) {
         try {
             kakaoApiFeignClient.unlink(
-                adminKey = "$KAKAO_UNLINK_HEADER_PREFIX${kakaoProperties.clientId}",
+                adminKey = "$KAKAO_UNLINK_HEADER_PREFIX${kakaoProperties.adminKey}",
                 targetIdType = KAKAO_UNLINK_TARGET_ID_TYPE,
-                targetId = oAuthUserInfo.credential.toLong(),
+                targetId = credential.toLong(),
             )
         } catch (e: Exception) {
-            logger.error(e) { "[KakaoAuthProvider.withdraw] code=$oAuthUserInfo" }
+            logger.error(e) { "[KakaoAuthProvider.withdraw] code=$credential" }
         }
     }
 
@@ -71,6 +69,6 @@ class KakaoAuthProvider(
         private const val KAKAO_AUTH_GRANT_TYPE = "authorization_code"
         private const val KAKAO_AUTH_HEADER_PREFIX = "Bearer "
         private const val KAKAO_UNLINK_HEADER_PREFIX = "KakaoAK "
-        private const val KAKAO_UNLINK_TARGET_ID_TYPE = "user_id "
+        private const val KAKAO_UNLINK_TARGET_ID_TYPE = "user_id"
     }
 }
