@@ -82,7 +82,7 @@ class MemberServiceTest {
             MemberDeletedEventPayload(
                 memberId = member.id,
                 socialProvider = member.oAuthUserInfo.socialProvider.name,
-                authId = member.oAuthUserInfo.id,
+                authId = member.oAuthUserInfo.credential,
                 authEmail = member.oAuthUserInfo.email,
                 deviceId = member.deviceId,
             )

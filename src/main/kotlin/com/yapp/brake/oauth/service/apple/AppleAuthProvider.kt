@@ -10,26 +10,21 @@ class AppleAuthProvider(
     private val appleClientSecretGenerator: AppleClientSecretGenerator,
     private val appleTokenProvider: AppleTokenProvider,
 ) : OAuthProvider {
-    override fun getAccessToken(code: String): String {
+    override fun getOAuthUserInfo(code: String): OAuthUserInfo {
         val clientSecret = appleClientSecretGenerator.getClientSecret()
-        return appleTokenProvider.getToken(code, clientSecret).idToken
-    }
-
-    override fun getUserInfo(token: String): OAuthUserInfo {
-        val claims = appleTokenProvider.verifyAndParse(token)
+        val tokens = appleTokenProvider.getToken(code, clientSecret)
+        val claims = appleTokenProvider.verifyAndParse(tokens.idToken)
 
         return OAuthUserInfo(
-            SocialProvider.APPLE,
-            id = claims.subject,
+            socialProvider = SocialProvider.APPLE,
+            credential = tokens.refreshToken,
             email = claims["email"] as? String ?: "",
         )
     }
 
     override fun withdraw(credential: String) {
         val clientSecret = appleClientSecretGenerator.getClientSecret()
-        val accessToken = appleTokenProvider.getToken(credential, clientSecret).accessToken
-
-        appleTokenProvider.revokeToken(accessToken, clientSecret)
+        appleTokenProvider.revokeToken(credential, clientSecret)
     }
 
     override fun supports(socialType: SocialProvider): Boolean = socialType == SocialProvider.APPLE

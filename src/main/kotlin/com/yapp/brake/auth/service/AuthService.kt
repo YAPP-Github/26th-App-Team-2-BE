@@ -33,8 +33,7 @@ class AuthService(
             findProvider(request.provider)
                 ?: throw CustomException(ErrorCode.BAD_REQUEST)
 
-        val authToken = authProvider.getAccessToken(request.authorizationCode)
-        val userInfo = authProvider.getUserInfo(authToken)
+        val userInfo = authProvider.getOAuthUserInfo(request.authorizationCode)
 
         val member = findOrCreateMember(request.deviceId, userInfo)
 
@@ -70,16 +69,6 @@ class AuthService(
 
         val ttl = jwtTokenProvider.extractExpiration(accessToken)
         blackListRepository.add(accessToken, Duration.ofMillis(ttl))
-    }
-
-    /***
-     * 삭제 예정
-     */
-    override fun withdraw(
-        socialProvider: SocialProvider,
-        credential: String,
-    ) {
-        TODO("Not yet implemented")
     }
 
     private fun findOrCreateMember(

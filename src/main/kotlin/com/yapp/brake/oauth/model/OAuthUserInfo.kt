@@ -4,6 +4,6 @@ import com.yapp.brake.common.enums.SocialProvider
 
 data class OAuthUserInfo(
     val socialProvider: SocialProvider,
-    val id: String,
+    val credential: String,
     val email: String,
 )

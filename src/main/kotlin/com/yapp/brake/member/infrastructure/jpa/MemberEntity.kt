@@ -21,7 +21,7 @@ class MemberEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val memberId: Long = 0L,
     val deviceId: String,
-    val authId: String,
+    val credential: String,
     val authEmail: String,
     @Enumerated(EnumType.STRING)
     val socialProvider: SocialProvider,
@@ -46,7 +46,7 @@ class MemberEntity(
         Member(
             id = memberId,
             deviceId = deviceId,
-            oAuthUserInfo = OAuthUserInfo(socialProvider, authId, authEmail),
+            oAuthUserInfo = OAuthUserInfo(socialProvider, credential, authEmail),
             nickname = nickname,
             role = role,
             state = state,
@@ -58,7 +58,7 @@ class MemberEntity(
         fun from(member: Member) =
             MemberEntity(
                 deviceId = member.deviceId,
-                authId = member.oAuthUserInfo.id,
+                credential = member.oAuthUserInfo.credential,
                 authEmail = member.oAuthUserInfo.email,
                 nickname = member.nickname,
                 socialProvider = member.oAuthUserInfo.socialProvider,

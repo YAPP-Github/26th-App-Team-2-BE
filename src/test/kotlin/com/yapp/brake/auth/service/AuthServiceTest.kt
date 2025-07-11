@@ -30,8 +30,7 @@ class AuthServiceTest {
     private val mockProvider =
         mock<OAuthProvider> {
             on { supports(SocialProvider.KAKAO) } doReturn true
-            on { getAccessToken(code) } doReturn "token"
-            on { getUserInfo("token") } doReturn userInfo
+            on { getOAuthUserInfo(code) } doReturn userInfo
         }
 
     private val oauthProviders = listOf(mockProvider)

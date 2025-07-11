@@ -44,8 +44,7 @@ out/
 .DS_Store
 
 ### Resouces ###
-/src/main/resources/
+/src/main/resources/*
+!/src/main/resources/db/
 /src/test/resources/
 docker-compose/.env
-
-

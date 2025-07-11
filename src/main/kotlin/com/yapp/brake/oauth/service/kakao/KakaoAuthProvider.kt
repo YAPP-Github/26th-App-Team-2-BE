@@ -17,21 +17,24 @@ class KakaoAuthProvider(
     private val kakaoAuthFeignClient: KakaoAuthFeignClient,
     private val kakaoApiFeignClient: KakaoApiFeignClient,
 ) : OAuthProvider {
-    override fun getAccessToken(code: String): String {
-        return try {
-            kakaoAuthFeignClient.getToken(
-                grantType = KAKAO_AUTH_GRANT_TYPE,
-                clientId = kakaoProperties.clientId,
-                redirectUri = kakaoProperties.redirectUri,
-                code = code,
-            ).accessToken
-        } catch (e: Exception) {
-            logger.error(e) { "[KakaoAuthProvider.getAccessToken] code=$code" }
-            ""
-        }
+    override fun getOAuthUserInfo(code: String): OAuthUserInfo {
+        val accessToken =
+            try {
+                kakaoAuthFeignClient.getToken(
+                    grantType = KAKAO_AUTH_GRANT_TYPE,
+                    clientId = kakaoProperties.clientId,
+                    redirectUri = kakaoProperties.redirectUri,
+                    code = code,
+                ).accessToken
+            } catch (e: Exception) {
+                logger.error(e) { "[KakaoAuthProvider.getAccessToken] code=$code" }
+                ""
+            }
+
+        return getUserInfo(accessToken)
     }
 
-    override fun getUserInfo(token: String): OAuthUserInfo {
+    private fun getUserInfo(token: String): OAuthUserInfo {
         val userInfo =
             try {
                 kakaoApiFeignClient.getUserInfo("$KAKAO_AUTH_HEADER_PREFIX$token")
@@ -43,7 +46,7 @@ class KakaoAuthProvider(
 
         return OAuthUserInfo(
             socialProvider = SocialProvider.KAKAO,
-            id = userInfo.id,
+            credential = userInfo.id,
             email = userInfo.kakaoAccount.email,
         )
     }

@@ -4,9 +4,7 @@ import com.yapp.brake.common.enums.SocialProvider
 import com.yapp.brake.oauth.model.OAuthUserInfo
 
 interface OAuthProvider {
-    fun getAccessToken(code: String): String
-
-    fun getUserInfo(token: String): OAuthUserInfo
+    fun getOAuthUserInfo(code: String): OAuthUserInfo
 
     fun withdraw(credential: String)
 

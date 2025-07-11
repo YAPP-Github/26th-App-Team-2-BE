@@ -23,9 +23,9 @@ class KakaoAuthProviderTest {
         )
 
     @Test
-    fun `액세스 토큰을 조회한다`() {
+    fun `유저 정보를 조회한다`() {
         val code = "authorizationCode"
-        val response =
+        val tokenResponse =
             KakaoTokenResponse(
                 accessToken = "accessToken",
                 tokenType = "access",
@@ -33,6 +33,11 @@ class KakaoAuthProviderTest {
                 expiresIn = 1L,
                 scope = null,
                 refreshTokenExpiresIn = 2L,
+            )
+        val expected =
+            KakaoUserInfoResponse(
+                id = "kakao-id",
+                kakaoAccount = KakaoUserInfoResponse.KakaoAccount("kakao@email.com"),
             )
 
         whenever(
@@ -42,27 +47,12 @@ class KakaoAuthProviderTest {
                 kakaoProperties.redirectUri,
                 code,
             ),
-        ).thenReturn(response)
-
-        val result = kakaoAuthProvider.getAccessToken(code)
-
-        assertThat(result).isEqualTo(response.accessToken)
-    }
-
-    @Test
-    fun `유저 정보를 조회한다`() {
-        val accessToken = "access-token"
-        val expected =
-            KakaoUserInfoResponse(
-                id = "kakao-id",
-                kakaoAccount = KakaoUserInfoResponse.KakaoAccount("kakao@email.com"),
-            )
-
+        ).thenReturn(tokenResponse)
         whenever(kakaoApiFeignClient.getUserInfo(any())).thenReturn(expected)
 
-        val result = kakaoAuthProvider.getUserInfo(accessToken)
+        val result = kakaoAuthProvider.getOAuthUserInfo(code)
 
-        assertThat(result.id).isEqualTo(expected.id)
+        assertThat(result.credential).isEqualTo(expected.id)
         assertThat(result.email).isEqualTo(expected.kakaoAccount.email)
     }
 }
