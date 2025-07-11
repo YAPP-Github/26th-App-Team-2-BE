@@ -71,13 +71,6 @@ class AuthService(
         blackListRepository.add(accessToken, Duration.ofMillis(ttl))
     }
 
-    /***
-     * 삭제 예정
-     */
-    override fun withdraw(socialProvider: SocialProvider) {
-        TODO("Not yet implemented")
-    }
-
     private fun findOrCreateMember(
         deviceId: String,
         userInfo: OAuthUserInfo,
