@@ -7,6 +7,7 @@ import com.yapp.brake.common.security.exception.ForbiddenHandler
 import com.yapp.brake.common.security.exception.UnauthenticatedEntryPoint
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.core.annotation.Order
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
@@ -26,6 +27,21 @@ class SecurityConfig(
     private val corsConfigurationSource: CorsConfigurationSource,
 ) {
     @Bean
+    @Order(1)
+    fun publicSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
+        return http.securityMatcher(*allowedUrls.toTypedArray())
+            .authorizeHttpRequests { it.anyRequest().permitAll() }
+            .csrf { it.disable() }
+            .sessionManagement {
+                it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            }
+            .cors { it.configurationSource(corsConfigurationSource) }
+            .securityContext { it.disable() }
+            .build()
+    }
+
+    @Bean
+    @Order(2)
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .csrf { it.disable() }
@@ -38,11 +54,7 @@ class SecurityConfig(
             .logout { it.disable() }
             .rememberMe { it.disable() }
             .requestCache { it.disable() }
-            .authorizeHttpRequests {
-                it.requestMatchers(*allowedUrls.toTypedArray())
-                    .permitAll()
-                    .anyRequest().authenticated()
-            }
+            .authorizeHttpRequests { it.anyRequest().authenticated() }
             .exceptionHandling {
                 it.authenticationEntryPoint(unauthenticatedEntryPoint)
                     .accessDeniedHandler(forbiddenHandler)

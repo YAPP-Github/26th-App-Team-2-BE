@@ -18,14 +18,6 @@ class JwtAuthenticationFilter(
     private val jwtTokenProvider: JwtTokenProvider,
     private val blackListRepository: RedisBlackListRepository,
 ) : OncePerRequestFilter() {
-    override fun shouldNotFilter(request: HttpServletRequest): Boolean {
-        val path = request.servletPath
-        return path == "/health" ||
-            path.startsWith("/v1/auth/login") ||
-            path.startsWith("/static/swagger") ||
-            path.startsWith("/v1/swagger")
-    }
-
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
