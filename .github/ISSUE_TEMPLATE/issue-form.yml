@@ -33,6 +33,7 @@ body:
         - refactor
         - chore
         - HOTFIX
+        - test
     validations:
       required: true
 
