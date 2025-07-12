@@ -71,6 +71,6 @@ class SecurityConfig(
     }
 
     companion object {
-        private val allowedUrls = listOf("/health", "/v1/auth/login", "/static/**", "/v1/swagger")
+        private val allowedUrls = listOf("/v1/auth/login", "/static/**", "/v1/swagger", "/actuator/**")
     }
 }
