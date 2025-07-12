@@ -1,6 +1,6 @@
 package com.yapp.brake.common.security.config
 
-import com.yapp.brake.auth.infrastructure.redis.RedisBlackListRepository
+import com.yapp.brake.auth.infrastructure.BlackListRepository
 import com.yapp.brake.auth.service.JwtTokenProvider
 import com.yapp.brake.common.filter.JwtAuthenticationFilter
 import com.yapp.brake.common.security.exception.ForbiddenHandler
@@ -22,8 +22,6 @@ class SecurityConfig(
     private val unauthenticatedEntryPoint: UnauthenticatedEntryPoint,
     private val forbiddenHandler: ForbiddenHandler,
     private val requestLoggingFilter: CommonsRequestLoggingFilter,
-    private val jwtTokenProvider: JwtTokenProvider,
-    private val blackListRepository: RedisBlackListRepository,
     private val corsConfigurationSource: CorsConfigurationSource,
 ) {
     @Bean
@@ -42,7 +40,11 @@ class SecurityConfig(
 
     @Bean
     @Order(2)
-    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
+    fun securityFilterChain(
+        jwtTokenProvider: JwtTokenProvider,
+        blackListRepository: BlackListRepository,
+        http: HttpSecurity,
+    ): SecurityFilterChain {
         http
             .csrf { it.disable() }
             .sessionManagement {

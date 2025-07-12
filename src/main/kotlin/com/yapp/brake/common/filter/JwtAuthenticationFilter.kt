@@ -1,6 +1,6 @@
 package com.yapp.brake.common.filter
 
-import com.yapp.brake.auth.infrastructure.redis.RedisBlackListRepository
+import com.yapp.brake.auth.infrastructure.BlackListRepository
 import com.yapp.brake.auth.service.JwtTokenProvider
 import com.yapp.brake.common.constants.TOKEN_TYPE_ACCESS
 import com.yapp.brake.common.exception.CustomException
@@ -16,7 +16,7 @@ private val log = KotlinLogging.logger {}
 
 class JwtAuthenticationFilter(
     private val jwtTokenProvider: JwtTokenProvider,
-    private val blackListRepository: RedisBlackListRepository,
+    private val blackListRepository: BlackListRepository,
 ) : OncePerRequestFilter() {
     override fun doFilterInternal(
         request: HttpServletRequest,
