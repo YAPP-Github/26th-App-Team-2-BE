@@ -23,6 +23,7 @@ class KakaoAuthProvider(
                 kakaoAuthFeignClient.getToken(
                     grantType = KAKAO_AUTH_GRANT_TYPE,
                     clientId = kakaoProperties.clientId,
+                    clientSecret = kakaoProperties.clientSecret,
                     redirectUri = kakaoProperties.redirectUri,
                     code = code,
                 ).accessToken

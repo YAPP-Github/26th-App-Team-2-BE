@@ -44,6 +44,7 @@ class KakaoAuthProviderTest {
             kakaoAuthFeignClient.getToken(
                 "authorization_code",
                 kakaoProperties.clientId,
+                kakaoProperties.clientSecret,
                 kakaoProperties.redirectUri,
                 code,
             ),
