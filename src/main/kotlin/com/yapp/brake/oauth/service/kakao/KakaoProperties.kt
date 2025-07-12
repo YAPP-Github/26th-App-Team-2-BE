@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component
 @ConfigurationProperties(prefix = "oauth.kakao")
 data class KakaoProperties(
     var clientId: String = "",
+    var clientSecret: String = "",
     var redirectUri: String = "",
     var adminKey: String = "",
 )
