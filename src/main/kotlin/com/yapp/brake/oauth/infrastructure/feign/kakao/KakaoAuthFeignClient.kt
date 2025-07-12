@@ -15,6 +15,7 @@ interface KakaoAuthFeignClient {
     fun getToken(
         @RequestParam("grant_type") grantType: String,
         @RequestParam("client_id") clientId: String,
+        @RequestParam("client_secret") clientSecret: String,
         @RequestParam("redirect_uri") redirectUri: String,
         @RequestParam("code") code: String,
     ): KakaoTokenResponse
