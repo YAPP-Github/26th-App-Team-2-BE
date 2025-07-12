@@ -30,7 +30,7 @@ class MemberServiceTest {
     @Nested
     inner class GetMemberTest {
         @Test
-        fun `getMember()는 유저가 존재하면 식별자로 조회가 가능하다`() {
+        fun `유저가 존재하면 식별자로 조회가 가능하다`() {
             val expected = memberFixture(id = 1L, nickname = "brake-user")
 
             whenever(memberReader.getById(memberId = expected.id)).thenReturn(expected)
@@ -41,7 +41,7 @@ class MemberServiceTest {
         }
 
         @Test
-        fun `getMember()는 유저가 존재하지 않으면 예외를 던진다`() {
+        fun `유저가 존재하지 않으면 예외를 던진다`() {
             val invalidId = 12124124L
             whenever(memberReader.getById(invalidId)).thenThrow(CustomException(ErrorCode.MEMBER_NOT_FOUND))
 
@@ -55,7 +55,7 @@ class MemberServiceTest {
     }
 
     @Test
-    fun `update()는 유저가 존재하면 유저 정보를 변경한다`() {
+    fun `유저가 존재하면 유저 정보를 변경한다`() {
         val newNickname = "brake-user-modified"
         val member = memberFixture(id = 1L, nickname = "brake-user", state = MemberState.HOLD)
         val expected = memberFixture(id = member.id, nickname = newNickname)
@@ -76,7 +76,7 @@ class MemberServiceTest {
     }
 
     @Test
-    fun `delete()는 유저 삭제하고 이벤트를 발행한다`() {
+    fun `유저 삭제하고 이벤트를 발행한다`() {
         val member = memberFixture(id = 1L, nickname = "brake-user", state = MemberState.HOLD)
         val payload =
             MemberDeletedEventPayload(
