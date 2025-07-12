@@ -29,7 +29,7 @@ health_check() {
     sleep "$HEALTHCHECK_WAIT"
 
     local STATUS
-    STATUS=$(docker exec "$CONTAINER_ID" curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8080/health)
+    STATUS=$(docker exec "$CONTAINER_ID" curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8080/actuator/health)
 
     if [[ "$STATUS" == "200" ]]; then
       echo "[HealthCheck] $NAME is healthy!"
