@@ -1,7 +1,7 @@
 package com.yapp.brake.oauth.service.eventhandler
 
 import com.yapp.brake.common.enums.SocialProvider
-import com.yapp.brake.common.event.EventPayloadHandler
+import com.yapp.brake.common.event.EventHandler
 import com.yapp.brake.common.event.EventType
 import com.yapp.brake.common.event.payload.MemberDeletedEventPayload
 import com.yapp.brake.common.exception.CustomException
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component
 @Component
 class OAuthMemberDeleteEventHandler(
     private val oauthProviders: List<OAuthProvider>,
-) : EventPayloadHandler<MemberDeletedEventPayload> {
+) : EventHandler<MemberDeletedEventPayload> {
     override val eventType: EventType = EventType.MEMBER_DELETED
 
     override fun handle(payload: MemberDeletedEventPayload) {

@@ -1,8 +1,8 @@
 package com.yapp.brake.outbox.service.listener
 
 import com.yapp.brake.common.event.Event
+import com.yapp.brake.common.event.EventHandler
 import com.yapp.brake.common.event.EventPayload
-import com.yapp.brake.common.event.EventPayloadHandler
 import com.yapp.brake.outbox.infrastructure.OutboxReader
 import com.yapp.brake.outbox.infrastructure.OutboxWriter
 import com.yapp.brake.outbox.model.Outbox
@@ -21,10 +21,10 @@ private val logger = KotlinLogging.logger { }
 class MessageRelay(
     private val outboxReader: OutboxReader,
     private val outboxWriter: OutboxWriter,
-    private val eventHandlers: List<EventPayloadHandler<*>>,
+    private val eventHandlers: List<EventHandler<*>>,
 ) {
     private val handlerMap =
-        eventHandlers.filterIsInstance<EventPayloadHandler<EventPayload>>()
+        eventHandlers.filterIsInstance<EventHandler<EventPayload>>()
             .associateBy { it::class.java.name }
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
