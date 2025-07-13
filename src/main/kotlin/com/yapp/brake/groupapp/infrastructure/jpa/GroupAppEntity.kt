@@ -31,7 +31,7 @@ class GroupAppEntity(
             GroupAppEntity(
                 groupId = groupApp.groupId,
                 appId = groupApp.appId,
-                createdAt = groupApp.createdAt,
+                createdAt = LocalDateTime.now(),
             )
     }
 }
