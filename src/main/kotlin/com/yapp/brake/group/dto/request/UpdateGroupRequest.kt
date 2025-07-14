@@ -6,10 +6,10 @@ import jakarta.validation.constraints.Positive
 import jakarta.validation.constraints.Size
 
 data class UpdateGroupRequest(
-    @NotNull
-    @Positive
+    @field:NotNull
+    @field:Positive
     val groupId: Long,
-    @NotBlank
-    @Size(min = 2, max = 10)
+    @field:NotBlank
+    @field:Size(min = 2, max = 10)
     val name: String,
 )

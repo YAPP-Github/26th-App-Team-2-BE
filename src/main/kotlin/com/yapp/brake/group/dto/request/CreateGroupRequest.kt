@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
 
 data class CreateGroupRequest(
-    @NotBlank
-    @Size(min = 2, max = 30)
+    @field:NotBlank
+    @field:Size(min = 2, max = 10)
     val name: String,
 )
