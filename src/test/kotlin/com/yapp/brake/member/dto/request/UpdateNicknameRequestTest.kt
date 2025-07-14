@@ -27,6 +27,7 @@ class UpdateNicknameRequestTest {
         }
     }
 
+    @Test
     fun `닉네임은 공백이면 예외가 발생한다`() {
         val request = UpdateNicknameRequest("  ")
         val violations = validator.validate(request)
