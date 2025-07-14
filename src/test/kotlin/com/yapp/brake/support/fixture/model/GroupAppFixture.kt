@@ -8,9 +8,11 @@ fun groupAppFixture(
     groupId: Long = 123L,
     appId: String = "kakaoTalk",
     createdAt: LocalDateTime? = null,
+    updatedAt: LocalDateTime? = null,
 ) = GroupApp(
     groupAppId = groupAppId,
     groupId = groupId,
     appId = appId,
     createdAt = createdAt,
+    updatedAt = updatedAt,
 )

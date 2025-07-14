@@ -7,6 +7,7 @@ data class GroupApp(
     val groupId: Long,
     val appId: String,
     val createdAt: LocalDateTime? = null,
+    val updatedAt: LocalDateTime? = null,
 ) {
     companion object {
         fun create(
