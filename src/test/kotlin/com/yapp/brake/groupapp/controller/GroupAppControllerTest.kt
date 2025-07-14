@@ -64,7 +64,7 @@ class GroupAppControllerTest : RestApiTestBase() {
         mockMvc.perform(builder)
             .andExpect(status().isNoContent)
             .andDocument(
-                "group-apps-add",
+                "group-apps-remove",
                 Tag.GROUP_APP,
                 pathParameters("groupAppId" means "제거할 관리 앱 식별자"),
             )
