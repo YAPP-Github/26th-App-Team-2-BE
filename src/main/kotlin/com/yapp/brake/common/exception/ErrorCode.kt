@@ -19,4 +19,7 @@ enum class ErrorCode(
     // Member
     MEMBER_NOT_FOUND(404, "M-001", "사용자를 찾을 수 없습니다."),
     MEMBER_INVALID(400, "M-002", "사용자 정보가 유효하지 않습니다."),
+
+    // Group
+    GROUP_NOT_FOUND(404, "G-001", "관리 앱 그룹을 찾을 수 없습니다."),
 }
