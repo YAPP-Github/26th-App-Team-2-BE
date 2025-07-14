@@ -2,6 +2,7 @@ package com.yapp.brake.common.security.config
 
 import com.yapp.brake.auth.infrastructure.BlackListRepository
 import com.yapp.brake.auth.service.JwtTokenProvider
+import com.yapp.brake.common.constants.ALLOWED_URIS
 import com.yapp.brake.common.filter.JwtAuthenticationFilter
 import com.yapp.brake.common.security.exception.ForbiddenHandler
 import com.yapp.brake.common.security.exception.UnauthenticatedEntryPoint
@@ -27,7 +28,7 @@ class SecurityConfig(
     @Bean
     @Order(1)
     fun publicSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        return http.securityMatcher(*allowedUrls.toTypedArray())
+        return http.securityMatcher(*ALLOWED_URIS.toTypedArray())
             .authorizeHttpRequests { it.anyRequest().permitAll() }
             .csrf { it.disable() }
             .sessionManagement {
@@ -68,9 +69,5 @@ class SecurityConfig(
             )
 
         return http.build()
-    }
-
-    companion object {
-        private val allowedUrls = listOf("/v1/auth/login", "/static/**", "/v1/swagger", "/actuator/**")
     }
 }

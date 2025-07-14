@@ -1,5 +1,6 @@
 package com.yapp.brake.common.logging
 
+import com.yapp.brake.common.constants.ALLOWED_URIS
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.CommonsRequestLoggingFilter
@@ -15,7 +16,7 @@ class CustomRequestLoggingFilter : CommonsRequestLoggingFilter() {
 
     override fun shouldLog(request: HttpServletRequest): Boolean {
         val uri = request.requestURI
-        return EXCLUDED_URI_PREFIXES.none { uri.startsWith(it) }
+        return ALLOWED_URIS.none { uri.startsWith(it) }
     }
 
     override fun beforeRequest(
@@ -29,14 +30,5 @@ class CustomRequestLoggingFilter : CommonsRequestLoggingFilter() {
         message: String,
     ) {
         logger.info(message)
-    }
-
-    companion object {
-        private val EXCLUDED_URI_PREFIXES =
-            setOf(
-                "/health",
-                "/v1/swagger-ui",
-                "/static/swagger",
-            )
     }
 }
