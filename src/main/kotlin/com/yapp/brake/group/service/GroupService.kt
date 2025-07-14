@@ -4,8 +4,10 @@ import com.yapp.brake.group.dto.response.GroupResponse
 import com.yapp.brake.group.infrastructure.GroupReader
 import com.yapp.brake.group.infrastructure.GroupWriter
 import com.yapp.brake.group.model.Group
+import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
+@Service
 class GroupService(
     private val groupWriter: GroupWriter,
     private val groupReader: GroupReader,
