@@ -14,8 +14,8 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
 
-@Table(name = "member")
 @Entity
+@Table(name = "member")
 class MemberEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,7 +55,7 @@ class MemberEntity(
         )
 
     companion object {
-        fun from(member: Member) =
+        fun create(member: Member) =
             MemberEntity(
                 deviceId = member.deviceId,
                 credential = member.oAuthUserInfo.credential,
