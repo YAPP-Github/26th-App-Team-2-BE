@@ -4,7 +4,9 @@ import com.yapp.brake.common.dto.ApiResponse
 import com.yapp.brake.common.exception.ErrorCode.BAD_REQUEST
 import com.yapp.brake.common.exception.ErrorCode.INTERNAL_SERVER_ERROR
 import io.github.oshai.kotlinlogging.KotlinLogging
+import jakarta.validation.ConstraintViolationException
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 
@@ -31,5 +33,19 @@ class GlobalExceptionHandler {
         logger.error(e) { "code=${INTERNAL_SERVER_ERROR.code}, message=${e.message}" }
         return ResponseEntity.status(INTERNAL_SERVER_ERROR.status)
             .body(ApiResponse.error(INTERNAL_SERVER_ERROR.status, INTERNAL_SERVER_ERROR.message))
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException::class)
+    fun handleMethodArgumentNotValidException(e: MethodArgumentNotValidException): ResponseEntity<ApiResponse<Unit>> {
+        logger.warn(e) { "code=${BAD_REQUEST.code}, message=${e.message}" }
+        return ResponseEntity.status(BAD_REQUEST.status)
+            .body(ApiResponse.error(BAD_REQUEST.status, BAD_REQUEST.message))
+    }
+
+    @ExceptionHandler(ConstraintViolationException::class)
+    fun handleValidationException(e: ConstraintViolationException): ResponseEntity<ApiResponse<Unit>> {
+        logger.warn(e) { "code=${BAD_REQUEST.code}, message=${e.message}" }
+        return ResponseEntity.status(BAD_REQUEST.status)
+            .body(ApiResponse.error(BAD_REQUEST.status, BAD_REQUEST.message))
     }
 }
