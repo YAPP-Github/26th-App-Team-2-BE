@@ -5,5 +5,5 @@ import com.yapp.brake.group.model.Group
 interface GroupWriter {
     fun save(group: Group): Group
 
-    fun delete(groupId: Long)
+    fun delete(group: Group)
 }

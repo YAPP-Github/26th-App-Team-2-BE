@@ -11,11 +11,11 @@ class GroupJpaWriter(
     private val groupRepository: GroupRepository,
 ) : GroupWriter {
     override fun save(group: Group): Group {
-        val entity = GroupEntity.create(group)
+        val entity = GroupEntity.from(group)
         return groupRepository.save(entity).toDomain()
     }
 
-    override fun delete(groupId: Long) {
-        groupRepository.deleteById(groupId)
+    override fun delete(group: Group) {
+        groupRepository.delete(GroupEntity.from(group))
     }
 }

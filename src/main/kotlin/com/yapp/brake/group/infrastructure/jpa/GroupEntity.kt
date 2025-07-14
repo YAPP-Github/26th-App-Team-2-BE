@@ -14,19 +14,23 @@ class GroupEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val groupId: Long = 0L,
+    val memberId: Long,
     val name: String,
 ) : Auditable() {
     fun toDomain() =
         Group(
             groupId = groupId,
+            memberId = memberId,
             name = name,
             createdAt = createdAt,
             updatedAt = updatedAt,
         )
 
     companion object {
-        fun create(group: Group) =
+        fun from(group: Group) =
             GroupEntity(
+                groupId = group.groupId,
+                memberId = group.memberId,
                 name = group.name,
             )
     }

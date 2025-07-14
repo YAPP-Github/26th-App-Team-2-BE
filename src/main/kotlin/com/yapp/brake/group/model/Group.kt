@@ -5,6 +5,7 @@ import java.time.LocalDateTime
 data class Group(
     val groupId: Long,
     val name: String,
+    val memberId: Long,
     val createdAt: LocalDateTime? = null,
     var updatedAt: LocalDateTime? = null,
 ) {
@@ -14,10 +15,13 @@ data class Group(
         )
 
     companion object {
-        fun create(name: String) =
-            Group(
-                groupId = 0L,
-                name = name,
-            )
+        fun create(
+            memberId: Long,
+            name: String,
+        ) = Group(
+            groupId = 0L,
+            name = name,
+            memberId = memberId,
+        )
     }
 }
