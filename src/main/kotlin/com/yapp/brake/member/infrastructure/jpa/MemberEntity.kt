@@ -57,6 +57,7 @@ class MemberEntity(
     companion object {
         fun from(member: Member) =
             MemberEntity(
+                memberId = member.id,
                 deviceId = member.deviceId,
                 credential = member.oAuthUserInfo.credential,
                 authEmail = member.oAuthUserInfo.email,
