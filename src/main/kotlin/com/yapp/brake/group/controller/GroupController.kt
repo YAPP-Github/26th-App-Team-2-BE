@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
@@ -24,7 +25,7 @@ class GroupController(
 ) {
     @PostMapping
     fun create(
-        @Valid
+        @Valid @RequestBody
         request: CreateGroupRequest,
     ): ApiResponse<GroupResponse> {
         return ApiResponse.success(
@@ -37,7 +38,7 @@ class GroupController(
     fun modify(
         @PathVariable @Positive
         groupId: Long,
-        @Valid
+        @Valid @RequestBody
         request: UpdateGroupRequest,
     ): ApiResponse<GroupResponse> {
         return ApiResponse.success(groupUseCase.modify(getMemberId(), groupId, request.name))
