@@ -63,7 +63,7 @@ class MemberControllerTest : RestApiTestBase() {
     fun `내정보 수정 API`() {
         val request =
             UpdateNicknameRequest(
-                nickname = "modifiedNickname",
+                nickname = "열글자이내닉네임",
             )
         val response =
             ApiResponse.success(

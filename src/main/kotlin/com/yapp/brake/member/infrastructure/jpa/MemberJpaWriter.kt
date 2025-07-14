@@ -11,7 +11,7 @@ class MemberJpaWriter(
     private val memberRepository: MemberRepository,
 ) : MemberWriter {
     override fun save(member: Member): Member {
-        val entity = MemberEntity.from(member)
+        val entity = MemberEntity.create(member)
         return memberRepository.save(entity).toDomain()
     }
 
