@@ -30,7 +30,7 @@ class GroupController(
     ): ApiResponse<GroupResponse> {
         return ApiResponse.success(
             code = HttpStatus.CREATED.value(),
-            data = groupUseCase.create(getMemberId(), request.name),
+            data = groupUseCase.create(getMemberId(), request),
         )
     }
 
@@ -41,7 +41,7 @@ class GroupController(
         @Valid @RequestBody
         request: UpdateGroupRequest,
     ): ApiResponse<GroupResponse> {
-        return ApiResponse.success(groupUseCase.modify(getMemberId(), groupId, request.name))
+        return ApiResponse.success(groupUseCase.modify(getMemberId(), groupId, request))
     }
 
     @DeleteMapping("/{groupId}")

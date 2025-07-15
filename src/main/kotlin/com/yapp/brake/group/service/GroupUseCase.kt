@@ -1,17 +1,19 @@
 package com.yapp.brake.group.service
 
+import com.yapp.brake.group.dto.request.CreateGroupRequest
+import com.yapp.brake.group.dto.request.UpdateGroupRequest
 import com.yapp.brake.group.dto.response.GroupResponse
 
 interface GroupUseCase {
     fun create(
         memberId: Long,
-        name: String,
+        request: CreateGroupRequest,
     ): GroupResponse
 
     fun modify(
         memberId: Long,
         groupId: Long,
-        name: String,
+        request: UpdateGroupRequest,
     ): GroupResponse
 
     fun remove(

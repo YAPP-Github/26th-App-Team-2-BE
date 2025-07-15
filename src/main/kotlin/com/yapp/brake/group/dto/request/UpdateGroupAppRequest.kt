@@ -1,13 +1,13 @@
-package com.yapp.brake.groupapp.dto.request
+package com.yapp.brake.group.dto.request
 
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Positive
 
-data class AddGroupAppRequest(
+data class UpdateGroupAppRequest(
     @field:NotNull
     @field:Positive
-    val groupId: Long,
+    val groupAppId: Long,
     @field:NotBlank
-    val appId: String,
+    val name: String,
 )

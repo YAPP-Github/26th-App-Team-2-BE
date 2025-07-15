@@ -15,13 +15,13 @@ class GroupAppEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val groupAppId: Long = 0L,
     val groupId: Long,
-    val appId: String,
+    val name: String,
 ) : Auditable() {
     fun toDomain() =
         GroupApp(
             groupAppId = groupAppId,
             groupId = groupId,
-            appId = appId,
+            name = name,
             createdAt = createdAt,
             updatedAt = updatedAt,
         )
@@ -30,7 +30,7 @@ class GroupAppEntity(
         fun create(groupApp: GroupApp) =
             GroupAppEntity(
                 groupId = groupApp.groupId,
-                appId = groupApp.appId,
+                name = groupApp.name,
             )
     }
 }

@@ -7,4 +7,5 @@ data class CreateGroupRequest(
     @field:NotBlank
     @field:Size(min = 2, max = 10)
     val name: String,
+    val groupApps: List<AddGroupAppRequest> = emptyList(),
 )

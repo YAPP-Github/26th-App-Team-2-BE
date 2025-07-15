@@ -12,4 +12,5 @@ data class UpdateGroupRequest(
     @field:NotBlank
     @field:Size(min = 2, max = 10)
     val name: String,
+    val groupApps: List<UpdateGroupAppRequest> = emptyList(),
 )

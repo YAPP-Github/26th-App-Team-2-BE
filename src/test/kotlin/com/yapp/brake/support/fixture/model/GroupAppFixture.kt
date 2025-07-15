@@ -6,13 +6,13 @@ import java.time.LocalDateTime
 fun groupAppFixture(
     groupAppId: Long = 12345L,
     groupId: Long = 123L,
-    appId: String = "kakaoTalk",
+    name: String = "kakaoTalk",
     createdAt: LocalDateTime? = null,
     updatedAt: LocalDateTime? = null,
 ) = GroupApp(
     groupAppId = groupAppId,
     groupId = groupId,
-    appId = appId,
+    name = name,
     createdAt = createdAt,
     updatedAt = updatedAt,
 )

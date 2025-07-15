@@ -2,10 +2,10 @@ package com.yapp.brake.groupapp.infrastructure.jpa
 
 import com.yapp.brake.groupapp.infrastructure.GroupAppWriter
 import com.yapp.brake.groupapp.model.GroupApp
-import org.springframework.stereotype.Repository
+import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 
-@Repository
+@Component
 @Transactional
 class GroupAppJpaWriter(
     private val groupAppRepository: GroupAppRepository,
