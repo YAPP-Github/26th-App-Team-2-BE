@@ -1,6 +1,6 @@
 package com.yapp.brake.session.service
 
-import com.yapp.brake.session.model.Snooze
+import com.yapp.brake.session.dto.response.AddSessionResponse
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -12,6 +12,7 @@ interface SessionUseCase {
         startTime: LocalTime,
         endTime: LocalTime,
         goalTime: Long,
-        snooze: Snooze,
-    )
+        snoozeUnit: Int,
+        snoozeCount: Int,
+    ): AddSessionResponse
 }
