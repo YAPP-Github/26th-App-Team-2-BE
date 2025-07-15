@@ -13,6 +13,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "member")
@@ -29,6 +30,8 @@ class MemberEntity(
     val role: Role,
     state: MemberState,
     nickname: String? = null,
+    override var createdAt: LocalDateTime? = null,
+    override var updatedAt: LocalDateTime? = null,
 ) : Auditable() {
     var nickname: String? = nickname
         protected set
@@ -57,6 +60,7 @@ class MemberEntity(
     companion object {
         fun create(member: Member) =
             MemberEntity(
+                memberId = member.id,
                 deviceId = member.deviceId,
                 credential = member.oAuthUserInfo.credential,
                 authEmail = member.oAuthUserInfo.email,
@@ -64,6 +68,8 @@ class MemberEntity(
                 socialProvider = member.oAuthUserInfo.socialProvider,
                 role = member.role,
                 state = member.state,
+                createdAt = member.createdAt,
+                updatedAt = member.updatedAt,
             )
     }
 }
