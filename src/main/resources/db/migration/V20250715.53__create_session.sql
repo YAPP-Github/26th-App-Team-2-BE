@@ -9,3 +9,6 @@ CREATE TABLE session
     snooze_count int      NOT NULL,
     snooze_unit  int      NOT NULL
 );
+
+ALTER TABLE session
+    ADD FOREIGN KEY (member_id) REFERENCES member (member_id);
