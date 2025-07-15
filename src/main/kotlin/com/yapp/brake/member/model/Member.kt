@@ -16,10 +16,10 @@ data class Member(
 ) {
     fun update(
         nickname: String? = this.nickname,
-        status: MemberState = this.state,
+        state: MemberState = this.state,
     ) = copy(
         nickname = nickname,
-        state = status,
+        state = state,
     )
 
     companion object {

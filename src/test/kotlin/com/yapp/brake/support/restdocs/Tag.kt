@@ -4,4 +4,5 @@ enum class Tag {
     AUTH,
     MEMBER,
     GROUP_APP,
+    SESSION,
 }

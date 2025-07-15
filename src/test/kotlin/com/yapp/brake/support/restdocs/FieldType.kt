@@ -28,3 +28,5 @@ data object ANY : FieldType(JsonFieldType.VARIES)
 data object DATE : FieldType(JsonFieldType.STRING)
 
 data object DATETIME : FieldType(JsonFieldType.STRING)
+
+data object TIME : FieldType(JsonFieldType.STRING)

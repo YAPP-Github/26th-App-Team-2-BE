@@ -50,13 +50,14 @@ class MemberEntity(
             nickname = nickname,
             role = role,
             state = state,
-            createdAt = requireNotNull(createdAt),
-            updatedAt = requireNotNull(updatedAt),
+            createdAt = createdAt,
+            updatedAt = updatedAt,
         )
 
     companion object {
         fun create(member: Member) =
             MemberEntity(
+                memberId = member.id,
                 deviceId = member.deviceId,
                 credential = member.oAuthUserInfo.credential,
                 authEmail = member.oAuthUserInfo.email,
