@@ -1,10 +1,12 @@
 package com.yapp.brake.session.dto.request
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import com.yapp.brake.session.validator.ValidSessionTime
 import jakarta.validation.constraints.Positive
 import jakarta.validation.constraints.PositiveOrZero
 import java.time.LocalDateTime
 
+@ValidSessionTime
 data class AddSessionRequest(
     @field:Positive
     val groupId: Long,

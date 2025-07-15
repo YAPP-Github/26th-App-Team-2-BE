@@ -35,6 +35,24 @@ class AddSessionRequestTest {
     }
 
     @Test
+    fun `종료 시간이 시작 시간보다 이른 경우 유효성 검사에 실패한다`() {
+        val invalidRequest =
+            AddSessionRequest(
+                groupId = 1L,
+                start = LocalDateTime.of(2025, 7, 15, 9, 1),
+                end = LocalDateTime.of(2025, 7, 15, 9, 0),
+                goalTime = 5L,
+                snoozeUnit = 0,
+                snoozeCount = 0,
+            )
+
+        val violations = validator.validate(invalidRequest)
+
+        assertEquals(1, violations.size)
+        assertTrue(violations.any { it.propertyPath.toString() == "" })
+    }
+
+    @Test
     fun `모든 값이 유효하면 검증을 통과한다`() {
         // given
         val validRequest =
