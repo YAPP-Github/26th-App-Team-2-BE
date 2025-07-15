@@ -12,4 +12,24 @@ data class Session(
     val endTime: LocalTime,
     val goalTime: Long,
     val snooze: Snooze,
-)
+) {
+    companion object {
+        fun create(
+            memberId: Long,
+            groupId: Long,
+            date: LocalDate,
+            startTime: LocalTime,
+            endTime: LocalTime,
+            goalTime: Long,
+            snooze: Snooze,
+        ) = Session(
+            memberId = memberId,
+            groupId = groupId,
+            date = date,
+            startTime = startTime,
+            endTime = endTime,
+            goalTime = goalTime,
+            snooze = snooze,
+        )
+    }
+}
