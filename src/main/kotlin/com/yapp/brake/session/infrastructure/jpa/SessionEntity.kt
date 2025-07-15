@@ -23,8 +23,8 @@ class SessionEntity(
     val startTime: LocalTime,
     val endTime: LocalTime,
     val goalTime: Long,
-    val snoozeUnit: Int = 0,
-    val snoozeCount: Int = 0,
+    val snoozeUnit: Int,
+    val snoozeCount: Int,
 ) : Auditable() {
     fun toDomain() =
         Session(
@@ -37,8 +37,8 @@ class SessionEntity(
             goalTime = goalTime,
             snooze =
                 Snooze(
-                    count = snoozeCount,
                     unit = snoozeUnit,
+                    count = snoozeCount,
                 ),
         )
 

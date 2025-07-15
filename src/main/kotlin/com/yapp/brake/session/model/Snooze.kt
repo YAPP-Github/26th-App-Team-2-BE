@@ -1,6 +1,6 @@
 package com.yapp.brake.session.model
 
 data class Snooze(
-    val count: Int = 0,
-    val unit: Int = 0,
+    val count: Int,
+    val unit: Int,
 )

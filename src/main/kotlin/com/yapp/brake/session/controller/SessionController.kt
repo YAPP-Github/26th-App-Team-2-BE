@@ -24,16 +24,6 @@ class SessionController(
     ): ApiResponse<AddSessionResponse> =
         ApiResponse.success(
             code = HttpStatus.CREATED.value(),
-            data =
-                sessionUseCase.add(
-                    getMemberId(),
-                    request.groupId,
-                    request.date,
-                    request.startTime,
-                    request.endTime,
-                    request.goalTime,
-                    request.snoozeUnit,
-                    request.snoozeCount,
-                ),
+            data = sessionUseCase.add(getMemberId(), request),
         )
 }

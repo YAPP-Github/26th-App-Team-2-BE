@@ -5,6 +5,7 @@ import com.yapp.brake.common.dto.ApiResponse
 import com.yapp.brake.session.dto.request.AddSessionRequest
 import com.yapp.brake.session.dto.response.AddSessionResponse
 import com.yapp.brake.support.RestApiTestBase
+import com.yapp.brake.support.fixture.model.sessionFixture
 import com.yapp.brake.support.restdocs.DATE
 import com.yapp.brake.support.restdocs.NUMBER
 import com.yapp.brake.support.restdocs.OBJECT
@@ -22,22 +23,21 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import requestBody
 import responseBody
-import java.time.LocalDate
-import java.time.LocalTime
 
 class SessionControllerTest : RestApiTestBase() {
     @Test
     fun `세션 추가 API`() {
         val memberId = 1L
+        val session = sessionFixture()
         val request =
             AddSessionRequest(
-                groupId = 1L,
-                date = LocalDate.now(),
-                startTime = LocalTime.now().minusMinutes(30),
-                endTime = LocalTime.now(),
-                goalTime = 108000L,
-                snoozeUnit = 5,
-                snoozeCount = 0,
+                groupId = session.groupId,
+                date = session.date,
+                startTime = session.startTime,
+                endTime = session.endTime,
+                goalTime = session.goalTime,
+                snoozeUnit = session.snooze.unit,
+                snoozeCount = session.snooze.count,
             )
         val response =
             ApiResponse.success(
@@ -51,13 +51,7 @@ class SessionControllerTest : RestApiTestBase() {
         whenever(
             sessionUseCase.add(
                 memberId,
-                request.groupId,
-                request.date,
-                request.startTime,
-                request.endTime,
-                request.goalTime,
-                request.snoozeUnit,
-                request.snoozeCount,
+                request,
             ),
         ).thenReturn(response.data)
 

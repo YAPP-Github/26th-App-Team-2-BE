@@ -21,7 +21,8 @@ data class Session(
             startTime: LocalTime,
             endTime: LocalTime,
             goalTime: Long,
-            snooze: Snooze,
+            snoozeUnit: Int,
+            snoozeCount: Int,
         ) = Session(
             memberId = memberId,
             groupId = groupId,
@@ -29,7 +30,11 @@ data class Session(
             startTime = startTime,
             endTime = endTime,
             goalTime = goalTime,
-            snooze = snooze,
+            snooze =
+                Snooze(
+                    unit = snoozeUnit,
+                    count = snoozeCount,
+                ),
         )
     }
 }

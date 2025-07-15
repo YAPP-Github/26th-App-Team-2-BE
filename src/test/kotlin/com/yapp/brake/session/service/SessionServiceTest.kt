@@ -1,5 +1,6 @@
 package com.yapp.brake.session.service
 
+import com.yapp.brake.session.dto.request.AddSessionRequest
 import com.yapp.brake.session.infrastructure.SessionWriter
 import com.yapp.brake.support.fixture.model.sessionFixture
 import org.junit.jupiter.api.Test
@@ -15,20 +16,26 @@ class SessionServiceTest {
     @Test
     fun `세션을 저장한다`() {
         val session = sessionFixture()
+        val request =
+            AddSessionRequest(
+                session.groupId,
+                session.date,
+                session.startTime,
+                session.endTime,
+                session.goalTime,
+                session.snooze.unit,
+                session.snooze.count,
+            )
 
         whenever(sessionWriter.save(any())).thenReturn(session)
 
+        // when
         sessionService.add(
             session.memberId,
-            session.groupId,
-            session.date,
-            session.startTime,
-            session.endTime,
-            session.goalTime,
-            session.snooze.unit,
-            session.snooze.count,
+            request,
         )
 
+        // then
         verify(sessionWriter).save(session)
     }
 }
