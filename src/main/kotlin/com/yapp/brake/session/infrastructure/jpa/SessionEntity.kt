@@ -1,6 +1,5 @@
 package com.yapp.brake.session.infrastructure.jpa
 
-import com.yapp.brake.common.persistence.Auditable
 import com.yapp.brake.session.model.Session
 import com.yapp.brake.session.model.Snooze
 import jakarta.persistence.Entity
@@ -25,7 +24,7 @@ class SessionEntity(
     val goalTime: Long,
     val snoozeUnit: Int,
     val snoozeCount: Int,
-) : Auditable() {
+) {
     fun toDomain() =
         Session(
             id = sessionId,

@@ -3,7 +3,6 @@ package com.yapp.brake.support.fixture.model
 import com.yapp.brake.session.model.Session
 import com.yapp.brake.session.model.Snooze
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.LocalTime
 
 fun sessionFixture(
@@ -16,8 +15,6 @@ fun sessionFixture(
     goalTime: Long = 108000L,
     snoozeUnit: Int = 5,
     snoozeCount: Int = 0,
-    createdAt: LocalDateTime? = null,
-    updatedAt: LocalDateTime? = null,
 ) = Session(
     id = sessionId,
     memberId = memberId,
