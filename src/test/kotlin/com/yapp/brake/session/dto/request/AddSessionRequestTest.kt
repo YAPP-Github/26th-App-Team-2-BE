@@ -3,6 +3,7 @@ package com.yapp.brake.session.dto.request
 import jakarta.validation.Validation
 import jakarta.validation.Validator
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import java.time.LocalDateTime
 import kotlin.test.Test
 
@@ -27,6 +28,10 @@ class AddSessionRequestTest {
 
         // then
         assertEquals(4, violations.size)
+        assertTrue(violations.any { it.propertyPath.toString() == "groupId" })
+        assertTrue(violations.any { it.propertyPath.toString() == "goalTime" })
+        assertTrue(violations.any { it.propertyPath.toString() == "snoozeUnit" })
+        assertTrue(violations.any { it.propertyPath.toString() == "snoozeCount" })
     }
 
     @Test

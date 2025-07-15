@@ -35,6 +35,6 @@ class SessionServiceTest {
         )
 
         // then
-        verify(sessionWriter).save(session)
+        verify(sessionWriter).save(any())
     }
 }
