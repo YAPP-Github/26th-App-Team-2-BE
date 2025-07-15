@@ -1,15 +1,13 @@
 package com.yapp.brake.session.model
 
-import java.time.LocalDate
-import java.time.LocalTime
+import java.time.LocalDateTime
 
 data class Session(
     val id: Long = 0L,
     val groupId: Long,
     val memberId: Long,
-    val date: LocalDate,
-    val startTime: LocalTime,
-    val endTime: LocalTime,
+    val start: LocalDateTime,
+    val end: LocalDateTime,
     val goalTime: Long,
     val snooze: Snooze,
 ) {
@@ -17,18 +15,16 @@ data class Session(
         fun create(
             memberId: Long,
             groupId: Long,
-            date: LocalDate,
-            startTime: LocalTime,
-            endTime: LocalTime,
+            start: LocalDateTime,
+            end: LocalDateTime,
             goalTime: Long,
             snoozeUnit: Int,
             snoozeCount: Int,
         ) = Session(
             memberId = memberId,
             groupId = groupId,
-            date = date,
-            startTime = startTime,
-            endTime = endTime,
+            start = start,
+            end = end,
             goalTime = goalTime,
             snooze =
                 Snooze(

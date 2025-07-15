@@ -3,18 +3,15 @@ package com.yapp.brake.session.dto.request
 import com.fasterxml.jackson.annotation.JsonFormat
 import jakarta.validation.constraints.Positive
 import jakarta.validation.constraints.PositiveOrZero
-import java.time.LocalDate
-import java.time.LocalTime
+import java.time.LocalDateTime
 
 data class AddSessionRequest(
     @field:Positive
     val groupId: Long,
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    val date: LocalDate,
-    @JsonFormat(pattern = "HH:mm")
-    val startTime: LocalTime,
-    @JsonFormat(pattern = "HH:mm")
-    val endTime: LocalTime,
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    val start: LocalDateTime,
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    val end: LocalDateTime,
     @field:Positive
     val goalTime: Long,
     @field:PositiveOrZero

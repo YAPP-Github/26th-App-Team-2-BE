@@ -6,10 +6,9 @@ import com.yapp.brake.session.dto.request.AddSessionRequest
 import com.yapp.brake.session.dto.response.AddSessionResponse
 import com.yapp.brake.support.RestApiTestBase
 import com.yapp.brake.support.fixture.model.sessionFixture
-import com.yapp.brake.support.restdocs.DATE
+import com.yapp.brake.support.restdocs.DATETIME
 import com.yapp.brake.support.restdocs.NUMBER
 import com.yapp.brake.support.restdocs.OBJECT
-import com.yapp.brake.support.restdocs.TIME
 import com.yapp.brake.support.restdocs.Tag
 import com.yapp.brake.support.restdocs.toJsonString
 import com.yapp.brake.support.restdocs.type
@@ -32,9 +31,8 @@ class SessionControllerTest : RestApiTestBase() {
         val request =
             AddSessionRequest(
                 groupId = session.groupId,
-                date = session.date,
-                startTime = session.startTime,
-                endTime = session.endTime,
+                start = session.start,
+                end = session.end,
                 goalTime = session.goalTime,
                 snoozeUnit = session.snooze.unit,
                 snoozeCount = session.snooze.count,
@@ -67,9 +65,8 @@ class SessionControllerTest : RestApiTestBase() {
                 Tag.SESSION,
                 requestBody(
                     "groupId" type NUMBER means "관리 앱 그룹",
-                    "date" type DATE means "세션 날짜",
-                    "startTime" type TIME means "세션 시작 시간",
-                    "endTime" type TIME means "세션 종료 시간",
+                    "start" type DATETIME means "세션 시작 시간",
+                    "end" type DATETIME means "세션 종료 시간",
                     "goalTime" type NUMBER means "세션 목표 시간(초 단위)",
                     "snoozeUnit" type NUMBER means "스누즈 단위(분 단위)",
                     "snoozeCount" type NUMBER means "스누즈 횟수",

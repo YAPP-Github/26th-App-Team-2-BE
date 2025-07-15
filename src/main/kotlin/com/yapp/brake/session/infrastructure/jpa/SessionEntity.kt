@@ -7,8 +7,7 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Table
-import java.time.LocalDate
-import java.time.LocalTime
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "session")
@@ -18,9 +17,8 @@ class SessionEntity(
     val sessionId: Long = 0L,
     val groupId: Long,
     val memberId: Long,
-    val date: LocalDate,
-    val startTime: LocalTime,
-    val endTime: LocalTime,
+    val start: LocalDateTime,
+    val end: LocalDateTime,
     val goalTime: Long,
     val snoozeUnit: Int,
     val snoozeCount: Int,
@@ -30,9 +28,8 @@ class SessionEntity(
             id = sessionId,
             groupId = groupId,
             memberId = memberId,
-            date = date,
-            startTime = startTime,
-            endTime = endTime,
+            start = start,
+            end = end,
             goalTime = goalTime,
             snooze =
                 Snooze(
@@ -47,9 +44,8 @@ class SessionEntity(
                 sessionId = session.id,
                 groupId = session.groupId,
                 memberId = session.memberId,
-                date = session.date,
-                startTime = session.startTime,
-                endTime = session.endTime,
+                start = session.start,
+                end = session.end,
                 goalTime = session.goalTime,
                 snoozeUnit = session.snooze.unit,
                 snoozeCount = session.snooze.count,

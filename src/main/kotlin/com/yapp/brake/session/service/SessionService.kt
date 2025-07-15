@@ -18,9 +18,8 @@ class SessionService(
             Session.create(
                 memberId,
                 request.groupId,
-                request.date,
-                request.startTime,
-                request.endTime,
+                request.start,
+                request.end,
                 request.goalTime,
                 request.snoozeUnit,
                 request.snoozeCount,

@@ -3,8 +3,7 @@ package com.yapp.brake.session.dto.request
 import jakarta.validation.Validation
 import jakarta.validation.Validator
 import org.junit.jupiter.api.Assertions.assertEquals
-import java.time.LocalDate
-import java.time.LocalTime
+import java.time.LocalDateTime
 import kotlin.test.Test
 
 class AddSessionRequestTest {
@@ -16,9 +15,8 @@ class AddSessionRequestTest {
         val invalidRequest =
             AddSessionRequest(
                 groupId = -1L,
-                date = LocalDate.now(),
-                startTime = LocalTime.of(9, 0),
-                endTime = LocalTime.of(10, 0),
+                start = LocalDateTime.of(2025, 7, 15, 9, 0),
+                end = LocalDateTime.of(2025, 7, 15, 10, 0),
                 goalTime = -1L,
                 snoozeUnit = -1,
                 snoozeCount = -1,
@@ -37,9 +35,8 @@ class AddSessionRequestTest {
         val validRequest =
             AddSessionRequest(
                 groupId = 1L,
-                date = LocalDate.now(),
-                startTime = LocalTime.of(9, 0),
-                endTime = LocalTime.of(10, 0),
+                start = LocalDateTime.of(2025, 7, 15, 9, 0),
+                end = LocalDateTime.of(2025, 7, 15, 10, 0),
                 goalTime = 5L,
                 snoozeUnit = 0,
                 snoozeCount = 0,

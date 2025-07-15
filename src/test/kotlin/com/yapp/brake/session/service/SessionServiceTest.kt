@@ -19,9 +19,8 @@ class SessionServiceTest {
         val request =
             AddSessionRequest(
                 session.groupId,
-                session.date,
-                session.startTime,
-                session.endTime,
+                session.start,
+                session.end,
                 session.goalTime,
                 session.snooze.unit,
                 session.snooze.count,
