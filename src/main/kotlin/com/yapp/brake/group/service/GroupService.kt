@@ -64,9 +64,10 @@ class GroupService(
         val added = findNewApps(updatedGroupApps)
         val deleted = findAppsToDelete(originGroupApps, updatedGroupApps)
 
-        val payload = GroupUpdatedEventPayload(deleted.map(GroupApp::groupAppId))
-
-        outboxEventPublisher.publish(EventType.GROUP_UPDATED, payload)
+        if (deleted.isNotEmpty()) {
+            val payload = GroupUpdatedEventPayload(deleted.map(GroupApp::groupAppId))
+            outboxEventPublisher.publish(EventType.GROUP_UPDATED, payload)
+        }
 
         return GroupResponse.from(group, existed + added)
     }
