@@ -9,7 +9,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.Table
 
 @Entity
-@Table(name = "group")
+@Table(name = "`group`")
 class GroupEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
