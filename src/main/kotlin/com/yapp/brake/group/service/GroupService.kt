@@ -1,5 +1,8 @@
 package com.yapp.brake.group.service
 
+import com.yapp.brake.common.event.EventType
+import com.yapp.brake.common.event.payload.GroupDeletedEventPayload
+import com.yapp.brake.common.event.payload.GroupUpdatedEventPayload
 import com.yapp.brake.group.dto.request.CreateGroupRequest
 import com.yapp.brake.group.dto.request.UpdateGroupRequest
 import com.yapp.brake.group.dto.response.GroupResponse
@@ -9,6 +12,7 @@ import com.yapp.brake.group.model.Group
 import com.yapp.brake.groupapp.infrastructure.GroupAppReader
 import com.yapp.brake.groupapp.infrastructure.GroupAppWriter
 import com.yapp.brake.groupapp.model.GroupApp
+import com.yapp.brake.outbox.infrastructure.event.OutboxEventPublisher
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -18,6 +22,7 @@ class GroupService(
     private val groupReader: GroupReader,
     private val groupAppWriter: GroupAppWriter,
     private val groupAppReader: GroupAppReader,
+    private val outboxEventPublisher: OutboxEventPublisher,
 ) : GroupUseCase {
     @Transactional
     override fun create(
@@ -59,9 +64,11 @@ class GroupService(
         val added = findNewApps(updatedGroupApps)
         val deleted = findAppsToDelete(originGroupApps, updatedGroupApps)
 
-        deleted.forEach { groupAppWriter.remove(it.groupAppId) }
+        val payload = GroupUpdatedEventPayload(deleted.map(GroupApp::groupAppId))
 
-        return GroupResponse.from(group, added + existed)
+        outboxEventPublisher.publish(EventType.GROUP_UPDATED, payload)
+
+        return GroupResponse.from(group, existed + added)
     }
 
     @Transactional
@@ -70,7 +77,12 @@ class GroupService(
         groupId: Long,
     ) {
         val group = groupReader.getByIdAndMemberId(groupId, memberId)
+
         groupWriter.delete(group)
+
+        val payload = GroupDeletedEventPayload(group.groupId)
+
+        outboxEventPublisher.publish(EventType.GROUP_DELETED, payload)
     }
 
     private fun findAppsToKeep(

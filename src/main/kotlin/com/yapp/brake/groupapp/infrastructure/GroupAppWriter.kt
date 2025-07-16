@@ -5,5 +5,9 @@ import com.yapp.brake.groupapp.model.GroupApp
 interface GroupAppWriter {
     fun save(groupApp: GroupApp): GroupApp
 
-    fun remove(groupAppId: Long)
+    fun delete(groupAppId: Long)
+
+    fun deleteByGroupId(groupId: Long)
+
+    fun deleteByGroupAppIds(groupAppIds: List<Long>)
 }
