@@ -4,6 +4,7 @@ import com.yapp.brake.group.infrastructure.GroupReader
 import com.yapp.brake.group.infrastructure.GroupWriter
 import com.yapp.brake.groupapp.infrastructure.GroupAppReader
 import com.yapp.brake.groupapp.infrastructure.GroupAppWriter
+import com.yapp.brake.outbox.infrastructure.event.OutboxEventPublisher
 import org.mockito.kotlin.mock
 
 class GroupServiceTest {
@@ -11,7 +12,9 @@ class GroupServiceTest {
     private val groupReader = mock<GroupReader>()
     private val groupAppReader = mock<GroupAppReader>()
     private val groupAppWriter = mock<GroupAppWriter>()
-    private val groupService = GroupService(groupWriter, groupReader, groupAppWriter, groupAppReader)
+    private val outboxEventPublisher = mock<OutboxEventPublisher>()
+    private val groupService =
+        GroupService(groupWriter, groupReader, groupAppWriter, groupAppReader, outboxEventPublisher)
 
 //    @Test
 //    fun `관리 앱 그룹을 생성한다`() {
