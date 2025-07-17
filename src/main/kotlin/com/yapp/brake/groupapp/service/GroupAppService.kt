@@ -23,6 +23,6 @@ class GroupAppService(
 
     @Transactional
     override fun remove(groupAppId: Long) {
-        groupAppWriter.deleteByGroupId(groupAppId)
+        groupAppWriter.delete(groupAppId)
     }
 }
