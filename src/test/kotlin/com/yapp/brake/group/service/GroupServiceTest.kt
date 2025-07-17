@@ -137,6 +137,7 @@ class GroupServiceTest {
             assertThat(result.name).isEqualTo(group.name)
             assertThat(result.groupApps).hasSize(request.groupApps.size)
 
+            verify(groupAppWriter, times(2)).save(any())
             verify(groupReader).getByIdAndMemberId(group.groupId, group.memberId)
             verify(groupWriter).save(any())
             verify(outboxEventPublisher).publish(any(), any())
