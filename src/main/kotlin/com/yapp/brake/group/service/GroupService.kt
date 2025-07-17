@@ -61,7 +61,7 @@ class GroupService(
                 .map { GroupApp.create(it.groupAppId, groupId, it.name) }
 
         val existed = findAppsToKeep(originGroupApps, updatedGroupApps)
-        val added = findNewApps(updatedGroupApps)
+        val added = findNewApps(updatedGroupApps).map(groupAppWriter::save)
         val deleted = findAppsToDelete(originGroupApps, updatedGroupApps)
 
         if (deleted.isNotEmpty()) {
