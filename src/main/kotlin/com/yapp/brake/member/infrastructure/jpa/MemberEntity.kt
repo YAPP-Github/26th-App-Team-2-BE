@@ -50,8 +50,8 @@ class MemberEntity(
             nickname = nickname,
             role = role,
             state = state,
-            createdAt = requireNotNull(createdAt),
-            updatedAt = requireNotNull(updatedAt),
+            createdAt = createdAt,
+            updatedAt = updatedAt,
         )
 
     companion object {

@@ -1,5 +1,6 @@
 package com.yapp.brake.support.restdocs
 
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.springframework.test.web.servlet.ResultMatcher
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.content
@@ -11,4 +12,7 @@ fun Any.toJson(): ResultMatcher {
     return content().json(objectMapper.writeValueAsString(this))
 }
 
-fun Any.toJsonString(): String = jacksonObjectMapper().writeValueAsString(this)
+fun Any.toJsonString(): String =
+    jacksonObjectMapper()
+        .registerModule(JavaTimeModule())
+        .writeValueAsString(this)
