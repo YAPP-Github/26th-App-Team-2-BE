@@ -28,10 +28,10 @@ class GroupAppServiceTest {
     fun `특정 그룹의 관리앱을 삭제 합니다`() {
         val groupAppId = 1L
 
-        doNothing().whenever(groupAppWriter).deleteByGroupId(groupAppId)
+        doNothing().whenever(groupAppWriter).delete(groupAppId)
 
         groupAppService.remove(groupAppId)
 
-        verify(groupAppWriter).deleteByGroupId(groupAppId)
+        verify(groupAppWriter).delete(groupAppId)
     }
 }
