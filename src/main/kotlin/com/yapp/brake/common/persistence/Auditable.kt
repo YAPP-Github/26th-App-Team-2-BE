@@ -1,6 +1,7 @@
 package com.yapp.brake.common.persistence
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import jakarta.persistence.Column
 import jakarta.persistence.EntityListeners
 import jakarta.persistence.MappedSuperclass
 import org.springframework.data.annotation.CreatedDate
@@ -12,6 +13,7 @@ import java.time.LocalDateTime
 @EntityListeners(AuditingEntityListener::class)
 abstract class Auditable {
     @CreatedDate
+    @Column(updatable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     var createdAt: LocalDateTime? = null
         protected set
