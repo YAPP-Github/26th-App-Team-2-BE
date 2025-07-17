@@ -2,10 +2,10 @@ package com.yapp.brake.groupapp.infrastructure.jpa
 
 import com.yapp.brake.groupapp.infrastructure.GroupAppReader
 import com.yapp.brake.groupapp.model.GroupApp
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 
-@Component
+@Repository
 @Transactional(readOnly = true)
 class GroupAppJpaReader(
     private val groupAppRepository: GroupAppRepository,

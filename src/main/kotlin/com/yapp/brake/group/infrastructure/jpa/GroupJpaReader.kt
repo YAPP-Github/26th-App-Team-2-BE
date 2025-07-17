@@ -4,10 +4,10 @@ import com.yapp.brake.common.exception.CustomException
 import com.yapp.brake.common.exception.ErrorCode
 import com.yapp.brake.group.infrastructure.GroupReader
 import com.yapp.brake.group.model.Group
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 
-@Component
+@Repository
 @Transactional(readOnly = true)
 class GroupJpaReader(
     private val groupRepository: GroupRepository,
