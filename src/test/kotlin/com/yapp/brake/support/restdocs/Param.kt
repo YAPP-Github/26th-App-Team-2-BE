@@ -35,15 +35,11 @@ infix fun String.means(description: String): Param {
 private fun createField(
     value: String,
     description: String,
-    optional: Boolean = false,
 ): Param {
     val descriptor =
         RequestDocumentation
             .parameterWithName(value) // 파라미터 이름을 설정
             .description(description) // 파라미터 설명을 설정
-
-    // 파라미터가 선택 사항인 경우 optional로 설정
-    if (optional) descriptor.optional()
 
     return Param(descriptor) // 설정된 파라미터 설명을 가진 Param 객체 반환
 }
