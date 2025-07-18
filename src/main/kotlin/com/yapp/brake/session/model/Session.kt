@@ -1,5 +1,6 @@
 package com.yapp.brake.session.model
 
+import java.time.Duration
 import java.time.LocalDateTime
 
 data class Session(
@@ -32,5 +33,9 @@ data class Session(
                     count = snoozeCount,
                 ),
         )
+    }
+
+    fun actualTime(): Long {
+        return Duration.between(start, end).toSeconds()
     }
 }
