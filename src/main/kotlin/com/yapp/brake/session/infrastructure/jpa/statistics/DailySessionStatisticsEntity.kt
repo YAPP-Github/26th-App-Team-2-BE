@@ -1,4 +1,4 @@
-package com.yapp.brake.session.infrastructure.jpa
+package com.yapp.brake.session.infrastructure.jpa.statistics
 
 import com.yapp.brake.session.model.DailySessionStatistics
 import jakarta.persistence.Entity

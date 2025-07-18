@@ -1,4 +1,4 @@
-package com.yapp.brake.session.infrastructure.jpa
+package com.yapp.brake.session.infrastructure.jpa.session
 
 import com.yapp.brake.session.model.Session
 import com.yapp.brake.session.model.Snooze

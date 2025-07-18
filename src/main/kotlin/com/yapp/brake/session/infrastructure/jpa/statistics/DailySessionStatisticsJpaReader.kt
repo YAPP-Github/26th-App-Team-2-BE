@@ -1,4 +1,4 @@
-package com.yapp.brake.session.infrastructure.jpa
+package com.yapp.brake.session.infrastructure.jpa.statistics
 
 import com.yapp.brake.session.infrastructure.DailySessionStatisticsReader
 import com.yapp.brake.session.model.DailySessionStatistics
