@@ -8,4 +8,9 @@ interface DailySessionStatisticsReader {
         memberId: Long,
         date: LocalDate,
     ): DailySessionStatistics
+
+    fun getByIds(
+        memberId: Long,
+        dates: List<LocalDate>,
+    ): List<DailySessionStatistics>
 }

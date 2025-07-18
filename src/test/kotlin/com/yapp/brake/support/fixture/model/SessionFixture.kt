@@ -9,7 +9,7 @@ fun sessionFixture(
     groupId: Long = 1L,
     memberId: Long = 1L,
     start: LocalDateTime = LocalDateTime.of(2025, 7, 18, 0, 0, 0),
-    end: LocalDateTime = LocalDateTime.of(2025, 7, 18, 0, 0, 0),
+    end: LocalDateTime = LocalDateTime.of(2025, 7, 18, 1, 0, 0),
     goalTime: Long = 1800L,
     snoozeUnit: Int = 5,
     snoozeCount: Int = 0,
