@@ -3,8 +3,8 @@ package com.yapp.brake.support
 import com.yapp.brake.auth.controller.AuthController
 import com.yapp.brake.auth.service.AuthUseCase
 import com.yapp.brake.common.filter.JwtAuthenticationFilter
-import com.yapp.brake.groupapp.controller.GroupAppController
-import com.yapp.brake.groupapp.service.GroupAppUseCase
+import com.yapp.brake.group.controller.GroupController
+import com.yapp.brake.group.service.GroupUseCase
 import com.yapp.brake.member.controller.MemberController
 import com.yapp.brake.member.service.MemberUseCase
 import com.yapp.brake.session.controller.SessionController
@@ -28,7 +28,7 @@ import org.springframework.web.context.WebApplicationContext
     controllers = [
         AuthController::class,
         MemberController::class,
-        GroupAppController::class,
+        GroupController::class,
         SessionController::class,
     ],
 )
@@ -43,7 +43,7 @@ abstract class RestApiTestBase {
     lateinit var memberUseCase: MemberUseCase
 
     @MockitoBean
-    lateinit var groupAppUseCase: GroupAppUseCase
+    lateinit var groupUseCase: GroupUseCase
 
     @MockitoBean
     lateinit var sessionUseCase: SessionUseCase

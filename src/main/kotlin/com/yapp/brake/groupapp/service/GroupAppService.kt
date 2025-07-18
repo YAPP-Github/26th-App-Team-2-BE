@@ -13,9 +13,9 @@ class GroupAppService(
     @Transactional
     override fun add(
         groupId: Long,
-        appId: String,
+        name: String,
     ): AddGroupAppResponse {
-        val groupApp = GroupApp.create(groupId, appId)
+        val groupApp = GroupApp.create(groupId = groupId, name = name)
         val savedGroupApp = groupAppWriter.save(groupApp)
 
         return AddGroupAppResponse(savedGroupApp.groupAppId)
@@ -23,6 +23,6 @@ class GroupAppService(
 
     @Transactional
     override fun remove(groupAppId: Long) {
-        groupAppWriter.remove(groupAppId)
+        groupAppWriter.delete(groupAppId)
     }
 }

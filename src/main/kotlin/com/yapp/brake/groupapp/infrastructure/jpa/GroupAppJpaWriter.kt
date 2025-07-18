@@ -15,7 +15,15 @@ class GroupAppJpaWriter(
         return groupAppRepository.save(entity).toDomain()
     }
 
-    override fun remove(groupAppId: Long) {
+    override fun delete(groupAppId: Long) {
         groupAppRepository.deleteById(groupAppId)
+    }
+
+    override fun deleteByGroupId(groupId: Long) {
+        groupAppRepository.deleteByGroupId(groupId)
+    }
+
+    override fun deleteByGroupAppIds(groupAppIds: List<Long>) {
+        groupAppRepository.deleteByGroupAppIdIn(groupAppIds)
     }
 }

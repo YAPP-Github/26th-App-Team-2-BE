@@ -19,7 +19,7 @@ class GroupAppServiceTest {
 
         whenever(groupAppWriter.save(any())).thenReturn(groupApp)
 
-        groupAppService.add(groupApp.groupId, groupApp.appId)
+        groupAppService.add(groupApp.groupId, groupApp.name)
 
         verify(groupAppWriter).save(groupApp)
     }
@@ -28,10 +28,10 @@ class GroupAppServiceTest {
     fun `특정 그룹의 관리앱을 삭제 합니다`() {
         val groupAppId = 1L
 
-        doNothing().whenever(groupAppWriter).remove(groupAppId)
+        doNothing().whenever(groupAppWriter).delete(groupAppId)
 
         groupAppService.remove(groupAppId)
 
-        verify(groupAppWriter).remove(groupAppId)
+        verify(groupAppWriter).delete(groupAppId)
     }
 }
