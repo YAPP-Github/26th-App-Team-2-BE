@@ -20,8 +20,7 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import requestBody
-import responseBody
+import snippet
 
 class MemberControllerTest : RestApiTestBase() {
     @Test
@@ -47,13 +46,15 @@ class MemberControllerTest : RestApiTestBase() {
             .andExpect(status().isOk)
             .andDocument(
                 "members-me-get",
-                Tag.MEMBER,
-                responseBody(
-                    "data" type OBJECT means "응답 바디",
-                    "data.nickname" type STRING means "닉네임",
-                    "data.state" type STRING means "상태",
-                    "code" type NUMBER means "HTTP 코드",
-                ),
+                snippet {
+                    tag(Tag.MEMBER)
+                    responseBody(
+                        "data" type OBJECT means "응답 바디",
+                        "data.nickname" type STRING means "닉네임",
+                        "data.state" type STRING means "상태",
+                        "code" type NUMBER means "HTTP 코드",
+                    )
+                },
             )
 
         SecurityContextHolder.clearContext()
@@ -84,16 +85,18 @@ class MemberControllerTest : RestApiTestBase() {
             .andExpect(status().isOk)
             .andDocument(
                 "members-me-update",
-                Tag.MEMBER,
-                requestBody(
-                    "nickname" type STRING means "변경하려는 닉네임",
-                ),
-                responseBody(
-                    "data" type OBJECT means "응답 바디",
-                    "data.nickname" type STRING means "닉네임",
-                    "data.state" type STRING means "상태",
-                    "code" type NUMBER means "HTTP 코드",
-                ),
+                snippet {
+                    tag(Tag.MEMBER)
+                    requestBody(
+                        "nickname" type STRING means "변경하려는 닉네임",
+                    )
+                    responseBody(
+                        "data" type OBJECT means "응답 바디",
+                        "data.nickname" type STRING means "닉네임",
+                        "data.state" type STRING means "상태",
+                        "code" type NUMBER means "HTTP 코드",
+                    )
+                },
             )
     }
 
@@ -112,7 +115,7 @@ class MemberControllerTest : RestApiTestBase() {
             .andExpect(status().isNoContent)
             .andDocument(
                 "member-delete",
-                Tag.MEMBER,
+                snippet { tag(Tag.MEMBER) },
             )
 
         SecurityContextHolder.clearContext()

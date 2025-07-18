@@ -1,5 +1,6 @@
 package com.yapp.brake.support.restdocs
 
+import com.epages.restdocs.apispec.ResourceSnippetParametersBuilder
 import org.springframework.restdocs.request.ParameterDescriptor
 import org.springframework.restdocs.request.PathParametersSnippet
 import org.springframework.restdocs.request.QueryParametersSnippet
@@ -58,6 +59,10 @@ fun pathParameters(vararg params: Param): PathParametersSnippet {
     return RequestDocumentation.pathParameters(params.map { it.descriptor })
 }
 
+fun ResourceSnippetParametersBuilder.pathParameters(vararg params: Param): ResourceSnippetParametersBuilder {
+    return pathParameters(*params.map { it.descriptor }.toTypedArray())
+}
+
 /**
  * 쿼리 파라미터들을 `QueryParametersSnippet` 객체로 변환하여 반환합니다.
  *
@@ -66,4 +71,8 @@ fun pathParameters(vararg params: Param): PathParametersSnippet {
  */
 fun queryParameters(vararg params: Param): QueryParametersSnippet {
     return RequestDocumentation.queryParameters(params.map { it.descriptor })
+}
+
+fun ResourceSnippetParametersBuilder.queryParameters(vararg params: Param): ResourceSnippetParametersBuilder {
+    return queryParameters(*params.map { it.descriptor }.toTypedArray())
 }

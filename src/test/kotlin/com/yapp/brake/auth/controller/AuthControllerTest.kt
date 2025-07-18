@@ -22,8 +22,7 @@ import org.mockito.kotlin.whenever
 import org.springframework.http.MediaType
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import requestBody
-import responseBody
+import snippet
 import java.util.UUID
 
 class AuthControllerTest : RestApiTestBase() {
@@ -57,19 +56,21 @@ class AuthControllerTest : RestApiTestBase() {
             .andExpect(status().isOk)
             .andDocument(
                 "auth-login",
-                Tag.AUTH,
-                requestBody(
-                    "provider" type STRING means "소셜 로그인 타입",
-                    "authorizationCode" type STRING means "인가 코드",
-                    "deviceId" type STRING means "모바일 디바이스 식별자",
-                ),
-                responseBody(
-                    "data" type OBJECT means "응답 바디",
-                    "data.accessToken" type STRING means "액세스 토큰",
-                    "data.refreshToken" type STRING means "리프레시 토큰",
-                    "data.memberState" type STRING means "유저의 상태 ",
-                    "code" type NUMBER means "HTTP 코드",
-                ),
+                snippet {
+                    tag(Tag.AUTH)
+                    requestBody(
+                        "provider" type STRING means "소셜 로그인 타입",
+                        "authorizationCode" type STRING means "인가 코드",
+                        "deviceId" type STRING means "모바일 디바이스 식별자",
+                    )
+                    responseBody(
+                        "data" type OBJECT means "응답 바디",
+                        "data.accessToken" type STRING means "액세스 토큰",
+                        "data.refreshToken" type STRING means "리프레시 토큰",
+                        "data.memberState" type STRING means "유저의 상태 ",
+                        "code" type NUMBER means "HTTP 코드",
+                    )
+                },
             )
     }
 
@@ -90,16 +91,18 @@ class AuthControllerTest : RestApiTestBase() {
             .andExpect(status().isOk)
             .andDocument(
                 "auth-refresh",
-                Tag.AUTH,
-                requestBody(
-                    "refreshToken" type STRING means "기존 리프레시 토큰",
-                ),
-                responseBody(
-                    "data" type OBJECT means "응답 바디",
-                    "data.accessToken" type STRING means "액세스 토큰",
-                    "data.refreshToken" type STRING means "리프레시 토큰",
-                    "code" type NUMBER means "HTTP 코드",
-                ),
+                snippet {
+                    tag(Tag.AUTH)
+                    requestBody(
+                        "refreshToken" type STRING means "기존 리프레시 토큰",
+                    )
+                    responseBody(
+                        "data" type OBJECT means "응답 바디",
+                        "data.accessToken" type STRING means "액세스 토큰",
+                        "data.refreshToken" type STRING means "리프레시 토큰",
+                        "code" type NUMBER means "HTTP 코드",
+                    )
+                },
             )
     }
 
@@ -118,10 +121,12 @@ class AuthControllerTest : RestApiTestBase() {
             .andExpect(status().isNoContent)
             .andDocument(
                 "auth-logout",
-                Tag.AUTH,
-                requestBody(
-                    "accessToken" type STRING means "기존 액세스 토큰",
-                ),
+                snippet {
+                    tag(Tag.AUTH)
+                    requestBody(
+                        "accessToken" type STRING means "기존 액세스 토큰",
+                    )
+                },
             )
     }
 }
