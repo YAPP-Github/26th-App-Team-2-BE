@@ -13,6 +13,7 @@ import com.yapp.brake.support.restdocs.Tag
 import com.yapp.brake.support.restdocs.toJsonString
 import com.yapp.brake.support.restdocs.type
 import org.junit.jupiter.api.Test
+import org.mockito.kotlin.any
 import org.mockito.kotlin.whenever
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -20,8 +21,6 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import requestBody
-import responseBody
 
 class SessionControllerTest : RestApiTestBase() {
     @Test
@@ -37,10 +36,11 @@ class SessionControllerTest : RestApiTestBase() {
                 snoozeUnit = session.snooze.unit,
                 snoozeCount = session.snooze.count,
             )
+
         val response =
             ApiResponse.success(
-                HttpStatus.CREATED.value(),
-                AddSessionResponse(sessionId = 1L),
+                code = HttpStatus.CREATED.value(),
+                data = AddSessionResponse(sessionId = 1L),
             )
 
         val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), null)
@@ -48,8 +48,8 @@ class SessionControllerTest : RestApiTestBase() {
 
         whenever(
             sessionUseCase.add(
-                memberId,
-                request,
+                any(),
+                any(),
             ),
         ).thenReturn(response.data)
 
@@ -60,9 +60,8 @@ class SessionControllerTest : RestApiTestBase() {
 
         mockMvc.perform(builder)
             .andExpect(status().isOk)
-            .andDocument(
-                "session-add",
-                Tag.SESSION,
+            .andDocument("session-add") {
+                tag(Tag.SESSION)
                 requestBody(
                     "groupId" type NUMBER means "관리 앱 그룹",
                     "start" type DATETIME means "세션 시작 시간",
@@ -70,12 +69,12 @@ class SessionControllerTest : RestApiTestBase() {
                     "goalTime" type NUMBER means "세션 목표 시간(초 단위)",
                     "snoozeUnit" type NUMBER means "스누즈 단위(분 단위)",
                     "snoozeCount" type NUMBER means "스누즈 횟수",
-                ),
+                )
                 responseBody(
                     "data" type OBJECT means "응답 바디",
                     "data.sessionId" type NUMBER means "세션 식별자",
                     "code" type NUMBER means "HTTP 코드",
-                ),
-            )
+                )
+            }
     }
 }
