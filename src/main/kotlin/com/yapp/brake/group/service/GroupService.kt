@@ -44,6 +44,23 @@ class GroupService(
         return GroupResponse.from(group, groupApps)
     }
 
+    @Transactional(readOnly = true)
+    override fun getAll(
+        memberId: Long,
+        pageSize: Long,
+        lastGroupId: Long?,
+    ): List<GroupResponse> {
+        val groups = groupReader.getAllInfiniteScroll(memberId, pageSize, lastGroupId)
+        val groupIds = groups.map(Group::groupId)
+        val groupApps = groupAppReader.getByGroupIds(groupIds)
+        val groupAppMap: Map<Long, List<GroupApp>> = groupApps.groupBy { it.groupId }
+
+        return groups.map { group ->
+            val apps = groupAppMap[group.groupId] ?: emptyList()
+            GroupResponse.from(group, apps)
+        }
+    }
+
     @Transactional
     override fun modify(
         memberId: Long,

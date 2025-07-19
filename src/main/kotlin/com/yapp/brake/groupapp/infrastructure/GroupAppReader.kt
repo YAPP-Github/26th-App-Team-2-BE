@@ -4,4 +4,6 @@ import com.yapp.brake.groupapp.model.GroupApp
 
 interface GroupAppReader {
     fun getByGroupId(groupId: Long): List<GroupApp>
+
+    fun getByGroupIds(groupIds: List<Long>): List<GroupApp>
 }

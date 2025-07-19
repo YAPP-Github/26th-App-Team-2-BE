@@ -7,4 +7,10 @@ interface GroupReader {
         groupId: Long,
         memberId: Long,
     ): Group
+
+    fun getAllInfiniteScroll(
+        groupId: Long,
+        limit: Long,
+        lastGroupId: Long?,
+    ): List<Group>
 }
