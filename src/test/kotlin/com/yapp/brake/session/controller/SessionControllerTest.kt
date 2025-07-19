@@ -131,10 +131,10 @@ class SessionControllerTest : RestApiTestBase() {
         mockMvc.perform(builder)
             .andExpect(status().isOk)
             .andDocument("session-get") {
-                Tag.SESSION
+                tag(Tag.SESSION)
                 queryParameters(
-                    "start" means "통계 조회 시작일",
-                    "end" means "통계 조회 종료일",
+                    "start" means "통계 조회 시작일" optional true,
+                    "end" means "통계 조회 종료일" optional true,
                 )
                 responseBody(
                     "data" type OBJECT means "응답 바디",
