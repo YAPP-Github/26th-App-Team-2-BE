@@ -1,6 +1,7 @@
 package com.yapp.brake.session.infrastructure
 
 import com.yapp.brake.session.model.DailySessionStatistics
+import com.yapp.brake.session.model.SessionStatistics
 import java.time.LocalDate
 
 interface DailySessionStatisticsReader {
@@ -9,8 +10,8 @@ interface DailySessionStatisticsReader {
         date: LocalDate,
     ): DailySessionStatistics
 
-    fun getByIds(
+    fun getAllByIds(
         memberId: Long,
         dates: List<LocalDate>,
-    ): List<DailySessionStatistics>
+    ): SessionStatistics
 }

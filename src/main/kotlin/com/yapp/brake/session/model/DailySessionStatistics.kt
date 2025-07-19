@@ -5,13 +5,17 @@ import java.time.LocalDate
 data class DailySessionStatistics(
     val memberId: Long,
     val date: LocalDate,
-    val actualTime: Long = 0L,
-    val goalTime: Long = 0L,
+    val actualMinutes: Long = 0L,
+    val goalMinutes: Long = 0L,
 ) {
-    fun update(session: Session): DailySessionStatistics {
+    fun add(session: Session): DailySessionStatistics {
+        if (session.start.toLocalDate() != date) {
+            return this
+        }
+
         return copy(
-            actualTime = actualTime + session.actualTime(),
-            goalTime = goalTime + session.goalTime,
+            actualMinutes = actualMinutes + session.toActualMinutes(),
+            goalMinutes = goalMinutes + session.goalMinutes,
         )
     }
 }

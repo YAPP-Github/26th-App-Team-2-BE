@@ -6,11 +6,11 @@ import java.time.LocalDate
 fun dailySessionStatisticsFixture(
     memberId: Long = 1L,
     date: LocalDate = LocalDate.of(2025, 7, 18),
-    actualTime: Long = 1800L,
-    goalTime: Long = 1800L,
+    actualMinutes: Long = 30L,
+    goalMinutes: Long = 30L,
 ) = DailySessionStatistics(
     memberId,
     date,
-    actualTime,
-    goalTime,
+    actualMinutes,
+    goalMinutes,
 )

@@ -41,7 +41,7 @@ class SessionControllerTest : RestApiTestBase() {
                 groupId = session.groupId,
                 start = session.start,
                 end = session.end,
-                goalTime = session.goalTime,
+                goalTime = session.goalMinutes,
                 snoozeUnit = session.snooze.unit,
                 snoozeCount = session.snooze.count,
             )

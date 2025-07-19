@@ -30,7 +30,7 @@ class SessionEntity(
             memberId = memberId,
             start = start,
             end = end,
-            goalTime = goalTime,
+            goalMinutes = goalTime,
             snooze =
                 Snooze(
                     unit = snoozeUnit,
@@ -46,7 +46,7 @@ class SessionEntity(
                 memberId = session.memberId,
                 start = session.start,
                 end = session.end,
-                goalTime = session.goalTime,
+                goalTime = session.goalMinutes,
                 snoozeUnit = session.snooze.unit,
                 snoozeCount = session.snooze.count,
             )

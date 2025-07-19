@@ -1,6 +1,7 @@
 package com.yapp.brake.session.utils
 
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 fun generateBetweenDates(
     startDate: LocalDate,
@@ -13,4 +14,11 @@ fun generateBetweenDates(
     return generateSequence(startDate) { it.plusDays(1) }
         .takeWhile { it.isBefore(endDate) }
         .toList() + endDate
+}
+
+fun generateBetweenDates(
+    startDate: LocalDateTime,
+    endDate: LocalDateTime,
+): List<LocalDate> {
+    return generateBetweenDates(startDate.toLocalDate(), endDate.toLocalDate())
 }

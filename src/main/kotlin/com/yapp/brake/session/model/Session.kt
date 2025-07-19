@@ -1,5 +1,6 @@
 package com.yapp.brake.session.model
 
+import com.yapp.brake.session.utils.generateBetweenDates
 import java.time.Duration
 import java.time.LocalDateTime
 
@@ -9,7 +10,7 @@ data class Session(
     val memberId: Long,
     val start: LocalDateTime,
     val end: LocalDateTime,
-    val goalTime: Long,
+    val goalMinutes: Long,
     val snooze: Snooze,
 ) {
     companion object {
@@ -18,7 +19,7 @@ data class Session(
             groupId: Long,
             start: LocalDateTime,
             end: LocalDateTime,
-            goalTime: Long,
+            goalMinutes: Long,
             snoozeUnit: Int,
             snoozeCount: Int,
         ) = Session(
@@ -26,7 +27,7 @@ data class Session(
             groupId = groupId,
             start = start,
             end = end,
-            goalTime = goalTime,
+            goalMinutes = goalMinutes,
             snooze =
                 Snooze(
                     unit = snoozeUnit,
@@ -35,7 +36,28 @@ data class Session(
         )
     }
 
-    fun actualTime(): Long {
-        return Duration.between(start, end).toSeconds()
+    fun toActualMinutes(): Long {
+        return Duration.between(start, end).toMinutes()
+    }
+
+    fun splitByDate(): List<Session> {
+        val betweenDates = generateBetweenDates(start, end)
+
+        val startDate = start.toLocalDate()
+        val endDate = end.toLocalDate()
+
+        return betweenDates.map { date ->
+            val isFirst = date == startDate
+            val isLast = date == endDate
+
+            val segmentStart = if (isFirst) start else date.atStartOfDay()
+            val segmentEnd = if (isLast) end else date.plusDays(1).atStartOfDay()
+
+            copy(
+                start = segmentStart,
+                end = segmentEnd,
+                goalMinutes = Duration.between(segmentStart, segmentEnd).toMinutes(),
+            )
+        }
     }
 }

@@ -36,11 +36,18 @@ class SessionService(
             )
         val savedSession = sessionWriter.save(session)
 
-        val statistics = dailySessionStatisticsReader.getById(memberId, request.start.toLocalDate())
-        val updated = statistics.update(session)
-        dailySessionStatisticsWriter.save(updated)
-
+        updateStatistics(memberId, session)
         return AddSessionResponse(savedSession.id)
+    }
+
+    private fun updateStatistics(
+        memberId: Long,
+        session: Session,
+    ) {
+        val betweenDates = generateBetweenDates(session.start, session.end)
+        val statistics = dailySessionStatisticsReader.getAllByIds(memberId, betweenDates)
+        val updated = statistics.update(session)
+        dailySessionStatisticsWriter.saveAll(updated)
     }
 
     @Transactional(readOnly = true)
@@ -50,10 +57,16 @@ class SessionService(
         endDate: LocalDate,
     ): SessionStatisticsResponse {
         val betweenDates = generateBetweenDates(startDate, endDate)
-        val statistics = dailySessionStatisticsReader.getByIds(memberId, betweenDates)
+        val statistics = dailySessionStatisticsReader.getAllByIds(memberId, betweenDates)
 
         return SessionStatisticsResponse(
-            statistics.map { DailySessionStatisticsResponse.create(it.date, it.actualTime, it.goalTime) },
+            statistics.statistics.map {
+                DailySessionStatisticsResponse.create(
+                    it.date,
+                    it.actualMinutes,
+                    it.goalMinutes,
+                )
+            },
         )
     }
 }
