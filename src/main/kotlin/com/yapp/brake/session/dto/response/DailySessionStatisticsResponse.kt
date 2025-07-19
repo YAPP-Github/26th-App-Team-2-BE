@@ -18,8 +18,8 @@ data class DailySessionStatisticsResponse(
         ) = DailySessionStatisticsResponse(
             date = date,
             dayOfWeek = date.dayOfWeek,
-            actualTime = LocalTime.ofSecondOfDay(actualTime),
-            goalTime = LocalTime.ofSecondOfDay(goalTime),
+            actualTime = LocalTime.MIN.plusMinutes(actualTime),
+            goalTime = LocalTime.MIN.plusMinutes(goalTime),
         )
     }
 }
