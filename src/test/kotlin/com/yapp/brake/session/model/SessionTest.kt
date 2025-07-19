@@ -36,6 +36,7 @@ class SessionTest {
             sessionFixture(
                 start = start,
                 end = end,
+                goalMinutes = 20,
             )
 
         // when
@@ -52,7 +53,7 @@ class SessionTest {
             session.copy(
                 start = LocalDate.of(2025, 7, 19).atStartOfDay(),
                 end = end,
-                goalMinutes = 20L,
+                goalMinutes = 10L,
             )
 
         assertAll(

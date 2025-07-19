@@ -72,4 +72,25 @@ class AddSessionRequestTest {
         // then
         assertEquals(0, violations.size)
     }
+
+    @Test
+    fun `이틀 이상 차이나면 예외가 발생한다`() {
+        // given
+        val validRequest =
+            AddSessionRequest(
+                groupId = 1L,
+                start = LocalDateTime.of(2025, 7, 15, 9, 0),
+                end = LocalDateTime.of(2025, 7, 17, 10, 0),
+                goalMinutes = 5L,
+                snoozeUnit = 0,
+                snoozeCount = 0,
+            )
+
+        // when
+        val violations = validator.validate(validRequest)
+
+        // then
+        assertEquals(1, violations.size)
+        assertNotNull(violations.first { it.propertyPath.toString().isEmpty() })
+    }
 }

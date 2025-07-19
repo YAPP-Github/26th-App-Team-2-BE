@@ -14,7 +14,7 @@ class SessionStatisticsTest {
         val session =
             sessionFixture(
                 start = start,
-                end = start.plusMinutes(30),
+                end = start.plusMinutes(40),
                 goalMinutes = 30L,
             )
         val sessionStatistics = SessionStatistics(emptyList())
@@ -35,7 +35,7 @@ class SessionStatisticsTest {
             dailySessionStatisticsFixture(
                 memberId = 1L,
                 date = startDate.plusDays(1),
-                actualMinutes = 20,
+                actualMinutes = 30,
                 goalMinutes = 20,
             )
 

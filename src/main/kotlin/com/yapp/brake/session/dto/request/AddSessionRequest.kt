@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Positive
 import jakarta.validation.constraints.PositiveOrZero
 import java.time.LocalDateTime
 
-@ValidSessionTime
+@ValidSessionTime(maxDays = 1)
 data class AddSessionRequest(
     @field:Positive
     val groupId: Long,
