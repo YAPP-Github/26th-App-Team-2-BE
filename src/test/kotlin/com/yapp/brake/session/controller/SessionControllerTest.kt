@@ -4,7 +4,7 @@ import andDocument
 import com.yapp.brake.common.dto.ApiResponse
 import com.yapp.brake.session.dto.request.AddSessionRequest
 import com.yapp.brake.session.dto.response.AddSessionResponse
-import com.yapp.brake.session.dto.response.DailySessionStatisticsResponse
+import com.yapp.brake.session.dto.response.DailySessionStatisticResponse
 import com.yapp.brake.session.dto.response.SessionStatisticsResponse
 import com.yapp.brake.support.RestApiTestBase
 import com.yapp.brake.support.fixture.model.sessionFixture
@@ -96,13 +96,13 @@ class SessionControllerTest : RestApiTestBase() {
                 HttpStatus.OK.value(),
                 SessionStatisticsResponse(
                     listOf(
-                        DailySessionStatisticsResponse(
+                        DailySessionStatisticResponse(
                             date = start,
                             dayOfWeek = start.dayOfWeek,
                             actualTime = LocalTime.of(1, 20),
                             goalTime = LocalTime.of(1, 30),
                         ),
-                        DailySessionStatisticsResponse(
+                        DailySessionStatisticResponse(
                             date = end,
                             dayOfWeek = end.dayOfWeek,
                             actualTime = LocalTime.of(2, 20),

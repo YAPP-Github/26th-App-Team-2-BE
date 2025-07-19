@@ -1,7 +1,7 @@
 package com.yapp.brake.session.model
 
 data class SessionStatistics(
-    val statistics: List<DailySessionStatistics>,
+    val statistics: List<DailySessionStatistic>,
 ) {
     fun update(session: Session): SessionStatistics {
         val updatedMap = statistics.associateBy { it.date }.toMutableMap()
@@ -9,7 +9,7 @@ data class SessionStatistics(
         for (split in session.splitByDate()) {
             val date = split.start.toLocalDate()
             val existing =
-                updatedMap[date] ?: DailySessionStatistics(
+                updatedMap[date] ?: DailySessionStatistic(
                     date = date,
                     memberId = split.memberId,
                 )

@@ -4,7 +4,7 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 
-data class DailySessionStatisticsResponse(
+data class DailySessionStatisticResponse(
     val date: LocalDate,
     val dayOfWeek: DayOfWeek,
     val actualTime: LocalTime,
@@ -15,7 +15,7 @@ data class DailySessionStatisticsResponse(
             date: LocalDate,
             actualTime: Long,
             goalTime: Long,
-        ) = DailySessionStatisticsResponse(
+        ) = DailySessionStatisticResponse(
             date = date,
             dayOfWeek = date.dayOfWeek,
             actualTime = LocalTime.MIN.plusMinutes(actualTime),

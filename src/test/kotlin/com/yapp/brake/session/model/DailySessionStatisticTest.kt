@@ -7,7 +7,7 @@ import org.junit.jupiter.api.assertAll
 import java.time.LocalDateTime
 import kotlin.test.assertEquals
 
-class DailySessionStatisticsTest {
+class DailySessionStatisticTest {
     private val goalMinutes = 30L
     private val usageMinutes = 10L
     private val start = LocalDateTime.of(2025, 7, 18, 12, 0, 0)

@@ -1,6 +1,6 @@
 package com.yapp.brake.support.fixture.model
 
-import com.yapp.brake.session.model.DailySessionStatistics
+import com.yapp.brake.session.model.DailySessionStatistic
 import java.time.LocalDate
 
 fun dailySessionStatisticsFixture(
@@ -8,7 +8,7 @@ fun dailySessionStatisticsFixture(
     date: LocalDate = LocalDate.of(2025, 7, 18),
     actualMinutes: Long = 30L,
     goalMinutes: Long = 30L,
-) = DailySessionStatistics(
+) = DailySessionStatistic(
     memberId,
     date,
     actualMinutes,

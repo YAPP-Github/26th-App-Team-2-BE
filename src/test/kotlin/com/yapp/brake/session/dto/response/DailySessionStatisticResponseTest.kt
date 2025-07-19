@@ -6,7 +6,7 @@ import java.time.LocalTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class DailySessionStatisticsResponseTest {
+class DailySessionStatisticResponseTest {
     @Test
     fun `날짜와 분 단위를 받아 요일과 시간을 만든다`() {
         // given
@@ -15,7 +15,7 @@ class DailySessionStatisticsResponseTest {
         val goalMinutes = 120L
 
         // when
-        val response = DailySessionStatisticsResponse.create(date, actualMinutes, goalMinutes)
+        val response = DailySessionStatisticResponse.create(date, actualMinutes, goalMinutes)
 
         // then
         assertEquals(date, response.date)

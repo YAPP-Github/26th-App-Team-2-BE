@@ -1,8 +1,8 @@
 package com.yapp.brake.session.service
 
 import com.yapp.brake.session.dto.request.AddSessionRequest
-import com.yapp.brake.session.infrastructure.DailySessionStatisticsReader
-import com.yapp.brake.session.infrastructure.DailySessionStatisticsWriter
+import com.yapp.brake.session.infrastructure.DailySessionStatisticReader
+import com.yapp.brake.session.infrastructure.DailySessionStatisticWriter
 import com.yapp.brake.session.infrastructure.SessionWriter
 import com.yapp.brake.session.model.SessionStatistics
 import com.yapp.brake.support.fixture.model.dailySessionStatisticsFixture
@@ -19,8 +19,8 @@ import kotlin.test.assertEquals
 
 class SessionServiceTest {
     private val sessionWriter = mock<SessionWriter>()
-    private val statisticsWriter = mock<DailySessionStatisticsWriter>()
-    private val statisticsReader = mock<DailySessionStatisticsReader>()
+    private val statisticsWriter = mock<DailySessionStatisticWriter>()
+    private val statisticsReader = mock<DailySessionStatisticReader>()
     private val sessionService = SessionService(sessionWriter, statisticsWriter, statisticsReader)
 
     @Test
