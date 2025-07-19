@@ -86,8 +86,9 @@ fun snippet(init: SnippetBuilderDsl.() -> Unit): ResourceSnippetParameters {
 
 fun ResultActions.andDocument(
     identifier: String,
-    snippet: ResourceSnippetParameters,
+    snippetBuilder: SnippetBuilderDsl.() -> Unit,
 ): ResultActions {
+    val snippet = snippet(snippetBuilder)
     return andDo(
         document(
             identifier,

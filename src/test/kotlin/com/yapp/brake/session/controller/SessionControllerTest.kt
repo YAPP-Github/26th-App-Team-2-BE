@@ -21,7 +21,6 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import snippet
 
 class SessionControllerTest : RestApiTestBase() {
     @Test
@@ -61,24 +60,21 @@ class SessionControllerTest : RestApiTestBase() {
 
         mockMvc.perform(builder)
             .andExpect(status().isOk)
-            .andDocument(
-                "session-add",
-                snippet {
-                    tag(Tag.SESSION)
-                    requestBody(
-                        "groupId" type NUMBER means "관리 앱 그룹",
-                        "start" type DATETIME means "세션 시작 시간",
-                        "end" type DATETIME means "세션 종료 시간",
-                        "goalTime" type NUMBER means "세션 목표 시간(초 단위)",
-                        "snoozeUnit" type NUMBER means "스누즈 단위(분 단위)",
-                        "snoozeCount" type NUMBER means "스누즈 횟수",
-                    )
-                    responseBody(
-                        "data" type OBJECT means "응답 바디",
-                        "data.sessionId" type NUMBER means "세션 식별자",
-                        "code" type NUMBER means "HTTP 코드",
-                    )
-                },
-            )
+            .andDocument("session-add") {
+                tag(Tag.SESSION)
+                requestBody(
+                    "groupId" type NUMBER means "관리 앱 그룹",
+                    "start" type DATETIME means "세션 시작 시간",
+                    "end" type DATETIME means "세션 종료 시간",
+                    "goalTime" type NUMBER means "세션 목표 시간(초 단위)",
+                    "snoozeUnit" type NUMBER means "스누즈 단위(분 단위)",
+                    "snoozeCount" type NUMBER means "스누즈 횟수",
+                )
+                responseBody(
+                    "data" type OBJECT means "응답 바디",
+                    "data.sessionId" type NUMBER means "세션 식별자",
+                    "code" type NUMBER means "HTTP 코드",
+                )
+            }
     }
 }
