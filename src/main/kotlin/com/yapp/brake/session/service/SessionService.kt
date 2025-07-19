@@ -30,7 +30,7 @@ class SessionService(
                 request.groupId,
                 request.start,
                 request.end,
-                request.goalTime,
+                request.goalMinutes,
                 request.snoozeUnit,
                 request.snoozeCount,
             )

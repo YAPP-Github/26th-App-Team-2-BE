@@ -19,7 +19,7 @@ class AddSessionRequestTest {
                 groupId = -1L,
                 start = LocalDateTime.of(2025, 7, 15, 9, 0),
                 end = LocalDateTime.of(2025, 7, 15, 10, 0),
-                goalTime = -1L,
+                goalMinutes = -1L,
                 snoozeUnit = -1,
                 snoozeCount = -1,
             )
@@ -30,7 +30,7 @@ class AddSessionRequestTest {
         // then
         assertEquals(4, violations.size)
         assertTrue(violations.any { it.propertyPath.toString() == "groupId" })
-        assertTrue(violations.any { it.propertyPath.toString() == "goalTime" })
+        assertTrue(violations.any { it.propertyPath.toString() == "goalMinutes" })
         assertTrue(violations.any { it.propertyPath.toString() == "snoozeUnit" })
         assertTrue(violations.any { it.propertyPath.toString() == "snoozeCount" })
     }
@@ -42,7 +42,7 @@ class AddSessionRequestTest {
                 groupId = 1L,
                 start = LocalDateTime.of(2025, 7, 15, 9, 1),
                 end = LocalDateTime.of(2025, 7, 15, 9, 0),
-                goalTime = 5L,
+                goalMinutes = 5L,
                 snoozeUnit = 0,
                 snoozeCount = 0,
             )
@@ -61,7 +61,7 @@ class AddSessionRequestTest {
                 groupId = 1L,
                 start = LocalDateTime.of(2025, 7, 15, 9, 0),
                 end = LocalDateTime.of(2025, 7, 15, 10, 0),
-                goalTime = 5L,
+                goalMinutes = 5L,
                 snoozeUnit = 0,
                 snoozeCount = 0,
             )

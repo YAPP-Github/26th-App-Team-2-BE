@@ -15,7 +15,7 @@ data class AddSessionRequest(
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     val end: LocalDateTime,
     @field:Positive
-    val goalTime: Long,
+    val goalMinutes: Long,
     @field:PositiveOrZero
     val snoozeUnit: Int,
     @field:PositiveOrZero
