@@ -1,5 +1,7 @@
 package com.yapp.brake.common.event
 
+import com.yapp.brake.common.event.payload.GroupDeletedEventPayload
+import com.yapp.brake.common.event.payload.GroupUpdatedEventPayload
 import com.yapp.brake.common.event.payload.MemberDeletedEventPayload
 import io.github.oshai.kotlinlogging.KotlinLogging
 
@@ -9,6 +11,8 @@ enum class EventType(
     val payloadClass: Class<out EventPayload>,
 ) {
     MEMBER_DELETED(MemberDeletedEventPayload::class.java),
+    GROUP_UPDATED(GroupUpdatedEventPayload::class.java),
+    GROUP_DELETED(GroupDeletedEventPayload::class.java),
     ;
 
     companion object {

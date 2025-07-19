@@ -1,0 +1,204 @@
+package com.yapp.brake.group.service
+
+import com.yapp.brake.common.exception.CustomException
+import com.yapp.brake.common.exception.ErrorCode
+import com.yapp.brake.group.infrastructure.GroupReader
+import com.yapp.brake.group.infrastructure.GroupWriter
+import com.yapp.brake.groupapp.infrastructure.GroupAppReader
+import com.yapp.brake.groupapp.infrastructure.GroupAppWriter
+import com.yapp.brake.groupapp.model.GroupApp
+import com.yapp.brake.outbox.infrastructure.event.OutboxEventPublisher
+import com.yapp.brake.support.fixture.dto.group.createGroupRequestFixture
+import com.yapp.brake.support.fixture.dto.group.updateGroupAppRequestFixture
+import com.yapp.brake.support.fixture.dto.group.updateGroupRequestFixture
+import com.yapp.brake.support.fixture.model.groupAppFixture
+import com.yapp.brake.support.fixture.model.groupFixture
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import org.mockito.kotlin.any
+import org.mockito.kotlin.doNothing
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
+import org.mockito.kotlin.times
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
+
+class GroupServiceTest {
+    private val groupWriter = mock<GroupWriter>()
+    private val groupReader = mock<GroupReader>()
+    private val groupAppReader = mock<GroupAppReader>()
+    private val groupAppWriter = mock<GroupAppWriter>()
+    private val outboxEventPublisher = mock<OutboxEventPublisher>()
+    private val groupService =
+        GroupService(groupWriter, groupReader, groupAppWriter, groupAppReader, outboxEventPublisher)
+
+    @Test
+    fun `관리 앱 그룹을 생성한다`() {
+        val request = createGroupRequestFixture()
+        val group = groupFixture(groupId = 1L, name = request.name)
+        val groupApps =
+            request.groupApps.mapIndexed { idx, it ->
+                groupAppFixture(
+                    groupAppId = idx + 1L,
+                    groupId = group.groupId,
+                    name = it.name,
+                )
+            }
+
+        whenever(groupWriter.save(any())).thenReturn(group)
+        whenever(groupAppWriter.save(any())).thenAnswer { invocation ->
+            val arg = invocation.arguments[0] as GroupApp
+            groupApps.first { it.name == arg.name }
+        }
+
+        val result = groupService.create(group.memberId, request)
+
+        assertThat(result.groupId).isEqualTo(group.groupId)
+        assertThat(result.name).isEqualTo(group.name)
+        assertThat(result.groupApps).hasSize(groupApps.size)
+
+        verify(groupWriter).save(any())
+        verify(groupAppWriter, times(groupApps.size)).save(any())
+    }
+
+    @Nested
+    inner class ModifyTest {
+        @Test
+        fun `관리 앱 그룹을 수정한다 (관리 앱 변화 X)`() {
+            val request = updateGroupRequestFixture()
+            val group = groupFixture()
+            val updatedGroup = groupFixture(groupId = group.groupId, name = request.name)
+            val groupApps =
+                request.groupApps.mapIndexed { idx, it ->
+                    groupAppFixture(
+                        groupAppId = idx + 1L,
+                        groupId = group.groupId,
+                        name = it.name,
+                    )
+                }
+
+            whenever(groupReader.getByIdAndMemberId(group.groupId, group.memberId)).thenReturn(group)
+            whenever(groupWriter.save(any())).thenReturn(updatedGroup)
+            whenever(groupAppReader.getByGroupId(group.groupId)).thenReturn(groupApps)
+
+            val result = groupService.modify(group.memberId, group.groupId, request)
+
+            assertThat(result.groupId).isEqualTo(group.groupId)
+            assertThat(result.name).isEqualTo(group.name)
+
+            verify(groupReader).getByIdAndMemberId(group.groupId, group.memberId)
+            verify(groupWriter).save(any())
+            verify(outboxEventPublisher, never()).publish(any(), any())
+        }
+
+        @Test
+        fun `관리 앱 그룹을 수정한다 (관리 앱 새로 추가 및 삭제)`() {
+            val originGroupApps =
+                listOf(
+                    groupAppFixture(groupAppId = 1L, name = "카카오톡"),
+                    groupAppFixture(groupAppId = 2L, name = "인스타그램"),
+                )
+
+            val request =
+                updateGroupRequestFixture(
+                    groupApps =
+                        listOf(
+                            updateGroupAppRequestFixture(0L, "페이스북"),
+                            updateGroupAppRequestFixture(0L, "트위터"),
+                            updateGroupAppRequestFixture(originGroupApps[0].groupAppId, originGroupApps[0].name),
+                        ),
+                )
+
+            val group = groupFixture()
+            val updatedGroup = groupFixture(groupId = group.groupId, name = request.name)
+
+            val updatedGroupApps =
+                request.groupApps.mapIndexed { idx, it ->
+                    groupAppFixture(
+                        groupAppId = idx + 100L,
+                        groupId = group.groupId,
+                        name = it.name,
+                    )
+                }
+
+            whenever(groupReader.getByIdAndMemberId(group.groupId, group.memberId)).thenReturn(group)
+            whenever(groupWriter.save(any())).thenReturn(updatedGroup)
+            whenever(groupAppReader.getByGroupId(group.groupId)).thenReturn(originGroupApps)
+            whenever(groupAppWriter.save(any())).thenAnswer { invocation ->
+                val arg = invocation.arguments[0] as GroupApp
+                updatedGroupApps.first { it.name == arg.name }
+            }
+
+            val result = groupService.modify(group.memberId, group.groupId, request)
+
+            assertThat(result.groupId).isEqualTo(group.groupId)
+            assertThat(result.name).isEqualTo(group.name)
+            assertThat(result.groupApps).hasSize(request.groupApps.size)
+
+            verify(groupAppWriter, times(2)).save(any())
+            verify(groupReader).getByIdAndMemberId(group.groupId, group.memberId)
+            verify(groupWriter).save(any())
+            verify(outboxEventPublisher).publish(any(), any())
+        }
+
+        @Test
+        fun `관리 앱 그룹이 존재하지 않으면 예외를 던진다`() {
+            val invalidMemberId = 12345L
+            val invalidGroupId = 12345L
+
+            whenever(groupReader.getByIdAndMemberId(invalidGroupId, invalidMemberId))
+                .thenThrow(CustomException(ErrorCode.GROUP_NOT_FOUND))
+
+            val result =
+                assertThrows<CustomException> {
+                    groupService.modify(invalidMemberId, invalidGroupId, updateGroupRequestFixture())
+                }
+
+            assertThat(result.errorCode).isEqualTo(ErrorCode.GROUP_NOT_FOUND)
+
+            verify(groupReader).getByIdAndMemberId(invalidGroupId, invalidMemberId)
+            verify(groupWriter, never()).save(any())
+            verify(groupAppReader, never()).getByGroupId(any())
+            verify(outboxEventPublisher, never()).publish(any(), any())
+        }
+    }
+
+    @Nested
+    inner class RemoveTest {
+        @Test
+        fun `관리 그룹을 삭제한다`() {
+            val group = groupFixture(groupId = 1L)
+
+            whenever(groupReader.getByIdAndMemberId(group.groupId, group.memberId)).thenReturn(group)
+            doNothing().whenever(outboxEventPublisher).publish(any(), any())
+
+            groupService.remove(group.memberId, group.groupId)
+
+            verify(groupReader).getByIdAndMemberId(group.groupId, group.memberId)
+            verify(groupWriter).delete(group)
+            verify(outboxEventPublisher).publish(any(), any())
+        }
+
+        @Test
+        fun `관리 앱 그룹이 존재하지 않으면 예외를 던진다`() {
+            val invalidMemberId = 12345L
+            val invalidGroupId = 12345L
+
+            whenever(groupReader.getByIdAndMemberId(invalidMemberId, invalidGroupId))
+                .thenThrow(CustomException(ErrorCode.GROUP_NOT_FOUND))
+
+            val result =
+                assertThrows<CustomException> {
+                    groupService.remove(invalidMemberId, invalidGroupId)
+                }
+
+            assertThat(result.errorCode).isEqualTo(ErrorCode.GROUP_NOT_FOUND)
+
+            verify(groupReader).getByIdAndMemberId(invalidGroupId, invalidMemberId)
+            verify(groupWriter, never()).delete(any())
+            verify(outboxEventPublisher, never()).publish(any(), any())
+        }
+    }
+}

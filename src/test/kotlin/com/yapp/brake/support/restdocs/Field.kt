@@ -106,7 +106,7 @@ open class Field(
      * @param value true이면 필드를 선택 사항으로 설정
      * @return 선택 사항이 설정된 필드 객체
      */
-    open infix fun isOptional(value: Boolean): Field {
+    open infix fun optional(value: Boolean): Field {
         if (value) descriptor.optional()
         return this
     }
@@ -144,15 +144,11 @@ infix fun String.type(docsFieldType: FieldType): Field {
 private fun createField(
     value: String,
     type: JsonFieldType,
-    optional: Boolean = true,
 ): Field {
     val descriptor =
         PayloadDocumentation.fieldWithPath(value)
             .type(type)
             .description("")
-
-    // 필드가 선택 사항일 경우 optional() 메서드 호출
-    if (optional) descriptor.optional()
 
     return Field(descriptor)
 }

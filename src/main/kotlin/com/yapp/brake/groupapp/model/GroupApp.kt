@@ -5,18 +5,21 @@ import java.time.LocalDateTime
 data class GroupApp(
     val groupAppId: Long,
     val groupId: Long,
-    val appId: String,
+    val name: String,
     val createdAt: LocalDateTime? = null,
     val updatedAt: LocalDateTime? = null,
 ) {
+    fun isNew() = groupAppId == 0L
+
     companion object {
         fun create(
+            groupAppId: Long = 0L,
             groupId: Long,
-            appId: String,
+            name: String,
         ) = GroupApp(
-            groupAppId = 0L,
+            groupAppId = groupAppId,
             groupId = groupId,
-            appId = appId,
+            name = name,
         )
     }
 }

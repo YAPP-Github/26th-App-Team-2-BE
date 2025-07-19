@@ -1,6 +1,8 @@
+
 import com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document
 import com.epages.restdocs.apispec.ResourceDocumentation.resource
 import com.epages.restdocs.apispec.ResourceSnippetParameters
+import com.yapp.brake.support.restdocs.SnippetBuilderDsl
 import com.yapp.brake.support.restdocs.Tag
 import org.springframework.restdocs.operation.preprocess.Preprocessors
 import org.springframework.restdocs.snippet.Attributes
@@ -72,6 +74,27 @@ fun ResultActions.andDocument(
             // 스니펫을 추가하여 문서화
             tagResource,
             *snippets,
+        ),
+    )
+}
+
+fun snippet(init: SnippetBuilderDsl.() -> Unit): ResourceSnippetParameters {
+    val dsl = SnippetBuilderDsl()
+    dsl.init()
+    return dsl.build()
+}
+
+fun ResultActions.andDocument(
+    identifier: String,
+    snippetBuilder: SnippetBuilderDsl.() -> Unit,
+): ResultActions {
+    val snippet = snippet(snippetBuilder)
+    return andDo(
+        document(
+            identifier,
+            Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
+            Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
+            resource(snippet),
         ),
     )
 }
