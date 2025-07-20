@@ -29,4 +29,24 @@ class DailySessionStatisticJpaReaderTest {
         assertEquals(DailySessionStatistic(memberId, date), result)
         verify(dailySessionStatisticRepository).findById(id)
     }
+
+    @Test
+    fun `데이터가 존재하면 해당 DailySessionStatistics를 반환한다`() {
+        // given
+        val entity =
+            DailySessionStatisticEntity(
+                date = date,
+                memberId = memberId,
+                actualMinutes = 25L,
+                goalMinutes = 30L,
+            )
+        whenever(dailySessionStatisticRepository.findById(id)).thenReturn(Optional.of(entity))
+
+        // when
+        val result = dailySessionStatisticsReader.getById(memberId, date)
+
+        // then
+        assertEquals(entity.toDomain(), result)
+        verify(dailySessionStatisticRepository).findById(id)
+    }
 }
