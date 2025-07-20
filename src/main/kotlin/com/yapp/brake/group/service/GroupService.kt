@@ -6,6 +6,7 @@ import com.yapp.brake.common.event.payload.GroupUpdatedEventPayload
 import com.yapp.brake.group.dto.request.CreateGroupRequest
 import com.yapp.brake.group.dto.request.UpdateGroupRequest
 import com.yapp.brake.group.dto.response.GroupResponse
+import com.yapp.brake.group.dto.response.GroupsResponse
 import com.yapp.brake.group.infrastructure.GroupReader
 import com.yapp.brake.group.infrastructure.GroupWriter
 import com.yapp.brake.group.model.Group
@@ -45,16 +46,12 @@ class GroupService(
     }
 
     @Transactional(readOnly = true)
-    override fun getAll(memberId: Long): List<GroupResponse> {
+    override fun getAll(memberId: Long): GroupsResponse {
         val groups = groupReader.getAllByMemberId(memberId)
         val groupIds = groups.map(Group::groupId)
         val groupApps = groupAppReader.getByGroupIds(groupIds)
-        val groupAppMap: Map<Long, List<GroupApp>> = groupApps.groupBy { it.groupId }
 
-        return groups.map { group ->
-            val apps = groupAppMap[group.groupId] ?: emptyList()
-            GroupResponse.from(group, apps)
-        }
+        return GroupsResponse.from(groups, groupApps)
     }
 
     @Transactional

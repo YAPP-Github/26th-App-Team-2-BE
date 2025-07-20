@@ -5,6 +5,7 @@ import com.yapp.brake.common.dto.ApiResponse
 import com.yapp.brake.support.RestApiTestBase
 import com.yapp.brake.support.fixture.dto.group.createGroupRequestFixture
 import com.yapp.brake.support.fixture.dto.group.groupResponseFixture
+import com.yapp.brake.support.fixture.dto.group.groupsResponseFixture
 import com.yapp.brake.support.fixture.dto.group.updateGroupAppRequestFixture
 import com.yapp.brake.support.fixture.dto.group.updateGroupRequestFixture
 import com.yapp.brake.support.restdocs.ARRAY
@@ -65,6 +66,44 @@ class GroupControllerTest : RestApiTestBase() {
                     "data.groupApps[]" type ARRAY means "관리 앱 목록",
                     "data.groupApps[].groupAppId" type NUMBER means "관리 앱 식별자",
                     "data.groupApps[].name" type STRING means "관리 앱 이름",
+                    "code" type NUMBER means "HTTP 코드",
+                )
+            }
+
+        SecurityContextHolder.clearContext()
+    }
+
+    @Test
+    fun `관리 앱 그룹 조회 API`() {
+        val memberId = 1L
+        val response =
+            ApiResponse.success(
+                code = HttpStatus.OK.value(),
+                data = groupsResponseFixture(),
+            )
+
+        whenever(groupUseCase.getAll(memberId))
+            .thenReturn(response.data)
+
+        val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), null)
+        SecurityContextHolder.getContext().authentication = authentication
+
+        val builder =
+            RestDocumentationRequestBuilders.get("/v1/groups")
+
+        mockMvc.perform(builder)
+            .andExpect(status().isOk)
+            .andDocument("groups-get-all") {
+                tag(Tag.GROUP)
+                responseSchema(response.data!!::class.java.simpleName)
+                responseBody(
+                    "data" type OBJECT means "응답 바디",
+                    "data.groups[]" type ARRAY means "그룹 리스트",
+                    "data.groups[].groupId" type NUMBER means "그룹 식별자",
+                    "data.groups[].name" type STRING means "그룹 이름",
+                    "data.groups[].groupApps[]" type ARRAY means "관리 앱 목록",
+                    "data.groups[].groupApps[].groupAppId" type NUMBER means "관리 앱 식별자",
+                    "data.groups[].groupApps[].name" type STRING means "관리 앱 이름",
                     "code" type NUMBER means "HTTP 코드",
                 )
             }

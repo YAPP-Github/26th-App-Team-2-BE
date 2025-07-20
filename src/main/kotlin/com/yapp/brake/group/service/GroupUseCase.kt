@@ -3,6 +3,7 @@ package com.yapp.brake.group.service
 import com.yapp.brake.group.dto.request.CreateGroupRequest
 import com.yapp.brake.group.dto.request.UpdateGroupRequest
 import com.yapp.brake.group.dto.response.GroupResponse
+import com.yapp.brake.group.dto.response.GroupsResponse
 
 interface GroupUseCase {
     fun create(
@@ -10,7 +11,7 @@ interface GroupUseCase {
         request: CreateGroupRequest,
     ): GroupResponse
 
-    fun getAll(memberId: Long): List<GroupResponse>
+    fun getAll(memberId: Long): GroupsResponse
 
     fun modify(
         memberId: Long,

@@ -5,6 +5,7 @@ import com.yapp.brake.common.security.getMemberId
 import com.yapp.brake.group.dto.request.CreateGroupRequest
 import com.yapp.brake.group.dto.request.UpdateGroupRequest
 import com.yapp.brake.group.dto.response.GroupResponse
+import com.yapp.brake.group.dto.response.GroupsResponse
 import com.yapp.brake.group.service.GroupUseCase
 import jakarta.validation.Valid
 import jakarta.validation.constraints.Positive
@@ -36,7 +37,7 @@ class GroupController(
     }
 
     @GetMapping
-    fun readALl(): ApiResponse<List<GroupResponse>> = ApiResponse.success(groupUseCase.getAll(getMemberId()))
+    fun readALl(): ApiResponse<GroupsResponse> = ApiResponse.success(groupUseCase.getAll(getMemberId()))
 
     @PutMapping("/{groupId}")
     fun modify(
