@@ -8,9 +8,5 @@ interface GroupReader {
         memberId: Long,
     ): Group
 
-    fun getAllInfiniteScroll(
-        groupId: Long,
-        limit: Long,
-        lastGroupId: Long?,
-    ): List<Group>
+    fun getAllByMemberId(memberId: Long): List<Group>
 }

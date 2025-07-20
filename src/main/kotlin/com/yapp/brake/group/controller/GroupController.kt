@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 
@@ -37,10 +36,7 @@ class GroupController(
     }
 
     @GetMapping
-    fun readALlInfiniteScroll(
-        @RequestParam("pageSize") pageSize: Long,
-        @RequestParam(value = "lastGroupId", required = false) lastGroupId: Long?,
-    ): ApiResponse<List<GroupResponse>> = ApiResponse.success(groupUseCase.getAll(getMemberId(), pageSize, lastGroupId))
+    fun readALl(): ApiResponse<List<GroupResponse>> = ApiResponse.success(groupUseCase.getAll(getMemberId()))
 
     @PutMapping("/{groupId}")
     fun modify(

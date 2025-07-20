@@ -21,16 +21,7 @@ class GroupJpaReader(
             ?: throw CustomException(ErrorCode.GROUP_NOT_FOUND)
     }
 
-    override fun getAllInfiniteScroll(
-        groupId: Long,
-        limit: Long,
-        lastGroupId: Long?,
-    ): List<Group> {
-        val groups =
-            lastGroupId?.let {
-                groupRepository.findAllInfiniteScroll(groupId, limit, lastGroupId)
-            } ?: groupRepository.findAllInfiniteScroll(groupId, limit)
-
-        return groups.map(GroupEntity::toDomain)
-    }
+    override fun getAllByMemberId(memberId: Long): List<Group> =
+        groupRepository.findByMemberId(memberId)
+            .map(GroupEntity::toDomain)
 }

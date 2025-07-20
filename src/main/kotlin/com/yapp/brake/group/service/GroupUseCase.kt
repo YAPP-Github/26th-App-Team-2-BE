@@ -10,11 +10,7 @@ interface GroupUseCase {
         request: CreateGroupRequest,
     ): GroupResponse
 
-    fun getAll(
-        memberId: Long,
-        pageSize: Long,
-        lastGroupId: Long?,
-    ): List<GroupResponse>
+    fun getAll(memberId: Long): List<GroupResponse>
 
     fun modify(
         memberId: Long,
