@@ -45,6 +45,7 @@ class MemberControllerTest : RestApiTestBase() {
             .andExpect(status().isOk)
             .andDocument("members-me-get") {
                 tag(Tag.MEMBER)
+                responseSchema(response.data!!::class.java.simpleName)
                 responseBody(
                     "data" type OBJECT means "응답 바디",
                     "data.nickname" type STRING means "닉네임",
@@ -81,6 +82,8 @@ class MemberControllerTest : RestApiTestBase() {
             .andExpect(status().isOk)
             .andDocument("members-me-update") {
                 tag(Tag.MEMBER)
+                requestSchema(request::class.java.simpleName)
+                responseSchema(response.data!!::class.java.simpleName)
                 requestBody(
                     "nickname" type STRING means "변경하려는 닉네임",
                 )

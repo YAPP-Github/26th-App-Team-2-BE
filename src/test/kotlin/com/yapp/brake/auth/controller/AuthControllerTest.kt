@@ -55,6 +55,8 @@ class AuthControllerTest : RestApiTestBase() {
             .andExpect(status().isOk)
             .andDocument("auth-login") {
                 tag(Tag.AUTH)
+                requestSchema(request::class.java.simpleName)
+                responseSchema(response.data!!::class.java.simpleName)
                 requestBody(
                     "provider" type STRING means "소셜 로그인 타입",
                     "authorizationCode" type STRING means "인가 코드",
@@ -87,6 +89,8 @@ class AuthControllerTest : RestApiTestBase() {
             .andExpect(status().isOk)
             .andDocument("auth-refresh") {
                 tag(Tag.AUTH)
+                requestSchema(request::class.java.simpleName)
+                responseSchema(response.data!!::class.java.simpleName)
                 requestBody(
                     "refreshToken" type STRING means "기존 리프레시 토큰",
                 )
@@ -114,6 +118,7 @@ class AuthControllerTest : RestApiTestBase() {
             .andExpect(status().isNoContent)
             .andDocument("auth-logout") {
                 tag(Tag.AUTH)
+                requestSchema(request::class.java.simpleName)
                 requestBody(
                     "accessToken" type STRING means "기존 액세스 토큰",
                 )

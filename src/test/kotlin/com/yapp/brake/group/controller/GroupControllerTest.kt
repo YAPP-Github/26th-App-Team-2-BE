@@ -51,6 +51,8 @@ class GroupControllerTest : RestApiTestBase() {
             .andExpect(status().isOk)
             .andDocument("groups-create") {
                 tag(Tag.GROUP)
+                requestSchema(request::class.java.simpleName)
+                responseSchema(response.data!!::class.java.simpleName)
                 requestBody(
                     "name" type STRING means "그룹 이름",
                     "groupApps[]" type ARRAY means "관리 앱 목록",
@@ -106,6 +108,8 @@ class GroupControllerTest : RestApiTestBase() {
             .andDocument("groups-update") {
                 tag(Tag.GROUP)
                 pathParameters("groupId" means "그룹 식별자")
+                requestSchema(request::class.java.simpleName)
+                responseSchema(response.data!!::class.java.simpleName)
                 requestBody(
                     "name" type STRING means "그룹 이름",
                     "groupApps[]" type ARRAY means "관리 앱 목록",
