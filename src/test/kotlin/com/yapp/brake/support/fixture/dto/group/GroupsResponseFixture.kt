@@ -23,7 +23,7 @@ fun groupsResponseFixture() =
                     },
             ),
             GroupResponse(
-                groupId = 1L,
+                groupId = 3L,
                 name = "그룹1",
                 groupApps =
                     List(2) { i ->
