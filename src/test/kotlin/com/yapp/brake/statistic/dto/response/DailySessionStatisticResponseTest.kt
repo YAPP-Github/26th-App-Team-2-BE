@@ -1,5 +1,6 @@
 package com.yapp.brake.statistic.dto.response
 
+import com.yapp.brake.support.fixture.model.dailySessionStatisticsFixture
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
@@ -11,11 +12,15 @@ class DailySessionStatisticResponseTest {
     fun `날짜와 분 단위를 받아 요일과 시간을 만든다`() {
         // given
         val date = LocalDate.of(2025, 7, 19)
-        val actualMinutes = 90L
-        val goalMinutes = 120L
+        val dailySessionStatisticsFixture =
+            dailySessionStatisticsFixture(
+                date = date,
+                actualMinutes = 90L,
+                goalMinutes = 120L,
+            )
 
         // when
-        val response = DailySessionStatisticResponse.create(date, actualMinutes, goalMinutes)
+        val response = DailySessionStatisticResponse.from(dailySessionStatisticsFixture)
 
         // then
         assertEquals(date, response.date)

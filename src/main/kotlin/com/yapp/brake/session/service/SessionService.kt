@@ -34,7 +34,7 @@ class SessionService(
         val savedSession = sessionWriter.save(session)
 
         updateStatistics(memberId, session)
-        return AddSessionResponse(savedSession.id)
+        return AddSessionResponse.from(savedSession.id)
     }
 
     private fun updateStatistics(

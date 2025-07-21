@@ -1,5 +1,6 @@
 package com.yapp.brake.statistic.dto.response
 
+import com.yapp.brake.statistic.model.DailySessionStatistic
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
@@ -11,15 +12,12 @@ data class DailySessionStatisticResponse(
     val goalTime: LocalTime,
 ) {
     companion object {
-        fun create(
-            date: LocalDate,
-            actualTime: Long,
-            goalTime: Long,
-        ) = DailySessionStatisticResponse(
-            date = date,
-            dayOfWeek = date.dayOfWeek,
-            actualTime = LocalTime.MIN.plusMinutes(actualTime),
-            goalTime = LocalTime.MIN.plusMinutes(goalTime),
-        )
+        fun from(dailySessionStatistic: DailySessionStatistic) =
+            DailySessionStatisticResponse(
+                date = dailySessionStatistic.date,
+                dayOfWeek = dailySessionStatistic.date.dayOfWeek,
+                actualTime = LocalTime.MIN.plusMinutes(dailySessionStatistic.actualMinutes),
+                goalTime = LocalTime.MIN.plusMinutes(dailySessionStatistic.goalMinutes),
+            )
     }
 }

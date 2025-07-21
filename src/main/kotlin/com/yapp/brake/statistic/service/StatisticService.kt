@@ -1,7 +1,6 @@
 package com.yapp.brake.statistic.service
 
 import com.yapp.brake.session.utils.generateBetweenDates
-import com.yapp.brake.statistic.dto.response.DailySessionStatisticResponse
 import com.yapp.brake.statistic.dto.response.SessionStatisticsResponse
 import com.yapp.brake.statistic.infrastructure.DailySessionStatisticReader
 import org.springframework.stereotype.Service
@@ -21,14 +20,6 @@ class StatisticService(
         val betweenDates = generateBetweenDates(startDate, endDate)
         val statistics = dailySessionStatisticReader.getAllByIds(memberId, betweenDates)
 
-        return SessionStatisticsResponse(
-            statistics.statistics.map {
-                DailySessionStatisticResponse.create(
-                    it.date,
-                    it.actualMinutes,
-                    it.goalMinutes,
-                )
-            },
-        )
+        return SessionStatisticsResponse.from(statistics)
     }
 }
