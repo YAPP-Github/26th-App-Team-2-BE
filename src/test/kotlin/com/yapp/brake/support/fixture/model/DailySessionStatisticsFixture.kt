@@ -1,6 +1,6 @@
 package com.yapp.brake.support.fixture.model
 
-import com.yapp.brake.session.model.DailySessionStatistic
+import com.yapp.brake.statistic.model.DailySessionStatistic
 import java.time.LocalDate
 
 fun dailySessionStatisticsFixture(
