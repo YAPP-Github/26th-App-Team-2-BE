@@ -37,7 +37,7 @@ class GroupController(
     }
 
     @GetMapping
-    fun readALl(): ApiResponse<GroupsResponse> = ApiResponse.success(groupUseCase.getAll(getMemberId()))
+    fun readAll(): ApiResponse<GroupsResponse> = ApiResponse.success(groupUseCase.getAll(getMemberId()))
 
     @PutMapping("/{groupId}")
     fun modify(
