@@ -20,4 +20,8 @@ class GroupJpaReader(
             ?.toDomain()
             ?: throw CustomException(ErrorCode.GROUP_NOT_FOUND)
     }
+
+    override fun getAllByMemberId(memberId: Long): List<Group> =
+        groupRepository.findByMemberId(memberId)
+            .map(GroupEntity::toDomain)
 }

@@ -20,10 +20,6 @@ fun groupResponseFixture(request: UpdateGroupRequest) =
         name = request.name,
         groupApps =
             request.groupApps.mapIndexed { idx, it ->
-                if (it.groupAppId == 0L) {
-                    groupAppResponseFixture(idx + 100L, it.name)
-                } else {
-                    groupAppResponseFixture(it.groupAppId, it.name)
-                }
+                groupAppResponseFixture(it.groupAppId ?: (idx + 100L), it.name)
             },
     )

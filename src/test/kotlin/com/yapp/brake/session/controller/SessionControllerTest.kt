@@ -62,6 +62,8 @@ class SessionControllerTest : RestApiTestBase() {
             .andExpect(status().isOk)
             .andDocument("session-add") {
                 tag(Tag.SESSION)
+                requestSchema(request::class.java.simpleName)
+                responseSchema(response.data!!::class.java.simpleName)
                 requestBody(
                     "groupId" type NUMBER means "관리 앱 그룹",
                     "start" type DATETIME means "세션 시작 시간",

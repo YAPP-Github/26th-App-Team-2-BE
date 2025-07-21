@@ -1,6 +1,7 @@
 package com.yapp.brake.support.restdocs
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters
+import com.epages.restdocs.apispec.Schema
 
 class SnippetBuilderDsl {
     private val builder = ResourceSnippetParameters.builder()
@@ -21,8 +22,16 @@ class SnippetBuilderDsl {
         builder.requestFields(fields.map { it.descriptor })
     }
 
+    fun requestSchema(requestDtoClassName: String) {
+        builder.requestSchema(Schema(requestDtoClassName))
+    }
+
     fun responseBody(vararg fields: Field) {
         builder.responseFields(fields.map { it.descriptor })
+    }
+
+    fun responseSchema(responseDtoClassName: String) {
+        builder.responseSchema(Schema(responseDtoClassName))
     }
 
     fun build(): ResourceSnippetParameters = builder.build()

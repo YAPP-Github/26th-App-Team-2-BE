@@ -7,4 +7,6 @@ interface GroupReader {
         groupId: Long,
         memberId: Long,
     ): Group
+
+    fun getAllByMemberId(memberId: Long): List<Group>
 }

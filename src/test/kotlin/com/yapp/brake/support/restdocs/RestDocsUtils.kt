@@ -42,15 +42,6 @@ internal object RestDocsUtils {
     }
 }
 
-/**
- * `ResultActions` 객체에 RestDocs 문서화 스니펫을 추가하는 확장 함수입니다.
- * 이 함수는 요청과 응답의 예시를 출력하고 문서화할 때 사용됩니다.
- *
- * @param identifier 문서화할 문서의 고유 식별자
- * @param tag API를 그룹화할 태그
- * @param snippets RestDocs 스니펫 배열
- * @return 문서화된 `ResultActions` 객체
- */
 fun ResultActions.andDocument(
     identifier: String,
     tag: Tag,
@@ -78,23 +69,32 @@ fun ResultActions.andDocument(
     )
 }
 
-fun snippet(init: SnippetBuilderDsl.() -> Unit): ResourceSnippetParameters {
+fun buildSnippets(init: SnippetBuilderDsl.() -> Unit): ResourceSnippetParameters {
     val dsl = SnippetBuilderDsl()
     dsl.init()
     return dsl.build()
 }
 
+/**
+ * `ResultActions` 객체에 RestDocs 문서화 스니펫을 추가하는 확장 함수입니다.
+ * 이 함수는 요청과 응답의 예시를 출력하고 문서화할 때 사용됩니다.
+ *
+ * @param identifier 문서화할 문서의 고유 식별자
+ * @param snippetBuilder 스니펫을 생성 시킬 익명함수
+ * @return 문서화된 `ResultActions` 객체
+ */
 fun ResultActions.andDocument(
     identifier: String,
     snippetBuilder: SnippetBuilderDsl.() -> Unit,
 ): ResultActions {
-    val snippet = snippet(snippetBuilder)
+    val snippetParameters = buildSnippets(snippetBuilder)
+
     return andDo(
         document(
             identifier,
             Preprocessors.preprocessRequest(Preprocessors.prettyPrint()),
             Preprocessors.preprocessResponse(Preprocessors.prettyPrint()),
-            resource(snippet),
+            resource(snippetParameters),
         ),
     )
 }

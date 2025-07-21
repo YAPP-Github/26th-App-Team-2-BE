@@ -5,11 +5,13 @@ import com.yapp.brake.common.security.getMemberId
 import com.yapp.brake.group.dto.request.CreateGroupRequest
 import com.yapp.brake.group.dto.request.UpdateGroupRequest
 import com.yapp.brake.group.dto.response.GroupResponse
+import com.yapp.brake.group.dto.response.GroupsResponse
 import com.yapp.brake.group.service.GroupUseCase
 import jakarta.validation.Valid
 import jakarta.validation.constraints.Positive
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
@@ -33,6 +35,9 @@ class GroupController(
             data = groupUseCase.create(getMemberId(), request),
         )
     }
+
+    @GetMapping
+    fun readAll(): ApiResponse<GroupsResponse> = ApiResponse.success(groupUseCase.getAll(getMemberId()))
 
     @PutMapping("/{groupId}")
     fun modify(

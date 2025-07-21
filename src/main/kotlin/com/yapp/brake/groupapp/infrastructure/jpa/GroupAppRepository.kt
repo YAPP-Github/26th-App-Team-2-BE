@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Modifying
 interface GroupAppRepository : JpaRepository<GroupAppEntity, Long> {
     fun findByGroupId(groupId: Long): List<GroupAppEntity>
 
+    fun findByGroupIdIn(groupId: List<Long>): List<GroupAppEntity>
+
     @Modifying
     fun deleteByGroupId(groupId: Long): Int
 

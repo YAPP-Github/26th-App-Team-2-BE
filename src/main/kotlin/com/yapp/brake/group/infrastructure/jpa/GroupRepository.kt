@@ -7,4 +7,6 @@ interface GroupRepository : JpaRepository<GroupEntity, Long> {
         groupId: Long,
         memberId: Long,
     ): GroupEntity?
+
+    fun findByMemberId(memberId: Long): List<GroupEntity>
 }

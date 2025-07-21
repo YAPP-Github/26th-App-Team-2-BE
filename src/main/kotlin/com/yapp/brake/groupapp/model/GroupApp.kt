@@ -13,11 +13,11 @@ data class GroupApp(
 
     companion object {
         fun create(
-            groupAppId: Long = 0L,
+            groupAppId: Long? = null,
             groupId: Long,
             name: String,
         ) = GroupApp(
-            groupAppId = groupAppId,
+            groupAppId = groupAppId ?: 0L,
             groupId = groupId,
             name = name,
         )

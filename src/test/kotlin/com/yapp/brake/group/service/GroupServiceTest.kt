@@ -2,8 +2,10 @@ package com.yapp.brake.group.service
 
 import com.yapp.brake.common.exception.CustomException
 import com.yapp.brake.common.exception.ErrorCode
+import com.yapp.brake.group.dto.response.GroupResponse
 import com.yapp.brake.group.infrastructure.GroupReader
 import com.yapp.brake.group.infrastructure.GroupWriter
+import com.yapp.brake.group.model.Group
 import com.yapp.brake.groupapp.infrastructure.GroupAppReader
 import com.yapp.brake.groupapp.infrastructure.GroupAppWriter
 import com.yapp.brake.groupapp.model.GroupApp
@@ -61,6 +63,38 @@ class GroupServiceTest {
 
         verify(groupWriter).save(any())
         verify(groupAppWriter, times(groupApps.size)).save(any())
+    }
+
+    @Test
+    fun `유저의 관리 그룹을 모두 조회한다`() {
+        val memberId = 1L
+        val groups =
+            List(3) { i ->
+                groupFixture(groupId = (i + 1).toLong(), memberId = memberId, name = "SNS$i")
+            }
+
+        val groupApps =
+            groups.mapIndexed { index, g ->
+                groupAppFixture(
+                    groupId = g.groupId,
+                    groupAppId = (index + 1).toLong(),
+                    name = "앱$index",
+                )
+            }
+
+        whenever(groupReader.getAllByMemberId(memberId)).thenReturn(groups)
+        whenever(groupAppReader.getByGroupIds(any())).thenReturn(groupApps)
+
+        val result = groupService.getAll(memberId)
+
+        assertThat(
+            result.groups.map(GroupResponse::groupId),
+        ).containsExactlyInAnyOrderElementsOf(groups.map(Group::groupId))
+        assertThat(result.groups.flatMap { it.groupApps }.map { it.name })
+            .containsExactlyInAnyOrderElementsOf(groupApps.map { it.name })
+
+        verify(groupReader).getAllByMemberId(memberId)
+        verify(groupAppReader).getByGroupIds(any())
     }
 
     @Nested

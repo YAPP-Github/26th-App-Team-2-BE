@@ -5,6 +5,7 @@ import com.yapp.brake.common.dto.ApiResponse
 import com.yapp.brake.support.RestApiTestBase
 import com.yapp.brake.support.fixture.dto.group.createGroupRequestFixture
 import com.yapp.brake.support.fixture.dto.group.groupResponseFixture
+import com.yapp.brake.support.fixture.dto.group.groupsResponseFixture
 import com.yapp.brake.support.fixture.dto.group.updateGroupAppRequestFixture
 import com.yapp.brake.support.fixture.dto.group.updateGroupRequestFixture
 import com.yapp.brake.support.restdocs.ARRAY
@@ -13,7 +14,6 @@ import com.yapp.brake.support.restdocs.OBJECT
 import com.yapp.brake.support.restdocs.STRING
 import com.yapp.brake.support.restdocs.Tag
 import com.yapp.brake.support.restdocs.means
-import com.yapp.brake.support.restdocs.pathParameters
 import com.yapp.brake.support.restdocs.toJsonString
 import com.yapp.brake.support.restdocs.type
 import org.junit.jupiter.api.Test
@@ -25,8 +25,6 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import requestBody
-import responseBody
 
 class GroupControllerTest : RestApiTestBase() {
     @Test
@@ -52,14 +50,15 @@ class GroupControllerTest : RestApiTestBase() {
 
         mockMvc.perform(builder)
             .andExpect(status().isOk)
-            .andDocument(
-                "groups-create",
-                Tag.GROUP,
+            .andDocument("groups-create") {
+                tag(Tag.GROUP)
+                requestSchema(request::class.java.simpleName)
+                responseSchema(response.data!!::class.java.simpleName)
                 requestBody(
                     "name" type STRING means "그룹 이름",
                     "groupApps[]" type ARRAY means "관리 앱 목록",
                     "groupApps[].name" type STRING means "관리 앱 이름",
-                ),
+                )
                 responseBody(
                     "data" type OBJECT means "응답 바디",
                     "data.groupId" type NUMBER means "그룹 식별자",
@@ -68,8 +67,46 @@ class GroupControllerTest : RestApiTestBase() {
                     "data.groupApps[].groupAppId" type NUMBER means "관리 앱 식별자",
                     "data.groupApps[].name" type STRING means "관리 앱 이름",
                     "code" type NUMBER means "HTTP 코드",
-                ),
+                )
+            }
+
+        SecurityContextHolder.clearContext()
+    }
+
+    @Test
+    fun `관리 앱 그룹 조회 API`() {
+        val memberId = 1L
+        val response =
+            ApiResponse.success(
+                code = HttpStatus.OK.value(),
+                data = groupsResponseFixture(),
             )
+
+        whenever(groupUseCase.getAll(memberId))
+            .thenReturn(response.data)
+
+        val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), null)
+        SecurityContextHolder.getContext().authentication = authentication
+
+        val builder =
+            RestDocumentationRequestBuilders.get("/v1/groups")
+
+        mockMvc.perform(builder)
+            .andExpect(status().isOk)
+            .andDocument("groups-get-all") {
+                tag(Tag.GROUP)
+                responseSchema(response.data!!::class.java.simpleName)
+                responseBody(
+                    "data" type OBJECT means "응답 바디",
+                    "data.groups[]" type ARRAY means "그룹 리스트",
+                    "data.groups[].groupId" type NUMBER means "그룹 식별자",
+                    "data.groups[].name" type STRING means "그룹 이름",
+                    "data.groups[].groupApps[]" type ARRAY means "관리 앱 목록",
+                    "data.groups[].groupApps[].groupAppId" type NUMBER means "관리 앱 식별자",
+                    "data.groups[].groupApps[].name" type STRING means "관리 앱 이름",
+                    "code" type NUMBER means "HTTP 코드",
+                )
+            }
 
         SecurityContextHolder.clearContext()
     }
@@ -84,8 +121,8 @@ class GroupControllerTest : RestApiTestBase() {
                     listOf(
                         updateGroupAppRequestFixture(1L, "카카오톡"),
                         updateGroupAppRequestFixture(2L, "인스타그램"),
-                        updateGroupAppRequestFixture(0L, "카카오톡"),
-                        updateGroupAppRequestFixture(0L, "인스타그램"),
+                        updateGroupAppRequestFixture(name = "카카오톡"),
+                        updateGroupAppRequestFixture(name = "인스타그램"),
                     ),
             )
         val response =
@@ -107,16 +144,17 @@ class GroupControllerTest : RestApiTestBase() {
 
         mockMvc.perform(builder)
             .andExpect(status().isOk)
-            .andDocument(
-                "groups-update",
-                Tag.GROUP,
-                pathParameters("groupId" means "그룹 식별자"),
+            .andDocument("groups-update") {
+                tag(Tag.GROUP)
+                pathParameters("groupId" means "그룹 식별자")
+                requestSchema(request::class.java.simpleName)
+                responseSchema(response.data!!::class.java.simpleName)
                 requestBody(
                     "name" type STRING means "그룹 이름",
                     "groupApps[]" type ARRAY means "관리 앱 목록",
-                    "groupApps[].groupAppId" type NUMBER means "관리 앱 식별자",
+                    "groupApps[].groupAppId" type NUMBER means "관리 앱 식별자" optional true,
                     "groupApps[].name" type STRING means "관리 앱 이름",
-                ),
+                )
                 responseBody(
                     "data" type OBJECT means "응답 바디",
                     "data.groupId" type NUMBER means "그룹 식별자",
@@ -125,8 +163,8 @@ class GroupControllerTest : RestApiTestBase() {
                     "data.groupApps[].groupAppId" type NUMBER means "관리 앱 식별자",
                     "data.groupApps[].name" type STRING means "관리 앱 이름",
                     "code" type NUMBER means "HTTP 코드",
-                ),
-            )
+                )
+            }
 
         SecurityContextHolder.clearContext()
     }
@@ -145,11 +183,10 @@ class GroupControllerTest : RestApiTestBase() {
 
         mockMvc.perform(builder)
             .andExpect(status().isNoContent)
-            .andDocument(
-                "groups-remove",
-                Tag.GROUP,
-                pathParameters("groupId" means "그룹 식별자"),
-            )
+            .andDocument("groups-remove") {
+                tag(Tag.GROUP)
+                pathParameters("groupId" means "그룹 식별자")
+            }
 
         SecurityContextHolder.clearContext()
     }
