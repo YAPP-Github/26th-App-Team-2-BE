@@ -12,7 +12,11 @@ import com.yapp.brake.support.restdocs.STRING
 import com.yapp.brake.support.restdocs.Tag
 import com.yapp.brake.support.restdocs.means
 import com.yapp.brake.support.restdocs.type
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
+import org.mockito.kotlin.any
 import org.mockito.kotlin.whenever
 import org.springframework.http.HttpStatus
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
@@ -23,46 +27,44 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 class StatisticControllerTest : RestApiTestBase() {
-    @Test
-    fun `앱 사용 통계 조회 API`() {
-        val memberId = 1L
-        val start = LocalDate.of(2025, 7, 17)
-        val end = LocalDate.of(2025, 7, 18)
-
-        val response =
-            ApiResponse.success(
-                HttpStatus.OK.value(),
-                SessionStatisticsResponse(
-                    listOf(
-                        DailySessionStatisticResponse(
-                            date = start,
-                            dayOfWeek = start.dayOfWeek,
-                            actualTime = LocalTime.of(1, 20),
-                            goalTime = LocalTime.of(1, 30),
-                        ),
-                        DailySessionStatisticResponse(
-                            date = end,
-                            dayOfWeek = end.dayOfWeek,
-                            actualTime = LocalTime.of(2, 20),
-                            goalTime = LocalTime.of(2, 0),
-                        ),
+    val memberId = 1L
+    val start = LocalDate.of(2025, 7, 17)
+    val end = LocalDate.of(2025, 7, 18)
+    val response =
+        ApiResponse.success(
+            HttpStatus.OK.value(),
+            SessionStatisticsResponse(
+                listOf(
+                    DailySessionStatisticResponse(
+                        date = start,
+                        dayOfWeek = start.dayOfWeek,
+                        actualTime = LocalTime.of(1, 20),
+                        goalTime = LocalTime.of(1, 30),
+                    ),
+                    DailySessionStatisticResponse(
+                        date = end,
+                        dayOfWeek = end.dayOfWeek,
+                        actualTime = LocalTime.of(2, 20),
+                        goalTime = LocalTime.of(2, 0),
                     ),
                 ),
-            )
+            ),
+        )
 
+    @AfterEach
+    fun tearDown() {
+        SecurityContextHolder.clearContext()
+    }
+
+    @Test
+    fun `앱 사용 통계 조회 API`() {
         val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), null)
         SecurityContextHolder.getContext().authentication = authentication
 
-        whenever(
-            statisticUseCase.get(
-                memberId,
-                startDate = start,
-                endDate = end,
-            ),
-        ).thenReturn(response.data)
+        whenever(statisticUseCase.get(memberId, start, end)).thenReturn(response.data)
 
         val builder =
-            RestDocumentationRequestBuilders.get("/v1/statistic")
+            RestDocumentationRequestBuilders.get("/v1/statistics")
                 .queryParam("start", start.toString())
                 .queryParam("end", end.toString())
 
@@ -84,5 +86,47 @@ class StatisticControllerTest : RestApiTestBase() {
                     "code" type NUMBER means "HTTP 코드",
                 )
             }
+    }
+
+    @Test
+    fun `앱 사용 통계 조회 API - 파라미터 X`() {
+        val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), null)
+        SecurityContextHolder.getContext().authentication = authentication
+
+        whenever(
+            statisticUseCase.get(
+                any(),
+                any(),
+                any(),
+            ),
+        ).thenReturn(response.data)
+
+        val builder =
+            RestDocumentationRequestBuilders.get("/v1/statistics")
+
+        mockMvc.perform(builder)
+            .andExpect(status().isOk)
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["start", "end"])
+    fun `앱 사용 통계 조회 API - 파라미터 일부`(date: String) {
+        val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), null)
+        SecurityContextHolder.getContext().authentication = authentication
+
+        whenever(
+            statisticUseCase.get(
+                any(),
+                any(),
+                any(),
+            ),
+        ).thenReturn(response.data)
+
+        val builder =
+            RestDocumentationRequestBuilders.get("/v1/statistics")
+                .queryParam(date, start.toString())
+
+        mockMvc.perform(builder)
+            .andExpect(status().isOk)
     }
 }

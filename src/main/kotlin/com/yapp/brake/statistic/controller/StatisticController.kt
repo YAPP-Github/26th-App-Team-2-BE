@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/v1/statistic")
+@RequestMapping("/v1/statistics")
 class StatisticController(
     private val statisticUseCase: StatisticUseCase,
 ) {

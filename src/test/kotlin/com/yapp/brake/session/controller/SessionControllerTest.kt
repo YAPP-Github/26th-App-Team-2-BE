@@ -76,5 +76,7 @@ class SessionControllerTest : RestApiTestBase() {
                     "code" type NUMBER means "HTTP 코드",
                 )
             }
+
+        SecurityContextHolder.clearContext()
     }
 }
