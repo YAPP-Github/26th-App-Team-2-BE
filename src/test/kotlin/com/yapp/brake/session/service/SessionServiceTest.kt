@@ -1,14 +1,10 @@
 package com.yapp.brake.session.service
 
+import com.yapp.brake.outbox.infrastructure.event.OutboxEventPublisher
 import com.yapp.brake.session.dto.request.AddSessionRequest
 import com.yapp.brake.session.infrastructure.SessionWriter
-import com.yapp.brake.statistic.infrastructure.DailySessionStatisticReader
-import com.yapp.brake.statistic.infrastructure.DailySessionStatisticWriter
-import com.yapp.brake.statistic.model.SessionStatistics
-import com.yapp.brake.support.fixture.model.dailySessionStatisticsFixture
 import com.yapp.brake.support.fixture.model.sessionFixture
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.anyList
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.any
 import org.mockito.kotlin.verify
@@ -16,15 +12,12 @@ import org.mockito.kotlin.whenever
 
 class SessionServiceTest {
     private val sessionWriter = mock<SessionWriter>()
-    private val statisticsWriter = mock<DailySessionStatisticWriter>()
-    private val statisticsReader = mock<DailySessionStatisticReader>()
-    private val sessionService = SessionService(sessionWriter, statisticsWriter, statisticsReader)
+    private val outboxEventPublisher = mock<OutboxEventPublisher>()
+    private val sessionService = SessionService(sessionWriter, outboxEventPublisher)
 
     @Test
-    fun `세션을 저장한다`() {
+    fun `세션을 저장하고 통계 업데이트 이벤트를 발행한다`() {
         val session = sessionFixture()
-        val dailySessionStatistics = dailySessionStatisticsFixture()
-        val sessionStatistics = SessionStatistics(listOf(dailySessionStatistics))
         val request =
             AddSessionRequest(
                 session.groupId,
@@ -36,7 +29,6 @@ class SessionServiceTest {
             )
 
         whenever(sessionWriter.save(any())).thenReturn(session)
-        whenever(statisticsReader.getAllByIds(any(), anyList())).thenReturn(sessionStatistics)
 
         // when
         sessionService.add(
@@ -46,7 +38,6 @@ class SessionServiceTest {
 
         // then
         verify(sessionWriter).save(any())
-        verify(statisticsReader).getAllByIds(any(), anyList())
-        verify(statisticsWriter).saveAll(any())
+        verify(outboxEventPublisher).publish(any(), any())
     }
 }
