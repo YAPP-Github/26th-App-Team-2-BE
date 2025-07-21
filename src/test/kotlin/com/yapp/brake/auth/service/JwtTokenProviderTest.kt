@@ -97,7 +97,7 @@ class JwtTokenProviderTest {
 
         // then
         assertEquals(memberId, authentication.principal)
-        assertTrue(authentication.authorities.contains(SimpleGrantedAuthority(Role.USER.name)))
+        assertTrue(authentication.authorities.contains(SimpleGrantedAuthority(Role.USER.type)))
         assertEquals(null, authentication.credentials)
     }
 

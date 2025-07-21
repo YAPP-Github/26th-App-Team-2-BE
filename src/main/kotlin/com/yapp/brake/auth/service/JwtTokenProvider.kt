@@ -69,7 +69,10 @@ class JwtTokenProvider(
         return UsernamePasswordAuthenticationToken(
             member.id,
             null,
-            listOf(SimpleGrantedAuthority(member.role.toString())),
+            listOf(
+                SimpleGrantedAuthority(member.role.type),
+                SimpleGrantedAuthority(member.state.name),
+            ),
         )
     }
 
