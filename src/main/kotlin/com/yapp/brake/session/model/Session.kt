@@ -48,18 +48,18 @@ data class Session(
         }
 
         val midnight = start.toLocalDate().plusDays(1).atStartOfDay()
-        val firstGoal = Duration.between(start, midnight).toMinutes()
-        val secondGoal = goalMinutes - firstGoal
+        val goalBeforeMidnight = Duration.between(start, midnight).toMinutes()
+        val goalAfterMidnight = goalMinutes - goalBeforeMidnight
         return listOf(
             copy(
                 start = start,
                 end = midnight,
-                goalMinutes = firstGoal,
+                goalMinutes = goalBeforeMidnight,
             ),
             copy(
                 start = midnight,
                 end = end,
-                goalMinutes = secondGoal,
+                goalMinutes = goalAfterMidnight,
             ),
         )
     }
