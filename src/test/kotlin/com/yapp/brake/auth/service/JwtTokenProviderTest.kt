@@ -3,7 +3,6 @@ package com.yapp.brake.auth.service
 import com.yapp.brake.common.config.properties.JwtProperties
 import com.yapp.brake.common.constants.TOKEN_TYPE_ACCESS
 import com.yapp.brake.common.constants.TOKEN_TYPE_REFRESH
-import com.yapp.brake.common.enums.Role
 import com.yapp.brake.common.exception.CustomException
 import com.yapp.brake.common.exception.ErrorCode
 import com.yapp.brake.member.infrastructure.jpa.MemberJpaReader
@@ -97,7 +96,8 @@ class JwtTokenProviderTest {
 
         // then
         assertEquals(memberId, authentication.principal)
-        assertTrue(authentication.authorities.contains(SimpleGrantedAuthority(Role.USER.name)))
+        assertTrue(authentication.authorities.contains(SimpleGrantedAuthority(member.role.type)))
+        assertTrue(authentication.authorities.contains(SimpleGrantedAuthority(member.state.name)))
         assertEquals(null, authentication.credentials)
     }
 

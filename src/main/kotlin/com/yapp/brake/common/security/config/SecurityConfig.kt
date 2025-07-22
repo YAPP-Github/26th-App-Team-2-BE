@@ -4,15 +4,18 @@ import com.yapp.brake.auth.infrastructure.BlackListRepository
 import com.yapp.brake.auth.service.JwtTokenProvider
 import com.yapp.brake.common.constants.ALLOWED_URIS
 import com.yapp.brake.common.filter.JwtAuthenticationFilter
+import com.yapp.brake.common.filter.MemberStateFilter
 import com.yapp.brake.common.security.exception.ForbiddenHandler
 import com.yapp.brake.common.security.exception.UnauthenticatedEntryPoint
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.annotation.Order
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.access.ExceptionTranslationFilter
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.filter.CommonsRequestLoggingFilter
@@ -41,7 +44,37 @@ class SecurityConfig(
 
     @Bean
     @Order(2)
-    fun securityFilterChain(
+    fun holdMemberFilterChain(
+        jwtTokenProvider: JwtTokenProvider,
+        blackListRepository: BlackListRepository,
+        http: HttpSecurity,
+    ): SecurityFilterChain {
+        http
+            .csrf { it.disable() }
+            .sessionManagement {
+                it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            }
+            .cors { it.configurationSource(corsConfigurationSource) }
+            .httpBasic { it.disable() }
+            .formLogin { it.disable() }
+            .logout { it.disable() }
+            .rememberMe { it.disable() }
+            .requestCache { it.disable() }
+            .securityMatcher("/v1/members/**")
+            .authorizeHttpRequests { it.requestMatchers(HttpMethod.PATCH, "/v1/members/me").permitAll() }
+            .exceptionHandling { it.authenticationEntryPoint(unauthenticatedEntryPoint) }
+            .addFilterBefore(requestLoggingFilter, UsernamePasswordAuthenticationFilter::class.java)
+            .addFilterBefore(
+                JwtAuthenticationFilter(jwtTokenProvider, blackListRepository),
+                UsernamePasswordAuthenticationFilter::class.java,
+            )
+
+        return http.build()
+    }
+
+    @Bean
+    @Order(3)
+    fun activeMemberFilterChain(
         jwtTokenProvider: JwtTokenProvider,
         blackListRepository: BlackListRepository,
         http: HttpSecurity,
@@ -67,6 +100,7 @@ class SecurityConfig(
                 JwtAuthenticationFilter(jwtTokenProvider, blackListRepository),
                 UsernamePasswordAuthenticationFilter::class.java,
             )
+            .addFilterAfter(MemberStateFilter(), ExceptionTranslationFilter::class.java)
 
         return http.build()
     }
