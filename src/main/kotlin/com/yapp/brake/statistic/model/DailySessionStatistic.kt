@@ -1,6 +1,5 @@
 package com.yapp.brake.statistic.model
 
-import com.yapp.brake.session.model.Session
 import java.time.LocalDate
 
 data class DailySessionStatistic(
@@ -9,14 +8,14 @@ data class DailySessionStatistic(
     val actualMinutes: Long = 0L,
     val goalMinutes: Long = 0L,
 ) {
-    fun add(session: Session): DailySessionStatistic {
-        if (session.start.toLocalDate() != date) {
+    fun add(memberUsage: MemberUsage): DailySessionStatistic {
+        if (memberUsage.start.toLocalDate() != date) {
             return this
         }
 
         return copy(
-            actualMinutes = actualMinutes + session.toActualMinutes(),
-            goalMinutes = goalMinutes + session.goalMinutes,
+            actualMinutes = actualMinutes + memberUsage.toActualMinutes(),
+            goalMinutes = goalMinutes + memberUsage.goalMinutes,
         )
     }
 }

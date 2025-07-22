@@ -1,6 +1,5 @@
 package com.yapp.brake.session.model
 
-import java.time.Duration
 import java.time.LocalDateTime
 
 data class Session(
@@ -32,35 +31,6 @@ data class Session(
                     unit = snoozeUnit,
                     count = snoozeCount,
                 ),
-        )
-    }
-
-    fun toActualMinutes(): Long {
-        return Duration.between(start, end).toMinutes()
-    }
-
-    fun splitByDate(): List<Session> {
-        val startDate = start.toLocalDate()
-        val endDate = end.toLocalDate()
-
-        if (startDate == endDate) {
-            return listOf(this)
-        }
-
-        val midnight = start.toLocalDate().plusDays(1).atStartOfDay()
-        val goalBeforeMidnight = Duration.between(start, midnight).toMinutes()
-        val goalAfterMidnight = goalMinutes - goalBeforeMidnight
-        return listOf(
-            copy(
-                start = start,
-                end = midnight,
-                goalMinutes = goalBeforeMidnight,
-            ),
-            copy(
-                start = midnight,
-                end = end,
-                goalMinutes = goalAfterMidnight,
-            ),
         )
     }
 }

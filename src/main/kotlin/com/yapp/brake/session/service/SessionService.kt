@@ -1,7 +1,7 @@
 package com.yapp.brake.session.service
 
 import com.yapp.brake.common.event.EventType
-import com.yapp.brake.common.event.payload.StatisticsUpdatedEventPayload
+import com.yapp.brake.common.event.payload.SessionAddedEventPayload
 import com.yapp.brake.outbox.infrastructure.event.OutboxEventPublisher
 import com.yapp.brake.session.dto.request.AddSessionRequest
 import com.yapp.brake.session.dto.response.AddSessionResponse
@@ -33,14 +33,13 @@ class SessionService(
         val savedSession = sessionWriter.save(session)
 
         val payload =
-            StatisticsUpdatedEventPayload(
+            SessionAddedEventPayload(
                 memberId = memberId,
                 start = session.start,
                 end = session.end,
-                groupId = request.groupId,
                 goalMinutes = request.goalMinutes,
             )
-        outboxEventPublisher.publish(EventType.STATISTICS_UPDATED, payload)
+        outboxEventPublisher.publish(EventType.SESSION_ADDED, payload)
 
         return AddSessionResponse.from(savedSession.id)
     }

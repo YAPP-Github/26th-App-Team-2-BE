@@ -1,6 +1,6 @@
 package com.yapp.brake.statistic.service.eventhandler
 
-import com.yapp.brake.common.event.payload.StatisticsUpdatedEventPayload
+import com.yapp.brake.common.event.payload.SessionAddedEventPayload
 import com.yapp.brake.statistic.infrastructure.DailySessionStatisticReader
 import com.yapp.brake.statistic.infrastructure.DailySessionStatisticWriter
 import com.yapp.brake.statistic.model.SessionStatistics
@@ -20,11 +20,10 @@ class StatisticsUpdatedEventHandlerTest {
 
     val session = sessionFixture()
     val payload =
-        StatisticsUpdatedEventPayload(
+        SessionAddedEventPayload(
             memberId = session.memberId,
             start = session.start,
             end = session.end,
-            groupId = session.groupId,
             goalMinutes = session.goalMinutes,
         )
 
