@@ -12,7 +12,12 @@ import org.springframework.restdocs.request.RequestDocumentation
 open class Param(
     // 파라미터에 대한 설명을 담고 있는 ParameterDescriptor 객체
     val descriptor: ParameterDescriptor,
-)
+) {
+    open infix fun optional(value: Boolean): Param {
+        if (value) descriptor.optional()
+        return this
+    }
+}
 
 /**
  * 경로 파라미터에 대한 설명을 설정합니다.

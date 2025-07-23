@@ -8,7 +8,7 @@ data class Session(
     val memberId: Long,
     val start: LocalDateTime,
     val end: LocalDateTime,
-    val goalTime: Long,
+    val goalMinutes: Long,
     val snooze: Snooze,
 ) {
     companion object {
@@ -17,7 +17,7 @@ data class Session(
             groupId: Long,
             start: LocalDateTime,
             end: LocalDateTime,
-            goalTime: Long,
+            goalMinutes: Long,
             snoozeUnit: Int,
             snoozeCount: Int,
         ) = Session(
@@ -25,7 +25,7 @@ data class Session(
             groupId = groupId,
             start = start,
             end = end,
-            goalTime = goalTime,
+            goalMinutes = goalMinutes,
             snooze =
                 Snooze(
                     unit = snoozeUnit,

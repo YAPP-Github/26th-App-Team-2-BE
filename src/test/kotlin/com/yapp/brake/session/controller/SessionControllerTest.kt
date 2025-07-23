@@ -32,7 +32,7 @@ class SessionControllerTest : RestApiTestBase() {
                 groupId = session.groupId,
                 start = session.start,
                 end = session.end,
-                goalTime = session.goalTime,
+                goalMinutes = session.goalMinutes,
                 snoozeUnit = session.snooze.unit,
                 snoozeCount = session.snooze.count,
             )
@@ -68,7 +68,7 @@ class SessionControllerTest : RestApiTestBase() {
                     "groupId" type NUMBER means "관리 앱 그룹",
                     "start" type DATETIME means "세션 시작 시간",
                     "end" type DATETIME means "세션 종료 시간",
-                    "goalTime" type NUMBER means "세션 목표 시간(초 단위)",
+                    "goalMinutes" type NUMBER means "세션 목표 시간(분 단위)",
                     "snoozeUnit" type NUMBER means "스누즈 단위(분 단위)",
                     "snoozeCount" type NUMBER means "스누즈 횟수",
                 )
@@ -78,5 +78,7 @@ class SessionControllerTest : RestApiTestBase() {
                     "code" type NUMBER means "HTTP 코드",
                 )
             }
+
+        SecurityContextHolder.clearContext()
     }
 }

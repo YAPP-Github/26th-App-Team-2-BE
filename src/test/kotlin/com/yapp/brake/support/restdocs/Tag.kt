@@ -5,4 +5,5 @@ enum class Tag {
     MEMBER,
     GROUP,
     SESSION,
+    STATISTIC,
 }

@@ -9,6 +9,8 @@ import com.yapp.brake.member.controller.MemberController
 import com.yapp.brake.member.service.MemberUseCase
 import com.yapp.brake.session.controller.SessionController
 import com.yapp.brake.session.service.SessionUseCase
+import com.yapp.brake.statistic.controller.StatisticController
+import com.yapp.brake.statistic.service.StatisticUseCase
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs
@@ -30,6 +32,7 @@ import org.springframework.web.context.WebApplicationContext
         MemberController::class,
         GroupController::class,
         SessionController::class,
+        StatisticController::class,
     ],
 )
 abstract class RestApiTestBase {
@@ -47,6 +50,9 @@ abstract class RestApiTestBase {
 
     @MockitoBean
     lateinit var sessionUseCase: SessionUseCase
+
+    @MockitoBean
+    lateinit var statisticUseCase: StatisticUseCase
 
     lateinit var mockMvc: MockMvc
 

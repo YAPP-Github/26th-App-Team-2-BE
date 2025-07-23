@@ -19,7 +19,7 @@ class SessionEntity(
     val memberId: Long,
     val start: LocalDateTime,
     val end: LocalDateTime,
-    val goalTime: Long,
+    val goalMinutes: Long,
     val snoozeUnit: Int,
     val snoozeCount: Int,
 ) {
@@ -30,7 +30,7 @@ class SessionEntity(
             memberId = memberId,
             start = start,
             end = end,
-            goalTime = goalTime,
+            goalMinutes = goalMinutes,
             snooze =
                 Snooze(
                     unit = snoozeUnit,
@@ -46,7 +46,7 @@ class SessionEntity(
                 memberId = session.memberId,
                 start = session.start,
                 end = session.end,
-                goalTime = session.goalTime,
+                goalMinutes = session.goalMinutes,
                 snoozeUnit = session.snooze.unit,
                 snoozeCount = session.snooze.count,
             )

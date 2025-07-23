@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Positive
 import jakarta.validation.constraints.PositiveOrZero
 import java.time.LocalDateTime
 
-@ValidSessionTime
+@ValidSessionTime(maxDays = 1)
 data class AddSessionRequest(
     @field:Positive
     val groupId: Long,
@@ -15,7 +15,7 @@ data class AddSessionRequest(
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     val end: LocalDateTime,
     @field:Positive
-    val goalTime: Long,
+    val goalMinutes: Long,
     @field:PositiveOrZero
     val snoozeUnit: Int,
     @field:PositiveOrZero

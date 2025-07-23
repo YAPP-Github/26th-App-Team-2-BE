@@ -21,9 +21,12 @@ class SessionController(
     fun add(
         @Valid @RequestBody
         request: AddSessionRequest,
-    ): ApiResponse<AddSessionResponse> =
-        ApiResponse.success(
+    ): ApiResponse<AddSessionResponse> {
+        val response = sessionUseCase.add(getMemberId(), request)
+
+        return ApiResponse.success(
             code = HttpStatus.CREATED.value(),
-            data = sessionUseCase.add(getMemberId(), request),
+            data = response,
         )
+    }
 }
