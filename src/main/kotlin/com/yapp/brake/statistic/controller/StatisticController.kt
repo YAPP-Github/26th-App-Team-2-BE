@@ -21,7 +21,7 @@ class StatisticController(
         @Valid @ModelAttribute
         request: QueryStatisticRequest,
     ): ApiResponse<SessionStatisticsResponse> {
-        val response = statisticUseCase.get(getMemberId(), request.start, request.end)
+        val response = statisticUseCase.get(getMemberId(), request.getStartOrDefault(), request.getEndOrDefault())
         return ApiResponse.success(response)
     }
 }

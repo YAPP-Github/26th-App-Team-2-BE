@@ -9,8 +9,16 @@ import java.time.LocalDate
 data class QueryStatisticRequest(
     @field:Nullable
     @JsonFormat(pattern = "yyyy-MM-dd")
-    val start: LocalDate = LocalDate.now().minusDays(6),
+    private val start: LocalDate?,
     @field:Nullable
     @JsonFormat(pattern = "yyyy-MM-dd")
-    val end: LocalDate = LocalDate.now(),
-)
+    private val end: LocalDate?,
+) {
+    fun getStartOrDefault(): LocalDate {
+        return start ?: (end?.minusDays(6) ?: LocalDate.now().minusDays(6))
+    }
+
+    fun getEndOrDefault(): LocalDate {
+        return end ?: (start?.plusDays(6) ?: LocalDate.now())
+    }
+}

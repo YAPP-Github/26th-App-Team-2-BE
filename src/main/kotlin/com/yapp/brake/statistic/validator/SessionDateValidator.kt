@@ -9,6 +9,7 @@ class SessionDateValidator : ConstraintValidator<ValidSessionDate, QueryStatisti
         value: QueryStatisticRequest,
         context: ConstraintValidatorContext,
     ): Boolean {
-        return value.end == value.start || value.end.isAfter(value.start)
+        return value.getEndOrDefault() == value.getStartOrDefault() ||
+            value.getEndOrDefault().isAfter(value.getStartOrDefault())
     }
 }
