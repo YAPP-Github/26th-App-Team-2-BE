@@ -4,6 +4,7 @@ services:
     image: gvf156/yapp-dev:latest
     volumes:
       - /home/app/YAPP-ENV:/YAPP-ENV:ro
+      - /home/app/logs:/app/logs
     environment:
       - SPRING_CONFIG_LOCATION=file:/YAPP-ENV/
       - SPRING_PROFILES_ACTIVE=dev
@@ -18,6 +19,7 @@ services:
     image: gvf156/yapp-dev:latest
     volumes:
       - /home/app/YAPP-ENV:/YAPP-ENV:ro
+      - /home/app/logs:/app/logs
     environment:
       - SPRING_CONFIG_LOCATION=file:/YAPP-ENV/
       - SPRING_PROFILES_ACTIVE=dev
