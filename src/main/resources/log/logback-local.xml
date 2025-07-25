@@ -10,7 +10,6 @@
 
     <!-- 애플리케이션 로그 -->
     <logger name="brake" level="DEBUG"/>
-    <logger name="brake" level="DEBUG"/>
 
     <!-- 스프링 프레임워크 로그 -->
     <logger name="org.springframework" level="INFO"/>
