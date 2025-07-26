@@ -12,10 +12,6 @@ import org.springframework.web.filter.OncePerRequestFilter
 private val log = KotlinLogging.logger {}
 
 class MemberStateFilter : OncePerRequestFilter() {
-    override fun shouldNotFilter(request: HttpServletRequest): Boolean {
-        return super.shouldNotFilter(request)
-    }
-
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,

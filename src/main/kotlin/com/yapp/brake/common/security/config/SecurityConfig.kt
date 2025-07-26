@@ -61,7 +61,11 @@ class SecurityConfig(
             .rememberMe { it.disable() }
             .requestCache { it.disable() }
             .securityMatcher("/v1/members/**")
-            .authorizeHttpRequests { it.requestMatchers(HttpMethod.PATCH, "/v1/members/me").permitAll() }
+            .authorizeHttpRequests {
+                it
+                    .requestMatchers(HttpMethod.PATCH, "/v1/members/me").permitAll()
+                    .anyRequest().authenticated()
+            }
             .exceptionHandling { it.authenticationEntryPoint(unauthenticatedEntryPoint) }
             .addFilterBefore(requestLoggingFilter, UsernamePasswordAuthenticationFilter::class.java)
             .addFilterBefore(
