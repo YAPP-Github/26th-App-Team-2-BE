@@ -14,4 +14,8 @@ class DeviceProfileJpaWriter(
         val entity = DeviceProfileEntity.create(deviceProfile)
         return deviceProfileRepository.save(entity).toDomain()
     }
+
+    override fun deleteAllByMemberId(memberId: Long): Long {
+        return deviceProfileRepository.deleteAllByMemberId(memberId)
+    }
 }

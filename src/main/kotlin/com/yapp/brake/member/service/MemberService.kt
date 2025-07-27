@@ -35,7 +35,6 @@ class MemberService(
     override fun delete(memberId: Long) {
         val member = memberReader.getById(memberId)
         memberWriter.delete(memberId)
-        // todo : 회원 탈퇴 시 회원의 디바이스 프로필도 삭제해야 함
 
         val payload =
             MemberDeletedEventPayload(

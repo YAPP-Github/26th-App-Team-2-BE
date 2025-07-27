@@ -7,4 +7,6 @@ interface DeviceProfileRepository : JpaRepository<DeviceProfileEntity, Long> {
         memberId: Long,
         deviceName: String,
     ): DeviceProfileEntity?
+
+    fun deleteAllByMemberId(memberId: Long): Long
 }
