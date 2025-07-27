@@ -83,7 +83,7 @@ class StatisticControllerTest : RestApiTestBase() {
                     "data.statistics[].dayOfWeek" type STRING means "요일",
                     "data.statistics[].actualTime" type STRING means "실제 사용 시간",
                     "data.statistics[].goalTime" type STRING means "목표 사용 시간",
-                    "code" type NUMBER means "HTTP 코드",
+                    "status" type NUMBER means "HTTP 코드",
                 )
             }
     }

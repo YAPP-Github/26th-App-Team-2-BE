@@ -25,7 +25,7 @@ class SessionController(
         val response = sessionUseCase.add(getMemberId(), request)
 
         return ApiResponse.success(
-            code = HttpStatus.CREATED.value(),
+            status = HttpStatus.CREATED.value(),
             data = response,
         )
     }

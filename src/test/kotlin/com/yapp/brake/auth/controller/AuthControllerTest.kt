@@ -67,7 +67,7 @@ class AuthControllerTest : RestApiTestBase() {
                     "data.accessToken" type STRING means "액세스 토큰",
                     "data.refreshToken" type STRING means "리프레시 토큰",
                     "data.memberState" type STRING means "유저의 상태 ",
-                    "code" type NUMBER means "HTTP 코드",
+                    "status" type NUMBER means "HTTP 코드",
                 )
             }
     }
@@ -98,7 +98,7 @@ class AuthControllerTest : RestApiTestBase() {
                     "data" type OBJECT means "응답 바디",
                     "data.accessToken" type STRING means "액세스 토큰",
                     "data.refreshToken" type STRING means "리프레시 토큰",
-                    "code" type NUMBER means "HTTP 코드",
+                    "status" type NUMBER means "HTTP 코드",
                 )
             }
     }

@@ -33,7 +33,7 @@ class GroupControllerTest : RestApiTestBase() {
         val request = createGroupRequestFixture()
         val response =
             ApiResponse.success(
-                code = HttpStatus.CREATED.value(),
+                status = HttpStatus.CREATED.value(),
                 data = groupResponseFixture(request),
             )
 
@@ -66,7 +66,7 @@ class GroupControllerTest : RestApiTestBase() {
                     "data.groupApps[]" type ARRAY means "관리 앱 목록",
                     "data.groupApps[].groupAppId" type NUMBER means "관리 앱 식별자",
                     "data.groupApps[].name" type STRING means "관리 앱 이름",
-                    "code" type NUMBER means "HTTP 코드",
+                    "status" type NUMBER means "HTTP 코드",
                 )
             }
 
@@ -78,7 +78,7 @@ class GroupControllerTest : RestApiTestBase() {
         val memberId = 1L
         val response =
             ApiResponse.success(
-                code = HttpStatus.OK.value(),
+                status = HttpStatus.OK.value(),
                 data = groupsResponseFixture(),
             )
 
@@ -104,7 +104,7 @@ class GroupControllerTest : RestApiTestBase() {
                     "data.groups[].groupApps[]" type ARRAY means "관리 앱 목록",
                     "data.groups[].groupApps[].groupAppId" type NUMBER means "관리 앱 식별자",
                     "data.groups[].groupApps[].name" type STRING means "관리 앱 이름",
-                    "code" type NUMBER means "HTTP 코드",
+                    "status" type NUMBER means "HTTP 코드",
                 )
             }
 
@@ -127,7 +127,7 @@ class GroupControllerTest : RestApiTestBase() {
             )
         val response =
             ApiResponse.success(
-                code = HttpStatus.OK.value(),
+                status = HttpStatus.OK.value(),
                 data = groupResponseFixture(request),
             )
 
@@ -162,7 +162,7 @@ class GroupControllerTest : RestApiTestBase() {
                     "data.groupApps[]" type ARRAY means "관리 앱 목록",
                     "data.groupApps[].groupAppId" type NUMBER means "관리 앱 식별자",
                     "data.groupApps[].name" type STRING means "관리 앱 이름",
-                    "code" type NUMBER means "HTTP 코드",
+                    "status" type NUMBER means "HTTP 코드",
                 )
             }
 

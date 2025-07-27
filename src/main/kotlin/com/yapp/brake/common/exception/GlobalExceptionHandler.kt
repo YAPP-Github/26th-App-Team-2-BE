@@ -18,34 +18,32 @@ class GlobalExceptionHandler {
     fun handleCustomException(e: CustomException): ResponseEntity<ApiResponse<Unit>> {
         logger.warn { "code=${e.errorCode.code}, message=${e.errorCode.message}" }
         return ResponseEntity.status(e.errorCode.status)
-            .body(ApiResponse.error(e.errorCode.status, e.errorCode.message))
+            .body(ApiResponse.error(e.errorCode.status, e.errorCode.message, e.errorCode.code))
     }
 
-    @ExceptionHandler(IllegalArgumentException::class)
-    fun handleIllegalArgumentException(e: IllegalArgumentException): ResponseEntity<ApiResponse<Unit>> {
+    @ExceptionHandler(
+        value = [
+            IllegalArgumentException::class,
+            MethodArgumentNotValidException::class,
+            ConstraintViolationException::class,
+        ],
+    )
+    fun handleBadRequestException(e: IllegalArgumentException): ResponseEntity<ApiResponse<Unit>> {
         logger.warn(e) { "code=${BAD_REQUEST.code}, message=${e.message}" }
         return ResponseEntity.status(BAD_REQUEST.status)
-            .body(ApiResponse.error(BAD_REQUEST.status, BAD_REQUEST.message))
+            .body(ApiResponse.error(BAD_REQUEST.status, BAD_REQUEST.message, BAD_REQUEST.code))
     }
 
     @ExceptionHandler(Exception::class)
     fun handleGlobalException(e: Exception): ResponseEntity<ApiResponse<Unit>> {
         logger.error(e) { "code=${INTERNAL_SERVER_ERROR.code}, message=${e.message}" }
         return ResponseEntity.status(INTERNAL_SERVER_ERROR.status)
-            .body(ApiResponse.error(INTERNAL_SERVER_ERROR.status, INTERNAL_SERVER_ERROR.message))
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException::class)
-    fun handleMethodArgumentNotValidException(e: MethodArgumentNotValidException): ResponseEntity<ApiResponse<Unit>> {
-        logger.warn(e) { "code=${BAD_REQUEST.code}, message=${e.message}" }
-        return ResponseEntity.status(BAD_REQUEST.status)
-            .body(ApiResponse.error(BAD_REQUEST.status, BAD_REQUEST.message))
-    }
-
-    @ExceptionHandler(ConstraintViolationException::class)
-    fun handleValidationException(e: ConstraintViolationException): ResponseEntity<ApiResponse<Unit>> {
-        logger.warn(e) { "code=${BAD_REQUEST.code}, message=${e.message}" }
-        return ResponseEntity.status(BAD_REQUEST.status)
-            .body(ApiResponse.error(BAD_REQUEST.status, BAD_REQUEST.message))
+            .body(
+                ApiResponse.error(
+                    INTERNAL_SERVER_ERROR.status,
+                    INTERNAL_SERVER_ERROR.message,
+                    INTERNAL_SERVER_ERROR.code,
+                ),
+            )
     }
 }

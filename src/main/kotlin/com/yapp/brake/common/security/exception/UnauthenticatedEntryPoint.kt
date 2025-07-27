@@ -20,12 +20,12 @@ class UnauthenticatedEntryPoint(
         response: HttpServletResponse,
         authException: AuthenticationException,
     ) {
-        val apiResponse = ApiResponse.error(UNAUTHORIZED.status, UNAUTHORIZED.message)
+        val apiResponse = ApiResponse.error(UNAUTHORIZED.status, UNAUTHORIZED.message, UNAUTHORIZED.code)
         val responseBody = objectMapper.writeValueAsString(apiResponse)
 
         response.apply {
             contentType = MediaType.APPLICATION_JSON_VALUE
-            status = apiResponse.code
+            status = apiResponse.status
             characterEncoding = StandardCharsets.UTF_8.name()
             writer.write(responseBody)
             writer.flush()

@@ -50,7 +50,7 @@ class MemberControllerTest : RestApiTestBase() {
                     "data" type OBJECT means "응답 바디",
                     "data.nickname" type STRING means "닉네임",
                     "data.state" type STRING means "상태",
-                    "code" type NUMBER means "HTTP 코드",
+                    "status" type NUMBER means "HTTP 코드",
                 )
             }
 
@@ -91,7 +91,7 @@ class MemberControllerTest : RestApiTestBase() {
                     "data" type OBJECT means "응답 바디",
                     "data.nickname" type STRING means "닉네임",
                     "data.state" type STRING means "상태",
-                    "code" type NUMBER means "HTTP 코드",
+                    "status" type NUMBER means "HTTP 코드",
                 )
             }
     }
