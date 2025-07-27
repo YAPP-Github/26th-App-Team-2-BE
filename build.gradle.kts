@@ -29,6 +29,7 @@ extra["springCloudVersion"] = "2025.0.0"
 val flywayVersion = "10.16.0"
 
 dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")

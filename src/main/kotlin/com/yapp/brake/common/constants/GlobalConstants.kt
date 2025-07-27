@@ -7,7 +7,7 @@ val ALLOWED_URIS =
         "/v1/auth/login",
         "/v1/auth/refresh",
         "/static/**",
-        "/v1/swagger",
+        "/v1/docs/**",
         "/actuator",
         "/actuator/**",
         "/static",
