@@ -5,6 +5,7 @@ enum class ErrorCode(
     val code: String,
     val message: String,
 ) {
+    // COMMON
     BAD_REQUEST(400, "C-400", "잘못된 요청입니다. 필수 값이 누락되었거나 형식이 맞지 않습니다."),
     UNAUTHORIZED(401, "C-401", "인증되지 않은 사용자입니다."),
     FORBIDDEN(403, "C-403", "권한이 없습니다."),

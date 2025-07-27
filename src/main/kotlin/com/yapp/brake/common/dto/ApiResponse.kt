@@ -23,12 +23,5 @@ data class ApiResponse<T>(
             message: String,
             code: String,
         ): ApiResponse<Unit> = ApiResponse(status = status, message = message, code = code)
-
-        fun error(
-            status: Int,
-            data: ErrorResponse,
-            message: String,
-            code: String,
-        ): ApiResponse<ErrorResponse> = ApiResponse(status = status, data = data, message = message, code = code)
     }
 }
