@@ -177,7 +177,7 @@ class AuthServiceTest {
 
         whenever(jwtTokenProvider.extractExpiration(accessToken)).thenReturn(ttl)
         // when
-        authService.logout(accessToken)
+        authService.logout(deviceProfileId, accessToken)
 
         // then
         verify(refreshTokenRepository).remove(memberId)

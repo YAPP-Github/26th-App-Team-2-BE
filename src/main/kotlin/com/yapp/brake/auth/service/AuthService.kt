@@ -10,7 +10,6 @@ import com.yapp.brake.common.enums.Role
 import com.yapp.brake.common.enums.SocialProvider
 import com.yapp.brake.common.exception.CustomException
 import com.yapp.brake.common.exception.ErrorCode
-import com.yapp.brake.common.security.getDeviceProfileId
 import com.yapp.brake.deviceprofile.infrastructure.DeviceProfileReader
 import com.yapp.brake.deviceprofile.infrastructure.DeviceProfileWriter
 import com.yapp.brake.deviceprofile.model.DeviceProfile
@@ -71,8 +70,11 @@ class AuthService(
         return RefreshTokenResponse(newAccessToken, newRefreshToken)
     }
 
-    override fun logout(accessToken: String) {
-        refreshTokenRepository.remove(getDeviceProfileId())
+    override fun logout(
+        deviceProfileId: Long,
+        accessToken: String,
+    ) {
+        refreshTokenRepository.remove(deviceProfileId)
 
         val ttl = jwtTokenProvider.extractExpiration(accessToken)
         blackListRepository.add(accessToken, Duration.ofMillis(ttl))
