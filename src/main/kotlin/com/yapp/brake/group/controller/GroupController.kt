@@ -1,7 +1,7 @@
 package com.yapp.brake.group.controller
 
 import com.yapp.brake.common.dto.ApiResponse
-import com.yapp.brake.common.security.getMemberId
+import com.yapp.brake.common.security.getDeviceProfileId
 import com.yapp.brake.group.dto.request.CreateGroupRequest
 import com.yapp.brake.group.dto.request.UpdateGroupRequest
 import com.yapp.brake.group.dto.response.GroupResponse
@@ -32,12 +32,12 @@ class GroupController(
     ): ApiResponse<GroupResponse> {
         return ApiResponse.success(
             code = HttpStatus.CREATED.value(),
-            data = groupUseCase.create(getMemberId(), request),
+            data = groupUseCase.create(getDeviceProfileId(), request),
         )
     }
 
     @GetMapping
-    fun readAll(): ApiResponse<GroupsResponse> = ApiResponse.success(groupUseCase.getAll(getMemberId()))
+    fun readAll(): ApiResponse<GroupsResponse> = ApiResponse.success(groupUseCase.getAll(getDeviceProfileId()))
 
     @PutMapping("/{groupId}")
     fun modify(
@@ -46,7 +46,7 @@ class GroupController(
         @Valid @RequestBody
         request: UpdateGroupRequest,
     ): ApiResponse<GroupResponse> {
-        return ApiResponse.success(groupUseCase.modify(getMemberId(), groupId, request))
+        return ApiResponse.success(groupUseCase.modify(getDeviceProfileId(), groupId, request))
     }
 
     @DeleteMapping("/{groupId}")
@@ -55,6 +55,6 @@ class GroupController(
         @PathVariable @Positive
         groupId: Long,
     ) {
-        groupUseCase.remove(getMemberId(), groupId)
+        groupUseCase.remove(getDeviceProfileId(), groupId)
     }
 }

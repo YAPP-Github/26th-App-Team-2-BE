@@ -7,7 +7,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import kotlin.test.assertEquals
 
-class MemberUsageTest {
+class DeviceUsageTest {
     @Test
     fun `실제 사용 시간을 계산한다`() {
         // given

@@ -13,7 +13,7 @@ import java.time.LocalDate
 @Table(name = "daily_session_statistic")
 class DailySessionStatisticEntity(
     @Id
-    val memberId: Long,
+    val deviceProfileId: Long,
     @Id
     val date: LocalDate,
     val actualMinutes: Long,
@@ -22,7 +22,7 @@ class DailySessionStatisticEntity(
     companion object {
         fun create(dailySessionStatistic: DailySessionStatistic): DailySessionStatisticEntity {
             return DailySessionStatisticEntity(
-                memberId = dailySessionStatistic.memberId,
+                deviceProfileId = dailySessionStatistic.deviceProfileId,
                 date = dailySessionStatistic.date,
                 actualMinutes = dailySessionStatistic.actualMinutes,
                 goalMinutes = dailySessionStatistic.goalMinutes,
@@ -32,7 +32,7 @@ class DailySessionStatisticEntity(
         fun create(sessionStatistics: SessionStatistics): List<DailySessionStatisticEntity> {
             return sessionStatistics.statistics.map {
                 DailySessionStatisticEntity(
-                    memberId = it.memberId,
+                    deviceProfileId = it.deviceProfileId,
                     date = it.date,
                     actualMinutes = it.actualMinutes,
                     goalMinutes = it.goalMinutes,
@@ -43,7 +43,7 @@ class DailySessionStatisticEntity(
 
     fun toDomain(): DailySessionStatistic {
         return DailySessionStatistic(
-            memberId = memberId,
+            deviceProfileId = deviceProfileId,
             date = date,
             actualMinutes = actualMinutes,
             goalMinutes = goalMinutes,

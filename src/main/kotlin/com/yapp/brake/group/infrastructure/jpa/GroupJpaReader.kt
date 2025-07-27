@@ -16,12 +16,12 @@ class GroupJpaReader(
         groupId: Long,
         memberId: Long,
     ): Group {
-        return groupRepository.findByGroupIdAndMemberId(groupId, memberId)
+        return groupRepository.findByGroupIdAndDeviceProfileId(groupId, memberId)
             ?.toDomain()
             ?: throw CustomException(ErrorCode.GROUP_NOT_FOUND)
     }
 
     override fun getAllByMemberId(memberId: Long): List<Group> =
-        groupRepository.findByMemberId(memberId)
+        groupRepository.findByDeviceProfileId(memberId)
             .map(GroupEntity::toDomain)
 }

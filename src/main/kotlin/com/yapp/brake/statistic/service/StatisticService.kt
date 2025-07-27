@@ -13,12 +13,12 @@ class StatisticService(
 ) : StatisticUseCase {
     @Transactional(readOnly = true)
     override fun get(
-        memberId: Long,
+        deviceProfileId: Long,
         startDate: LocalDate,
         endDate: LocalDate,
     ): SessionStatisticsResponse {
         val betweenDates = generateBetweenDates(startDate, endDate)
-        val statistics = dailySessionStatisticReader.getAllByIds(memberId, betweenDates)
+        val statistics = dailySessionStatisticReader.getAllByIds(deviceProfileId, betweenDates)
 
         return SessionStatisticsResponse.from(statistics)
     }

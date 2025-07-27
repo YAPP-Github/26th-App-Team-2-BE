@@ -32,7 +32,7 @@ class SessionServiceTest {
 
         // when
         sessionService.add(
-            session.memberId,
+            session.deviceProfileId,
             request,
         )
 

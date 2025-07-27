@@ -7,20 +7,20 @@ import com.yapp.brake.group.dto.response.GroupsResponse
 
 interface GroupUseCase {
     fun create(
-        memberId: Long,
+        deviceProfileId: Long,
         request: CreateGroupRequest,
     ): GroupResponse
 
-    fun getAll(memberId: Long): GroupsResponse
+    fun getAll(deviceProfileId: Long): GroupsResponse
 
     fun modify(
-        memberId: Long,
+        deviceProfileId: Long,
         groupId: Long,
         request: UpdateGroupRequest,
     ): GroupResponse
 
     fun remove(
-        memberId: Long,
+        deviceProfileId: Long,
         groupId: Long,
     )
 }

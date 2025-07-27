@@ -67,7 +67,7 @@ class MemberServiceTest {
         whenever(memberReader.getById(memberId = member.id)).thenReturn(member)
         whenever(memberWriter.save(any())).thenReturn(expected)
 
-        val result = memberService.update(newNickname)
+        val result = memberService.update(member.id, newNickname)
 
         assertThat(result.nickname).isEqualTo(expected.nickname)
         assertThat(result.state).isEqualTo(MemberState.ACTIVE.name)
@@ -84,7 +84,6 @@ class MemberServiceTest {
                 socialProvider = member.oAuthUserInfo.socialProvider.name,
                 authId = member.oAuthUserInfo.credential,
                 authEmail = member.oAuthUserInfo.email,
-                deviceId = member.deviceId,
             )
         whenever(memberReader.getById(memberId = member.id)).thenReturn(member)
         doNothing().whenever(memberWriter).delete(member.id)

@@ -14,20 +14,20 @@ class DailySessionStatisticJpaReader(
     private val dailySessionStatisticRepository: DailySessionStatisticRepository,
 ) : DailySessionStatisticReader {
     override fun getById(
-        memberId: Long,
+        deviceProfileId: Long,
         date: LocalDate,
     ): DailySessionStatistic {
-        return dailySessionStatisticRepository.findById(DailySessionStatisticId(memberId, date))
+        return dailySessionStatisticRepository.findById(DailySessionStatisticId(deviceProfileId, date))
             .getOrNull()
             ?.toDomain()
-            ?: DailySessionStatistic(memberId, date)
+            ?: DailySessionStatistic(deviceProfileId, date)
     }
 
     override fun getAllByIds(
-        memberId: Long,
+        deviceProfileId: Long,
         dates: List<LocalDate>,
     ): SessionStatistics {
-        val ids = dates.map { DailySessionStatisticId(memberId, it) }
+        val ids = dates.map { DailySessionStatisticId(deviceProfileId, it) }
         val statistics = dailySessionStatisticRepository.findAllById(ids).map { it.toDomain() }
         return SessionStatistics(statistics)
     }

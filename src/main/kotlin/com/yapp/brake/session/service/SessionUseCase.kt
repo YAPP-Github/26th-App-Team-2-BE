@@ -5,7 +5,7 @@ import com.yapp.brake.session.dto.response.AddSessionResponse
 
 interface SessionUseCase {
     fun add(
-        memberId: Long,
+        deviceProfileId: Long,
         request: AddSessionRequest,
     ): AddSessionResponse
 }

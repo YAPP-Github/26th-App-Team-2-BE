@@ -30,6 +30,7 @@ class GroupControllerTest : RestApiTestBase() {
     @Test
     fun `관리 앱 그룹 생성 API`() {
         val memberId = 1L
+        val deviceProfileId = 1L
         val request = createGroupRequestFixture()
         val response =
             ApiResponse.success(
@@ -40,7 +41,7 @@ class GroupControllerTest : RestApiTestBase() {
         whenever(groupUseCase.create(memberId, request))
             .thenReturn(response.data)
 
-        val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), null)
+        val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), deviceProfileId)
         SecurityContextHolder.getContext().authentication = authentication
 
         val builder =
@@ -76,6 +77,7 @@ class GroupControllerTest : RestApiTestBase() {
     @Test
     fun `관리 앱 그룹 조회 API`() {
         val memberId = 1L
+        val deviceProfileId = 1L
         val response =
             ApiResponse.success(
                 code = HttpStatus.OK.value(),
@@ -85,7 +87,7 @@ class GroupControllerTest : RestApiTestBase() {
         whenever(groupUseCase.getAll(memberId))
             .thenReturn(response.data)
 
-        val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), null)
+        val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), deviceProfileId)
         SecurityContextHolder.getContext().authentication = authentication
 
         val builder =
@@ -114,6 +116,7 @@ class GroupControllerTest : RestApiTestBase() {
     @Test
     fun `관리 앱 그룹 수정 API`() {
         val memberId = 1L
+        val deviceProfileId = 1L
         val groupId = 1L
         val request =
             updateGroupRequestFixture(
@@ -134,7 +137,7 @@ class GroupControllerTest : RestApiTestBase() {
         whenever(groupUseCase.modify(memberId, groupId, request))
             .thenReturn(response.data)
 
-        val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), null)
+        val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), deviceProfileId)
         SecurityContextHolder.getContext().authentication = authentication
 
         val builder =
@@ -173,10 +176,11 @@ class GroupControllerTest : RestApiTestBase() {
     fun `관리 앱 그룹 삭제 API`() {
         val memberId = 1L
         val groupId = 1L
+        val deviceProfileId = 1L
 
         doNothing().whenever(groupUseCase).remove(memberId, groupId)
 
-        val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), null)
+        val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), deviceProfileId)
         SecurityContextHolder.getContext().authentication = authentication
 
         val builder = RestDocumentationRequestBuilders.delete("/v1/groups/{groupId}", groupId)

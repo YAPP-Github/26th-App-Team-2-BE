@@ -5,7 +5,10 @@ import com.yapp.brake.member.dto.response.MemberResponse
 interface MemberUseCase {
     fun getMember(memberId: Long): MemberResponse
 
-    fun update(nickname: String): MemberResponse
+    fun update(
+        memberId: Long,
+        nickname: String,
+    ): MemberResponse
 
     fun delete(memberId: Long)
 }

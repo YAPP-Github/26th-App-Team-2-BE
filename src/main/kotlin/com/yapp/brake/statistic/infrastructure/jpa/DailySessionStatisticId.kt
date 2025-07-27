@@ -4,6 +4,6 @@ import java.io.Serializable
 import java.time.LocalDate
 
 data class DailySessionStatisticId(
-    var memberId: Long = 0L,
+    var deviceProfileId: Long = 0L,
     var date: LocalDate = LocalDate.MIN,
 ) : Serializable

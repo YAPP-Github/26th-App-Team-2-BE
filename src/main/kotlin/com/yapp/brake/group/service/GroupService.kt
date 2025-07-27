@@ -27,10 +27,10 @@ class GroupService(
 ) : GroupUseCase {
     @Transactional
     override fun create(
-        memberId: Long,
+        deviceProfileId: Long,
         request: CreateGroupRequest,
     ): GroupResponse {
-        val group = groupWriter.save(Group.create(memberId, request.name))
+        val group = groupWriter.save(Group.create(deviceProfileId, request.name))
         val groupApps =
             request.groupApps.map {
                 val groupApp =
@@ -46,8 +46,8 @@ class GroupService(
     }
 
     @Transactional(readOnly = true)
-    override fun getAll(memberId: Long): GroupsResponse {
-        val groups = groupReader.getAllByMemberId(memberId)
+    override fun getAll(deviceProfileId: Long): GroupsResponse {
+        val groups = groupReader.getAllByMemberId(deviceProfileId)
         val groupIds = groups.map(Group::groupId)
         val groupApps = groupAppReader.getByGroupIds(groupIds)
 
@@ -56,12 +56,12 @@ class GroupService(
 
     @Transactional
     override fun modify(
-        memberId: Long,
+        deviceProfileId: Long,
         groupId: Long,
         request: UpdateGroupRequest,
     ): GroupResponse {
         val group =
-            groupReader.getByIdAndMemberId(groupId, memberId)
+            groupReader.getByIdAndMemberId(groupId, deviceProfileId)
                 .update(request.name)
                 .let { groupWriter.save(it) }
 
@@ -84,10 +84,10 @@ class GroupService(
 
     @Transactional
     override fun remove(
-        memberId: Long,
+        deviceProfileId: Long,
         groupId: Long,
     ) {
-        val group = groupReader.getByIdAndMemberId(groupId, memberId)
+        val group = groupReader.getByIdAndMemberId(groupId, deviceProfileId)
 
         groupWriter.delete(group)
 

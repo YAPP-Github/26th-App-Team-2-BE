@@ -17,12 +17,12 @@ class SessionService(
 ) : SessionUseCase {
     @Transactional
     override fun add(
-        memberId: Long,
+        deviceProfileId: Long,
         request: AddSessionRequest,
     ): AddSessionResponse {
         val session =
             Session.create(
-                memberId,
+                deviceProfileId,
                 request.groupId,
                 request.start,
                 request.end,
@@ -34,7 +34,7 @@ class SessionService(
 
         val payload =
             SessionAddedEventPayload(
-                memberId = memberId,
+                deviceProfileId = deviceProfileId,
                 start = session.start,
                 end = session.end,
                 goalMinutes = request.goalMinutes,

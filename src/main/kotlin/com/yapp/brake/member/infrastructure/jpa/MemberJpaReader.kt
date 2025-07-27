@@ -1,5 +1,6 @@
 package com.yapp.brake.member.infrastructure.jpa
 
+import com.yapp.brake.common.enums.SocialProvider
 import com.yapp.brake.common.exception.CustomException
 import com.yapp.brake.common.exception.ErrorCode
 import com.yapp.brake.member.infrastructure.MemberReader
@@ -13,8 +14,11 @@ import kotlin.jvm.optionals.getOrNull
 class MemberJpaReader(
     private val memberRepository: MemberRepository,
 ) : MemberReader {
-    override fun findByDeviceId(deviceId: String): Member? =
-        memberRepository.findByDeviceId(deviceId)
+    override fun findByOauthInfo(
+        email: String,
+        socialProvider: SocialProvider,
+    ): Member? =
+        memberRepository.findByAuthEmailAndSocialProvider(email, socialProvider)
             ?.toDomain()
 
     override fun findById(memberId: Long): Member? =

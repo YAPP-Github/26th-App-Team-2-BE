@@ -3,16 +3,16 @@ package com.yapp.brake.statistic.model
 data class SessionStatistics(
     val statistics: List<DailySessionStatistic>,
 ) {
-    fun update(memberUsage: MemberUsage): SessionStatistics {
+    fun update(deviceUsage: DeviceUsage): SessionStatistics {
         val updatedMap = statistics.associateBy { it.date }.toMutableMap()
 
-        for (dailyUsage in memberUsage.splitByDate()) {
+        for (dailyUsage in deviceUsage.splitByDate()) {
             val date = dailyUsage.start.toLocalDate()
             val dailySessionStatistic =
                 updatedMap[date]
                     ?: DailySessionStatistic(
                         date = date,
-                        memberId = dailyUsage.memberId,
+                        deviceProfileId = dailyUsage.deviceProfileId,
                     )
             updatedMap[date] = dailySessionStatistic.add(dailyUsage)
         }

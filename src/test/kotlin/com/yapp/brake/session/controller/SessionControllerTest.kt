@@ -26,6 +26,7 @@ class SessionControllerTest : RestApiTestBase() {
     @Test
     fun `세션 추가 API`() {
         val memberId = 1L
+        val deviceProfileId = 1L
         val session = sessionFixture()
         val request =
             AddSessionRequest(
@@ -43,7 +44,7 @@ class SessionControllerTest : RestApiTestBase() {
                 data = AddSessionResponse(sessionId = 1L),
             )
 
-        val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), null)
+        val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), deviceProfileId)
         SecurityContextHolder.getContext().authentication = authentication
 
         whenever(

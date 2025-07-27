@@ -39,7 +39,7 @@ class DailySessionStatisticTest {
         assertAll(
             { assertEquals(originStatistics.actualMinutes + usageMinutes, updated.actualMinutes) },
             { assertEquals(originStatistics.goalMinutes + goalMinutes, updated.goalMinutes) },
-            { assertEquals(memberId, updated.memberId) },
+            { assertEquals(memberId, updated.deviceProfileId) },
             { assertEquals(date, updated.date) },
         )
     }
@@ -70,7 +70,7 @@ class DailySessionStatisticTest {
         assertAll(
             { assertEquals(originStatistics.actualMinutes + usageMinutes, updated.actualMinutes) },
             { assertEquals(originStatistics.goalMinutes + goalMinutes, updated.goalMinutes) },
-            { assertEquals(memberId, updated.memberId) },
+            { assertEquals(memberId, updated.deviceProfileId) },
             { assertEquals(date, updated.date) },
         )
     }
@@ -100,7 +100,7 @@ class DailySessionStatisticTest {
         assertAll(
             { assertEquals(originStatistics.actualMinutes, updated.actualMinutes) },
             { assertEquals(originStatistics.goalMinutes, updated.goalMinutes) },
-            { assertEquals(memberId, updated.memberId) },
+            { assertEquals(memberId, updated.deviceProfileId) },
             { assertEquals(date, updated.date) },
         )
     }

@@ -3,10 +3,10 @@ package com.yapp.brake.group.infrastructure.jpa
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface GroupRepository : JpaRepository<GroupEntity, Long> {
-    fun findByGroupIdAndMemberId(
+    fun findByGroupIdAndDeviceProfileId(
         groupId: Long,
-        memberId: Long,
+        deviceProfileId: Long,
     ): GroupEntity?
 
-    fun findByMemberId(memberId: Long): List<GroupEntity>
+    fun findByDeviceProfileId(deviceProfileId: Long): List<GroupEntity>
 }

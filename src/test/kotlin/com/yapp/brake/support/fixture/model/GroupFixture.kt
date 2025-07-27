@@ -11,7 +11,7 @@ fun groupFixture(
     updatedAt: LocalDateTime? = null,
 ) = Group(
     groupId = groupId,
-    memberId = memberId,
+    deviceProfileId = memberId,
     name = name,
     createdAt = createdAt,
     updatedAt = updatedAt,

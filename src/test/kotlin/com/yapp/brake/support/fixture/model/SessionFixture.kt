@@ -15,7 +15,7 @@ fun sessionFixture(
     snoozeCount: Int = 0,
 ) = Session(
     id = sessionId,
-    memberId = memberId,
+    deviceProfileId = memberId,
     groupId = groupId,
     start = start,
     end = end,
