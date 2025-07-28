@@ -20,7 +20,6 @@ class MemberEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val memberId: Long = 0L,
-    val deviceId: String,
     val credential: String,
     val authEmail: String,
     @Enumerated(EnumType.STRING)
@@ -45,7 +44,6 @@ class MemberEntity(
     fun toDomain() =
         Member(
             id = memberId,
-            deviceId = deviceId,
             oAuthUserInfo = OAuthUserInfo(socialProvider, credential, authEmail),
             nickname = nickname,
             role = role,
@@ -58,7 +56,6 @@ class MemberEntity(
         fun create(member: Member) =
             MemberEntity(
                 memberId = member.id,
-                deviceId = member.deviceId,
                 credential = member.oAuthUserInfo.credential,
                 authEmail = member.oAuthUserInfo.email,
                 nickname = member.nickname,

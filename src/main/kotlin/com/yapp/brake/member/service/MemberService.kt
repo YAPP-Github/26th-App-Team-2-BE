@@ -2,7 +2,6 @@ package com.yapp.brake.member.service
 
 import com.yapp.brake.common.event.EventType
 import com.yapp.brake.common.event.payload.MemberDeletedEventPayload
-import com.yapp.brake.common.security.getMemberId
 import com.yapp.brake.member.dto.response.MemberResponse
 import com.yapp.brake.member.infrastructure.MemberReader
 import com.yapp.brake.member.infrastructure.MemberWriter
@@ -21,9 +20,12 @@ class MemberService(
     override fun getMember(memberId: Long): MemberResponse = MemberResponse.from(memberReader.getById(memberId))
 
     @Transactional
-    override fun update(nickname: String): MemberResponse {
+    override fun update(
+        memberId: Long,
+        nickname: String,
+    ): MemberResponse {
         val member =
-            memberReader.getById(getMemberId())
+            memberReader.getById(memberId)
                 .update(nickname, MemberState.ACTIVE)
 
         return MemberResponse.from(memberWriter.save(member))
@@ -40,7 +42,6 @@ class MemberService(
                 socialProvider = member.oAuthUserInfo.socialProvider.name,
                 authId = member.oAuthUserInfo.credential,
                 authEmail = member.oAuthUserInfo.email,
-                deviceId = member.deviceId,
             )
 
         outboxEventPublisher.publish(EventType.MEMBER_DELETED, payload)

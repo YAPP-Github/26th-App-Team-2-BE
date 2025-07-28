@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 data class Session(
     val id: Long = 0L,
     val groupId: Long,
-    val memberId: Long,
+    val deviceProfileId: Long,
     val start: LocalDateTime,
     val end: LocalDateTime,
     val goalMinutes: Long,
@@ -21,7 +21,7 @@ data class Session(
             snoozeUnit: Int,
             snoozeCount: Int,
         ) = Session(
-            memberId = memberId,
+            deviceProfileId = memberId,
             groupId = groupId,
             start = start,
             end = end,

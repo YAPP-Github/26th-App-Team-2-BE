@@ -8,7 +8,6 @@ data class Member(
     val id: Long = 0L,
     var nickname: String? = null,
     val oAuthUserInfo: OAuthUserInfo,
-    val deviceId: String,
     val role: Role,
     var state: MemberState,
     val createdAt: LocalDateTime? = null,
@@ -24,11 +23,9 @@ data class Member(
 
     companion object {
         fun create(
-            deviceId: String,
             oAuthUserInfo: OAuthUserInfo,
             role: Role,
         ) = Member(
-            deviceId = deviceId,
             oAuthUserInfo = oAuthUserInfo,
             role = role,
             state = MemberState.HOLD,

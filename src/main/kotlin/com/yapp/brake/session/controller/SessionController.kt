@@ -1,7 +1,7 @@
 package com.yapp.brake.session.controller
 
 import com.yapp.brake.common.dto.ApiResponse
-import com.yapp.brake.common.security.getMemberId
+import com.yapp.brake.common.security.getDeviceProfileId
 import com.yapp.brake.session.dto.request.AddSessionRequest
 import com.yapp.brake.session.dto.response.AddSessionResponse
 import com.yapp.brake.session.service.SessionUseCase
@@ -22,7 +22,7 @@ class SessionController(
         @Valid @RequestBody
         request: AddSessionRequest,
     ): ApiResponse<AddSessionResponse> {
-        val response = sessionUseCase.add(getMemberId(), request)
+        val response = sessionUseCase.add(getDeviceProfileId(), request)
 
         return ApiResponse.success(
             status = HttpStatus.CREATED.value(),

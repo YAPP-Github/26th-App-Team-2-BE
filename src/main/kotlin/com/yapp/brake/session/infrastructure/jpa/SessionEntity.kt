@@ -16,7 +16,7 @@ class SessionEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val sessionId: Long = 0L,
     val groupId: Long,
-    val memberId: Long,
+    val deviceProfileId: Long,
     val start: LocalDateTime,
     val end: LocalDateTime,
     val goalMinutes: Long,
@@ -27,7 +27,7 @@ class SessionEntity(
         Session(
             id = sessionId,
             groupId = groupId,
-            memberId = memberId,
+            deviceProfileId = deviceProfileId,
             start = start,
             end = end,
             goalMinutes = goalMinutes,
@@ -43,7 +43,7 @@ class SessionEntity(
             SessionEntity(
                 sessionId = session.id,
                 groupId = session.groupId,
-                memberId = session.memberId,
+                deviceProfileId = session.deviceProfileId,
                 start = session.start,
                 end = session.end,
                 goalMinutes = session.goalMinutes,

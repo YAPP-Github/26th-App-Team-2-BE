@@ -55,7 +55,7 @@ class GroupServiceTest {
             groupApps.first { it.name == arg.name }
         }
 
-        val result = groupService.create(group.memberId, request)
+        val result = groupService.create(group.deviceProfileId, request)
 
         assertThat(result.groupId).isEqualTo(group.groupId)
         assertThat(result.name).isEqualTo(group.name)
@@ -66,11 +66,11 @@ class GroupServiceTest {
     }
 
     @Test
-    fun `유저의 관리 그룹을 모두 조회한다`() {
-        val memberId = 1L
+    fun `디바이스 프로필의 관리 그룹을 모두 조회한다`() {
+        val deviceProfileId = 1L
         val groups =
             List(3) { i ->
-                groupFixture(groupId = (i + 1).toLong(), memberId = memberId, name = "SNS$i")
+                groupFixture(groupId = (i + 1).toLong(), deviceProfileId = deviceProfileId, name = "SNS$i")
             }
 
         val groupApps =
@@ -82,10 +82,10 @@ class GroupServiceTest {
                 )
             }
 
-        whenever(groupReader.getAllByMemberId(memberId)).thenReturn(groups)
+        whenever(groupReader.getAllByDeviceProfileId(deviceProfileId)).thenReturn(groups)
         whenever(groupAppReader.getByGroupIds(any())).thenReturn(groupApps)
 
-        val result = groupService.getAll(memberId)
+        val result = groupService.getAll(deviceProfileId)
 
         assertThat(
             result.groups.map(GroupResponse::groupId),
@@ -93,7 +93,7 @@ class GroupServiceTest {
         assertThat(result.groups.flatMap { it.groupApps }.map { it.name })
             .containsExactlyInAnyOrderElementsOf(groupApps.map { it.name })
 
-        verify(groupReader).getAllByMemberId(memberId)
+        verify(groupReader).getAllByDeviceProfileId(deviceProfileId)
         verify(groupAppReader).getByGroupIds(any())
     }
 
@@ -113,16 +113,16 @@ class GroupServiceTest {
                     )
                 }
 
-            whenever(groupReader.getByIdAndMemberId(group.groupId, group.memberId)).thenReturn(group)
+            whenever(groupReader.getByIdAndDeviceProfileId(group.groupId, group.deviceProfileId)).thenReturn(group)
             whenever(groupWriter.save(any())).thenReturn(updatedGroup)
             whenever(groupAppReader.getByGroupId(group.groupId)).thenReturn(groupApps)
 
-            val result = groupService.modify(group.memberId, group.groupId, request)
+            val result = groupService.modify(group.deviceProfileId, group.groupId, request)
 
             assertThat(result.groupId).isEqualTo(group.groupId)
             assertThat(result.name).isEqualTo(group.name)
 
-            verify(groupReader).getByIdAndMemberId(group.groupId, group.memberId)
+            verify(groupReader).getByIdAndDeviceProfileId(group.groupId, group.deviceProfileId)
             verify(groupWriter).save(any())
             verify(outboxEventPublisher, never()).publish(any(), any())
         }
@@ -157,7 +157,7 @@ class GroupServiceTest {
                     )
                 }
 
-            whenever(groupReader.getByIdAndMemberId(group.groupId, group.memberId)).thenReturn(group)
+            whenever(groupReader.getByIdAndDeviceProfileId(group.groupId, group.deviceProfileId)).thenReturn(group)
             whenever(groupWriter.save(any())).thenReturn(updatedGroup)
             whenever(groupAppReader.getByGroupId(group.groupId)).thenReturn(originGroupApps)
             whenever(groupAppWriter.save(any())).thenAnswer { invocation ->
@@ -165,14 +165,14 @@ class GroupServiceTest {
                 updatedGroupApps.first { it.name == arg.name }
             }
 
-            val result = groupService.modify(group.memberId, group.groupId, request)
+            val result = groupService.modify(group.deviceProfileId, group.groupId, request)
 
             assertThat(result.groupId).isEqualTo(group.groupId)
             assertThat(result.name).isEqualTo(group.name)
             assertThat(result.groupApps).hasSize(request.groupApps.size)
 
             verify(groupAppWriter, times(2)).save(any())
-            verify(groupReader).getByIdAndMemberId(group.groupId, group.memberId)
+            verify(groupReader).getByIdAndDeviceProfileId(group.groupId, group.deviceProfileId)
             verify(groupWriter).save(any())
             verify(outboxEventPublisher).publish(any(), any())
         }
@@ -182,7 +182,7 @@ class GroupServiceTest {
             val invalidMemberId = 12345L
             val invalidGroupId = 12345L
 
-            whenever(groupReader.getByIdAndMemberId(invalidGroupId, invalidMemberId))
+            whenever(groupReader.getByIdAndDeviceProfileId(invalidGroupId, invalidMemberId))
                 .thenThrow(CustomException(ErrorCode.GROUP_NOT_FOUND))
 
             val result =
@@ -192,7 +192,7 @@ class GroupServiceTest {
 
             assertThat(result.errorCode).isEqualTo(ErrorCode.GROUP_NOT_FOUND)
 
-            verify(groupReader).getByIdAndMemberId(invalidGroupId, invalidMemberId)
+            verify(groupReader).getByIdAndDeviceProfileId(invalidGroupId, invalidMemberId)
             verify(groupWriter, never()).save(any())
             verify(groupAppReader, never()).getByGroupId(any())
             verify(outboxEventPublisher, never()).publish(any(), any())
@@ -205,12 +205,12 @@ class GroupServiceTest {
         fun `관리 그룹을 삭제한다`() {
             val group = groupFixture(groupId = 1L)
 
-            whenever(groupReader.getByIdAndMemberId(group.groupId, group.memberId)).thenReturn(group)
+            whenever(groupReader.getByIdAndDeviceProfileId(group.groupId, group.deviceProfileId)).thenReturn(group)
             doNothing().whenever(outboxEventPublisher).publish(any(), any())
 
-            groupService.remove(group.memberId, group.groupId)
+            groupService.remove(group.deviceProfileId, group.groupId)
 
-            verify(groupReader).getByIdAndMemberId(group.groupId, group.memberId)
+            verify(groupReader).getByIdAndDeviceProfileId(group.groupId, group.deviceProfileId)
             verify(groupWriter).delete(group)
             verify(outboxEventPublisher).publish(any(), any())
         }
@@ -220,7 +220,7 @@ class GroupServiceTest {
             val invalidMemberId = 12345L
             val invalidGroupId = 12345L
 
-            whenever(groupReader.getByIdAndMemberId(invalidMemberId, invalidGroupId))
+            whenever(groupReader.getByIdAndDeviceProfileId(invalidMemberId, invalidGroupId))
                 .thenThrow(CustomException(ErrorCode.GROUP_NOT_FOUND))
 
             val result =
@@ -230,7 +230,7 @@ class GroupServiceTest {
 
             assertThat(result.errorCode).isEqualTo(ErrorCode.GROUP_NOT_FOUND)
 
-            verify(groupReader).getByIdAndMemberId(invalidGroupId, invalidMemberId)
+            verify(groupReader).getByIdAndDeviceProfileId(invalidGroupId, invalidMemberId)
             verify(groupWriter, never()).delete(any())
             verify(outboxEventPublisher, never()).publish(any(), any())
         }

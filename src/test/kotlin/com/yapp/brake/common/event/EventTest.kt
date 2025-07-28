@@ -4,7 +4,6 @@ import com.yapp.brake.common.enums.SocialProvider
 import com.yapp.brake.common.event.payload.MemberDeletedEventPayload
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import java.util.UUID
 
 class EventTest {
     @Test
@@ -15,7 +14,6 @@ class EventTest {
                 socialProvider = SocialProvider.KAKAO.name,
                 authId = "123124",
                 authEmail = "auth@kakao.com",
-                deviceId = UUID.randomUUID().toString(),
             )
 
         val event = Event.of(EventType.MEMBER_DELETED, payload)

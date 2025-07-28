@@ -3,8 +3,8 @@ package com.yapp.brake.statistic.model
 import java.time.Duration
 import java.time.LocalDateTime
 
-data class MemberUsage(
-    val memberId: Long,
+data class DeviceUsage(
+    val deviceProfileId: Long,
     val start: LocalDateTime,
     val end: LocalDateTime,
     val goalMinutes: Long,
@@ -13,7 +13,7 @@ data class MemberUsage(
         return Duration.between(start, end).toMinutes()
     }
 
-    fun splitByDate(): List<MemberUsage> {
+    fun splitByDate(): List<DeviceUsage> {
         val startDate = start.toLocalDate()
         val endDate = end.toLocalDate()
 

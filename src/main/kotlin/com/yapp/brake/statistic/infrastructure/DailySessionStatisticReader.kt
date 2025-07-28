@@ -6,12 +6,12 @@ import java.time.LocalDate
 
 interface DailySessionStatisticReader {
     fun getById(
-        memberId: Long,
+        deviceProfileId: Long,
         date: LocalDate,
     ): DailySessionStatistic
 
     fun getAllByIds(
-        memberId: Long,
+        deviceProfileId: Long,
         dates: List<LocalDate>,
     ): SessionStatistics
 }

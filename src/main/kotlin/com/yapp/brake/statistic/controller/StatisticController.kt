@@ -1,7 +1,7 @@
 package com.yapp.brake.statistic.controller
 
 import com.yapp.brake.common.dto.ApiResponse
-import com.yapp.brake.common.security.getMemberId
+import com.yapp.brake.common.security.getDeviceProfileId
 import com.yapp.brake.statistic.dto.request.QueryStatisticRequest
 import com.yapp.brake.statistic.dto.response.SessionStatisticsResponse
 import com.yapp.brake.statistic.service.StatisticUseCase
@@ -21,7 +21,8 @@ class StatisticController(
         @Valid @ModelAttribute
         request: QueryStatisticRequest,
     ): ApiResponse<SessionStatisticsResponse> {
-        val response = statisticUseCase.get(getMemberId(), request.getStartOrDefault(), request.getEndOrDefault())
+        val response =
+            statisticUseCase.get(getDeviceProfileId(), request.getStartOrDefault(), request.getEndOrDefault())
         return ApiResponse.success(response)
     }
 }

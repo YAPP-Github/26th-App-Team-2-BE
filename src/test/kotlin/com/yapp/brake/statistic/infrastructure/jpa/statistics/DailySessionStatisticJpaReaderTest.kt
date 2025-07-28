@@ -40,7 +40,7 @@ class DailySessionStatisticJpaReaderTest {
         val entity =
             DailySessionStatisticEntity(
                 date = date,
-                memberId = memberId,
+                deviceProfileId = memberId,
                 actualMinutes = 25L,
                 goalMinutes = 30L,
             )

@@ -7,6 +7,7 @@ import com.yapp.brake.auth.dto.response.OAuthLoginResponse
 import com.yapp.brake.auth.dto.response.RefreshTokenResponse
 import com.yapp.brake.auth.service.AuthUseCase
 import com.yapp.brake.common.dto.ApiResponse
+import com.yapp.brake.common.security.getDeviceProfileId
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.PostMapping
@@ -42,6 +43,6 @@ class AuthController(
         @RequestBody @Valid
         request: LogoutRequest,
     ) {
-        authUseCase.logout(request.accessToken)
+        authUseCase.logout(getDeviceProfileId(), request.accessToken)
     }
 }

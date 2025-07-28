@@ -7,5 +7,4 @@ data class MemberDeletedEventPayload(
     val socialProvider: String,
     val authId: String,
     val authEmail: String,
-    val deviceId: String,
 ) : EventPayload

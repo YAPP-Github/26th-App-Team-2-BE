@@ -23,4 +23,8 @@ enum class ErrorCode(
 
     // Group
     GROUP_NOT_FOUND(404, "G-001", "관리 앱 그룹을 찾을 수 없습니다."),
+
+    // Device Profile
+    DEVICE_PROFILE_NOT_FOUND(404, "D-001", "디바이스 프로필을 찾을 수 없습니다."),
+    DEVICE_PROFILE_INVALID(400, "D-002", "디바이스 프로필 정보가 유효하지 않습니다."),
 }

@@ -59,6 +59,7 @@ class MemberControllerTest : RestApiTestBase() {
 
     @Test
     fun `내정보 수정 API`() {
+        val memberId = 1L
         val request =
             UpdateNicknameRequest(
                 nickname = "열글자이내닉네임",
@@ -71,7 +72,10 @@ class MemberControllerTest : RestApiTestBase() {
                 ),
             )
 
-        whenever(memberUseCase.update(request.nickname)).thenReturn(response.data)
+        val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), null)
+        SecurityContextHolder.getContext().authentication = authentication
+
+        whenever(memberUseCase.update(memberId, request.nickname)).thenReturn(response.data)
 
         val builder =
             RestDocumentationRequestBuilders.patch("/v1/members/me")

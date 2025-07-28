@@ -21,7 +21,7 @@ class StatisticsUpdatedEventHandlerTest {
     val session = sessionFixture()
     val payload =
         SessionAddedEventPayload(
-            memberId = session.memberId,
+            deviceProfileId = session.deviceProfileId,
             start = session.start,
             end = session.end,
             goalMinutes = session.goalMinutes,

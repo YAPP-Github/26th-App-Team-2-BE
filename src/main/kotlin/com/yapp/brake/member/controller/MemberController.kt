@@ -27,7 +27,7 @@ class MemberController(
     fun update(
         @Valid @RequestBody
         request: UpdateNicknameRequest,
-    ): ApiResponse<MemberResponse> = ApiResponse.success(memberUseCase.update(request.nickname))
+    ): ApiResponse<MemberResponse> = ApiResponse.success(memberUseCase.update(getMemberId(), request.nickname))
 
     @DeleteMapping("/me")
     @ResponseStatus(HttpStatus.NO_CONTENT)

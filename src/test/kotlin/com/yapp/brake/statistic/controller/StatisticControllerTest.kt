@@ -28,6 +28,7 @@ import java.time.LocalTime
 
 class StatisticControllerTest : RestApiTestBase() {
     val memberId = 1L
+    val deviceProfileId = 1L
     val start = LocalDate.of(2025, 7, 17)
     val end = LocalDate.of(2025, 7, 18)
     val response =
@@ -58,7 +59,7 @@ class StatisticControllerTest : RestApiTestBase() {
 
     @Test
     fun `앱 사용 통계 조회 API`() {
-        val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), null)
+        val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), deviceProfileId)
         SecurityContextHolder.getContext().authentication = authentication
 
         whenever(statisticUseCase.get(memberId, start, end)).thenReturn(response.data)
@@ -72,6 +73,7 @@ class StatisticControllerTest : RestApiTestBase() {
             .andExpect(status().isOk)
             .andDocument("statistic-get") {
                 tag(Tag.STATISTIC)
+                responseSchema(response.data!!::class.java.simpleName)
                 queryParameters(
                     "start" means "통계 조회 시작일" optional true,
                     "end" means "통계 조회 종료일" optional true,
@@ -90,7 +92,7 @@ class StatisticControllerTest : RestApiTestBase() {
 
     @Test
     fun `앱 사용 통계 조회 API - 파라미터 X`() {
-        val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), null)
+        val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), deviceProfileId)
         SecurityContextHolder.getContext().authentication = authentication
 
         whenever(
@@ -111,7 +113,7 @@ class StatisticControllerTest : RestApiTestBase() {
     @ParameterizedTest
     @ValueSource(strings = ["start", "end"])
     fun `앱 사용 통계 조회 API - 파라미터 일부`(date: String) {
-        val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), null)
+        val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), deviceProfileId)
         SecurityContextHolder.getContext().authentication = authentication
 
         whenever(

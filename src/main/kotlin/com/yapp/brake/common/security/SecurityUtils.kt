@@ -9,3 +9,10 @@ fun getMemberId(): Long =
         ?.name
         ?.toLongOrNull()
         ?: throw CustomException(ErrorCode.MEMBER_INVALID)
+
+fun getDeviceProfileId(): Long =
+    SecurityContextHolder.getContext().authentication
+        ?.credentials
+        ?.toString()
+        ?.toLongOrNull()
+        ?: throw CustomException(ErrorCode.DEVICE_PROFILE_INVALID)

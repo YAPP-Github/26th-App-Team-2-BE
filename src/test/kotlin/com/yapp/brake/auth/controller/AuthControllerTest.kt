@@ -21,6 +21,8 @@ import org.mockito.kotlin.doNothing
 import org.mockito.kotlin.whenever
 import org.springframework.http.MediaType
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.util.UUID
 
@@ -60,7 +62,7 @@ class AuthControllerTest : RestApiTestBase() {
                 requestBody(
                     "provider" type STRING means "소셜 로그인 타입",
                     "authorizationCode" type STRING means "인가 코드",
-                    "deviceId" type STRING means "모바일 디바이스 식별자",
+                    "deviceName" type STRING means "모바일 디바이스 식별자",
                 )
                 responseBody(
                     "data" type OBJECT means "응답 바디",
@@ -105,9 +107,14 @@ class AuthControllerTest : RestApiTestBase() {
 
     @Test
     fun `로그아웃 API`() {
+        val memberId = 1L
+        val deviceProfileId = 1L
         val request = LogoutRequest("accessToken")
 
-        doNothing().whenever(authUseCase).logout(request.accessToken)
+        val authentication = UsernamePasswordAuthenticationToken(memberId, deviceProfileId)
+        SecurityContextHolder.getContext().authentication = authentication
+
+        doNothing().whenever(authUseCase).logout(deviceProfileId, request.accessToken)
 
         val builder =
             RestDocumentationRequestBuilders.post("/v1/auth/logout")

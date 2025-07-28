@@ -5,7 +5,7 @@ import java.time.LocalDate
 
 interface StatisticUseCase {
     fun get(
-        memberId: Long,
+        deviceProfileId: Long,
         startDate: LocalDate,
         endDate: LocalDate,
     ): SessionStatisticsResponse

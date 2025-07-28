@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 fun sessionFixture(
     sessionId: Long = 0L,
     groupId: Long = 1L,
-    memberId: Long = 1L,
+    deviceProfileId: Long = 1L,
     start: LocalDateTime = LocalDateTime.of(2025, 7, 18, 0, 0, 0),
     end: LocalDateTime = start.plusMinutes(30),
     goalMinutes: Long = 30L,
@@ -15,7 +15,7 @@ fun sessionFixture(
     snoozeCount: Int = 0,
 ) = Session(
     id = sessionId,
-    memberId = memberId,
+    deviceProfileId = deviceProfileId,
     groupId = groupId,
     start = start,
     end = end,
