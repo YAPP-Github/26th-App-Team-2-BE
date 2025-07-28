@@ -5,21 +5,23 @@ import org.springframework.http.HttpStatus
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class ApiResponse<T>(
-    val code: Int,
+    val status: Int,
     val data: T? = null,
     val message: String? = null,
+    val code: String? = null,
 ) {
     companion object {
         fun <T> success(
-            code: Int,
+            status: Int,
             data: T,
-        ): ApiResponse<T> = ApiResponse(code = code, data = data)
+        ): ApiResponse<T> = ApiResponse(status = status, data = data)
 
-        fun <T> success(data: T): ApiResponse<T> = ApiResponse(code = HttpStatus.OK.value(), data = data)
+        fun <T> success(data: T): ApiResponse<T> = ApiResponse(status = HttpStatus.OK.value(), data = data)
 
         fun error(
-            code: Int,
+            status: Int,
             message: String,
-        ): ApiResponse<Unit> = ApiResponse(code = code, message = message)
+            code: String,
+        ): ApiResponse<Unit> = ApiResponse(status = status, message = message, code = code)
     }
 }

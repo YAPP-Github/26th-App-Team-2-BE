@@ -39,7 +39,7 @@ class SessionControllerTest : RestApiTestBase() {
 
         val response =
             ApiResponse.success(
-                code = HttpStatus.CREATED.value(),
+                status = HttpStatus.CREATED.value(),
                 data = AddSessionResponse(sessionId = 1L),
             )
 
@@ -75,7 +75,7 @@ class SessionControllerTest : RestApiTestBase() {
                 responseBody(
                     "data" type OBJECT means "응답 바디",
                     "data.sessionId" type NUMBER means "세션 식별자",
-                    "code" type NUMBER means "HTTP 코드",
+                    "status" type NUMBER means "HTTP 코드",
                 )
             }
 

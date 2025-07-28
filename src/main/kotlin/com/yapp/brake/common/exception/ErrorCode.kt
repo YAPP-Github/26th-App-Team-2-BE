@@ -5,7 +5,8 @@ enum class ErrorCode(
     val code: String,
     val message: String,
 ) {
-    BAD_REQUEST(400, "C-400", "잘못된 요청입니다."),
+    // COMMON
+    BAD_REQUEST(400, "C-400", "잘못된 요청입니다. 필수 값이 누락되었거나 형식이 맞지 않습니다."),
     UNAUTHORIZED(401, "C-401", "인증되지 않은 사용자입니다."),
     FORBIDDEN(403, "C-403", "권한이 없습니다."),
     INTERNAL_SERVER_ERROR(500, "C-500", "예기치 못한 서버 오류가 발생했습니다."),
@@ -13,7 +14,7 @@ enum class ErrorCode(
     // JWT
     TOKEN_EXPIRED(401, "T-001", "토큰이 만료되었습니다."),
     TOKEN_INVALID(401, "T-002", "토큰이 유효하지 않습니다."),
-    TOKEN_NOT_FOUND(401, "T-003", "토큰을 찾을 수 없습니다."),
+    TOKEN_NOT_FOUND(401, "T-003", "헤더에서 토큰을 찾을 수 없습니다."),
     TOKEN_TYPE_MISMATCH(401, "T-004", "토큰의 타입이 올바르지 않습니다."),
 
     // Member

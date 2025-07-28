@@ -1,34 +1,30 @@
 package com.yapp.brake.common.security.exception
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.yapp.brake.common.dto.ApiResponse
-import com.yapp.brake.common.exception.ErrorCode.UNAUTHORIZED
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.springframework.http.MediaType
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.stereotype.Component
-import java.nio.charset.StandardCharsets
+import org.springframework.web.servlet.HandlerExceptionResolver
 
 @Component
 class UnauthenticatedEntryPoint(
     private val objectMapper: ObjectMapper,
+    @Qualifier("handlerExceptionResolver")
+    private val resolver: HandlerExceptionResolver,
 ) : AuthenticationEntryPoint {
     override fun commence(
         request: HttpServletRequest,
         response: HttpServletResponse,
         authException: AuthenticationException,
     ) {
-        val apiResponse = ApiResponse.error(UNAUTHORIZED.status, UNAUTHORIZED.message)
-        val responseBody = objectMapper.writeValueAsString(apiResponse)
+        val exception = request.getAttribute(ATTRIBUTE_EXCEPTION_KEY) as Exception
+        resolver.resolveException(request, response, null, exception)
+    }
 
-        response.apply {
-            contentType = MediaType.APPLICATION_JSON_VALUE
-            status = apiResponse.code
-            characterEncoding = StandardCharsets.UTF_8.name()
-            writer.write(responseBody)
-            writer.flush()
-        }
+    companion object {
+        const val ATTRIBUTE_EXCEPTION_KEY = "exception"
     }
 }
