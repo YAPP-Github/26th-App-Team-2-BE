@@ -31,7 +31,7 @@ class GroupController(
         request: CreateGroupRequest,
     ): ApiResponse<GroupResponse> {
         return ApiResponse.success(
-            code = HttpStatus.CREATED.value(),
+            status = HttpStatus.CREATED.value(),
             data = groupUseCase.create(getDeviceProfileId(), request),
         )
     }

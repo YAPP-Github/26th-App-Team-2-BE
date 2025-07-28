@@ -25,7 +25,7 @@ class SessionController(
         val response = sessionUseCase.add(getDeviceProfileId(), request)
 
         return ApiResponse.success(
-            code = HttpStatus.CREATED.value(),
+            status = HttpStatus.CREATED.value(),
             data = response,
         )
     }

@@ -20,12 +20,12 @@ class ForbiddenHandler(
         response: HttpServletResponse,
         accessDeniedException: AccessDeniedException,
     ) {
-        val apiResponse = ApiResponse.error(FORBIDDEN.status, FORBIDDEN.message)
+        val apiResponse = ApiResponse.error(FORBIDDEN.status, FORBIDDEN.message, FORBIDDEN.code)
         val responseBody = objectMapper.writeValueAsString(apiResponse)
 
         response.apply {
             contentType = MediaType.APPLICATION_JSON_VALUE
-            status = apiResponse.code
+            status = apiResponse.status
             characterEncoding = StandardCharsets.UTF_8.name()
             writer.write(responseBody)
             writer.flush()

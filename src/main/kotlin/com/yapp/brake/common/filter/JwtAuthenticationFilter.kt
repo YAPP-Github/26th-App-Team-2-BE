@@ -5,6 +5,7 @@ import com.yapp.brake.auth.service.JwtTokenProvider
 import com.yapp.brake.common.constants.TOKEN_TYPE_ACCESS
 import com.yapp.brake.common.exception.CustomException
 import com.yapp.brake.common.exception.ErrorCode
+import com.yapp.brake.common.security.exception.UnauthenticatedEntryPoint.Companion.ATTRIBUTE_EXCEPTION_KEY
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
@@ -29,7 +30,7 @@ class JwtAuthenticationFilter(
             val deviceProfileId = jwtTokenProvider.extractProfileId(accessToken)
 
             if (isBlackList(accessToken)) {
-                throw CustomException(ErrorCode.FORBIDDEN)
+                throw CustomException(ErrorCode.TOKEN_INVALID)
             }
 
             val authentication = jwtTokenProvider.getAuthentication(memberId, deviceProfileId)
@@ -37,7 +38,7 @@ class JwtAuthenticationFilter(
             SecurityContextHolder.getContext().authentication = authentication
         } catch (e: Exception) {
             log.warn(e) { "[JwtAuthenticationFilter.doFilterInternal] fail to parse token" }
-            throw e
+            request.setAttribute(ATTRIBUTE_EXCEPTION_KEY, e)
         }
 
         filterChain.doFilter(request, response)
