@@ -55,7 +55,7 @@ class AuthService(
         val memberId = jwtTokenProvider.extractMemberId(refreshToken, TOKEN_TYPE_REFRESH)
         val deviceProfileId = jwtTokenProvider.extractProfileId(refreshToken)
         val member = memberReader.getById(memberId)
-        val savedToken = refreshTokenRepository.get(memberId)
+        val savedToken = refreshTokenRepository.get(deviceProfileId)
 
         if (savedToken != refreshToken) {
             throw CustomException(ErrorCode.TOKEN_INVALID)
