@@ -5,13 +5,13 @@ import java.time.LocalDateTime
 
 fun groupFixture(
     groupId: Long = 0L,
-    memberId: Long = 1234L,
+    deviceProfileId: Long = 1234L,
     name: String = "SNS",
     createdAt: LocalDateTime? = null,
     updatedAt: LocalDateTime? = null,
 ) = Group(
     groupId = groupId,
-    deviceProfileId = memberId,
+    deviceProfileId = deviceProfileId,
     name = name,
     createdAt = createdAt,
     updatedAt = updatedAt,

@@ -12,16 +12,16 @@ import org.springframework.transaction.annotation.Transactional
 class GroupJpaReader(
     private val groupRepository: GroupRepository,
 ) : GroupReader {
-    override fun getByIdAndMemberId(
+    override fun getByIdAndDeviceProfileId(
         groupId: Long,
-        memberId: Long,
+        deviceProfileId: Long,
     ): Group {
-        return groupRepository.findByGroupIdAndDeviceProfileId(groupId, memberId)
+        return groupRepository.findByGroupIdAndDeviceProfileId(groupId, deviceProfileId)
             ?.toDomain()
             ?: throw CustomException(ErrorCode.GROUP_NOT_FOUND)
     }
 
-    override fun getAllByMemberId(memberId: Long): List<Group> =
-        groupRepository.findByDeviceProfileId(memberId)
+    override fun getAllByDeviceProfileId(deviceProfileId: Long): List<Group> =
+        groupRepository.findByDeviceProfileId(deviceProfileId)
             .map(GroupEntity::toDomain)
 }

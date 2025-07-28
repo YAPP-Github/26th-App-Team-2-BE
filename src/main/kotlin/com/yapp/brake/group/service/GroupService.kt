@@ -47,7 +47,7 @@ class GroupService(
 
     @Transactional(readOnly = true)
     override fun getAll(deviceProfileId: Long): GroupsResponse {
-        val groups = groupReader.getAllByMemberId(deviceProfileId)
+        val groups = groupReader.getAllByDeviceProfileId(deviceProfileId)
         val groupIds = groups.map(Group::groupId)
         val groupApps = groupAppReader.getByGroupIds(groupIds)
 
@@ -61,7 +61,7 @@ class GroupService(
         request: UpdateGroupRequest,
     ): GroupResponse {
         val group =
-            groupReader.getByIdAndMemberId(groupId, deviceProfileId)
+            groupReader.getByIdAndDeviceProfileId(groupId, deviceProfileId)
                 .update(request.name)
                 .let { groupWriter.save(it) }
 
@@ -87,7 +87,7 @@ class GroupService(
         deviceProfileId: Long,
         groupId: Long,
     ) {
-        val group = groupReader.getByIdAndMemberId(groupId, deviceProfileId)
+        val group = groupReader.getByIdAndDeviceProfileId(groupId, deviceProfileId)
 
         groupWriter.delete(group)
 
