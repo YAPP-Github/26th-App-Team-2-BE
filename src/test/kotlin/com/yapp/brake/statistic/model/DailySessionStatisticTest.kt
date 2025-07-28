@@ -1,7 +1,7 @@
 package com.yapp.brake.statistic.model
 
 import com.yapp.brake.support.fixture.model.dailySessionStatisticsFixture
-import com.yapp.brake.support.fixture.model.memberUsageFixture
+import com.yapp.brake.support.fixture.model.deviceUsageFixture
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import java.time.LocalDateTime
@@ -26,7 +26,7 @@ class DailySessionStatisticTest {
                 goalMinutes = 10L,
             )
         val memberUsage =
-            memberUsageFixture(
+            deviceUsageFixture(
                 start = start,
                 end = end,
                 goalMinutes = goalMinutes,
@@ -57,7 +57,7 @@ class DailySessionStatisticTest {
                 goalMinutes = 0L,
             )
         val memberUsage =
-            memberUsageFixture(
+            deviceUsageFixture(
                 start = start,
                 end = end,
                 goalMinutes = goalMinutes,
@@ -88,7 +88,7 @@ class DailySessionStatisticTest {
                 goalMinutes = 0L,
             )
         val memberUsage =
-            memberUsageFixture(
+            deviceUsageFixture(
                 start = start.plusDays(1),
                 goalMinutes = goalMinutes,
             )

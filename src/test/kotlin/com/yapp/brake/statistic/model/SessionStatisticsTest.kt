@@ -1,7 +1,7 @@
 package com.yapp.brake.statistic.model
 
 import com.yapp.brake.support.fixture.model.dailySessionStatisticsFixture
-import com.yapp.brake.support.fixture.model.memberUsageFixture
+import com.yapp.brake.support.fixture.model.deviceUsageFixture
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import java.time.LocalDateTime
@@ -12,7 +12,7 @@ class SessionStatisticsTest {
     fun `날짜에 맞춰 통계를 업데이트한다`() {
         val start = LocalDateTime.of(2025, 7, 18, 23, 50)
         val memberUsage =
-            memberUsageFixture(
+            deviceUsageFixture(
                 start = start,
                 end = start.plusMinutes(40),
                 goalMinutes = 30L,
