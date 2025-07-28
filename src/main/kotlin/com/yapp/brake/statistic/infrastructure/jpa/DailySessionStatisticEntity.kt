@@ -30,14 +30,7 @@ class DailySessionStatisticEntity(
         }
 
         fun create(sessionStatistics: SessionStatistics): List<DailySessionStatisticEntity> {
-            return sessionStatistics.statistics.map {
-                DailySessionStatisticEntity(
-                    deviceProfileId = it.deviceProfileId,
-                    date = it.date,
-                    actualMinutes = it.actualMinutes,
-                    goalMinutes = it.goalMinutes,
-                )
-            }
+            return sessionStatistics.statistics.map(this::create)
         }
     }
 
