@@ -27,3 +27,6 @@ ALTER TABLE `group`
 
 ALTER TABLE daily_session_statistic
     CHANGE COLUMN member_id device_profile_id bigint NOT NULL;
+
+CREATE INDEX idx_session_device_profile_id ON session (device_profile_id);
+CREATE INDEX idx_group_device_profile_id ON `group` (device_profile_id);
