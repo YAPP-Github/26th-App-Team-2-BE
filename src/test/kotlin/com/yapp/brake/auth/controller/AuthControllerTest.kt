@@ -62,7 +62,7 @@ class AuthControllerTest : RestApiTestBase() {
                 requestBody(
                     "provider" type STRING means "소셜 로그인 타입",
                     "authorizationCode" type STRING means "인가 코드",
-                    "deviceId" type STRING means "모바일 디바이스 식별자",
+                    "deviceName" type STRING means "모바일 디바이스 식별자",
                 )
                 responseBody(
                     "data" type OBJECT means "응답 바디",

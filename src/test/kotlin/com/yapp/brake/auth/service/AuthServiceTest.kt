@@ -71,7 +71,7 @@ class AuthServiceTest {
             OAuthLoginRequest(
                 provider = provider,
                 authorizationCode = code,
-                deviceId = deviceProfile.deviceName,
+                deviceName = deviceProfile.deviceName,
             )
 
         whenever(memberReader.findByOauthInfo(userInfo.email, userInfo.socialProvider)).thenReturn(member)

@@ -10,5 +10,5 @@ data class OAuthLoginRequest(
     @field:NotBlank(message = "인가 코드는 필수 입니다.")
     val authorizationCode: String,
     @field:NotBlank(message = "디바이스 식별자는 필수 입니다.")
-    val deviceId: String,
+    val deviceName: String,
 )

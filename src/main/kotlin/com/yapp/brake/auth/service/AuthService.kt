@@ -40,7 +40,7 @@ class AuthService(
         val userInfo = authProvider.getOAuthUserInfo(request.authorizationCode)
 
         val member = findOrCreateMember(userInfo)
-        val deviceProfile = findOrCreateDeviceProfile(member, request.deviceId)
+        val deviceProfile = findOrCreateDeviceProfile(member, request.deviceName)
 
         val accessToken = jwtTokenProvider.generateAccessToken(member.id, deviceProfile.id)
         val refreshToken = jwtTokenProvider.generateRefreshToken(member.id, deviceProfile.id)
