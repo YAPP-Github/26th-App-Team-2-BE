@@ -38,7 +38,7 @@ class GroupControllerTest : RestApiTestBase() {
                 data = groupResponseFixture(request),
             )
 
-        whenever(groupUseCase.create(memberId, request))
+        whenever(groupUseCase.create(deviceProfileId, request))
             .thenReturn(response.data)
 
         val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), deviceProfileId)
@@ -84,7 +84,7 @@ class GroupControllerTest : RestApiTestBase() {
                 data = groupsResponseFixture(),
             )
 
-        whenever(groupUseCase.getAll(memberId))
+        whenever(groupUseCase.getAll(deviceProfileId))
             .thenReturn(response.data)
 
         val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), deviceProfileId)
@@ -134,7 +134,7 @@ class GroupControllerTest : RestApiTestBase() {
                 data = groupResponseFixture(request),
             )
 
-        whenever(groupUseCase.modify(memberId, groupId, request))
+        whenever(groupUseCase.modify(deviceProfileId, groupId, request))
             .thenReturn(response.data)
 
         val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), deviceProfileId)
@@ -178,7 +178,7 @@ class GroupControllerTest : RestApiTestBase() {
         val groupId = 1L
         val deviceProfileId = 1L
 
-        doNothing().whenever(groupUseCase).remove(memberId, groupId)
+        doNothing().whenever(groupUseCase).remove(deviceProfileId, groupId)
 
         val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), deviceProfileId)
         SecurityContextHolder.getContext().authentication = authentication

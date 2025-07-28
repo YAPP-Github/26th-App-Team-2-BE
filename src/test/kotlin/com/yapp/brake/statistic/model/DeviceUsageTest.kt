@@ -14,14 +14,14 @@ class DeviceUsageTest {
         val usageMinutes = 30L
         val start = LocalDateTime.of(2025, 7, 18, 12, 0, 0)
         val end = start.plusMinutes(usageMinutes)
-        val memberUsage =
+        val deviceUsage =
             deviceUsageFixture(
                 start = start,
                 end = end,
             )
 
         // when
-        val actual = memberUsage.toActualMinutes()
+        val actual = deviceUsage.toActualMinutes()
 
         // then
         assertEquals(usageMinutes, actual)
@@ -32,7 +32,7 @@ class DeviceUsageTest {
         // given
         val start = LocalDateTime.of(2025, 7, 18, 23, 50, 0)
         val end = LocalDateTime.of(2025, 7, 19, 0, 20, 0)
-        val memberUsage =
+        val deviceUsage =
             deviceUsageFixture(
                 start = start,
                 end = end,
@@ -40,17 +40,17 @@ class DeviceUsageTest {
             )
 
         // when
-        val actual = memberUsage.splitByDate()
+        val actual = deviceUsage.splitByDate()
 
         // then
-        val memberUsage1 =
-            memberUsage.copy(
+        val deviceUsage1 =
+            deviceUsage.copy(
                 start = start,
                 end = LocalDate.of(2025, 7, 19).atStartOfDay(),
                 goalMinutes = 10L,
             )
-        val memberUsage2 =
-            memberUsage.copy(
+        val deviceUsage2 =
+            deviceUsage.copy(
                 start = LocalDate.of(2025, 7, 19).atStartOfDay(),
                 end = end,
                 goalMinutes = 10L,
@@ -58,8 +58,8 @@ class DeviceUsageTest {
 
         assertAll(
             { assertEquals(2, actual.size) },
-            { assertEquals(memberUsage1, actual.get(0)) },
-            { assertEquals(memberUsage2, actual.get(1)) },
+            { assertEquals(deviceUsage1, actual.get(0)) },
+            { assertEquals(deviceUsage2, actual.get(1)) },
         )
     }
 }
