@@ -92,7 +92,7 @@ jobs:
           script: |
             sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/brake:dev
-            cd /home/app/dev
+            cd /home/app/deploy/dev
             chmod 777 ../scripts/deploy.sh
-            ../scripts/dev-deploy.sh
+            ../scripts/deploy.sh
             docker image prune -f
