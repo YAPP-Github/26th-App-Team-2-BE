@@ -1,0 +1,37 @@
+services:
+  blue:
+    container_name: blue
+    image: gvf156/brake:dev
+    volumes:
+      - /home/app/YAPP-ENV:/YAPP-ENV:ro
+      - /home/app/logs:/app/logs
+    environment:
+      - SPRING_CONFIG_LOCATION=file:/YAPP-ENV/
+      - SPRING_PROFILES_ACTIVE=dev
+      - TZ=Asia/Seoul
+    restart: always
+    ports:
+      - "8081:8080"
+    networks:
+      - yapp_server
+  green:
+    container_name: green
+    image: gvf156/brake:dev
+    volumes:
+      - /home/app/YAPP-ENV:/YAPP-ENV:ro
+      - /home/app/logs:/app/logs
+    environment:
+      - SPRING_CONFIG_LOCATION=file:/YAPP-ENV/
+      - SPRING_PROFILES_ACTIVE=dev
+      - TZ=Asia/Seoul
+    restart: always
+    ports:
+      - "8082:8080"
+    networks:
+      - yapp_server
+
+networks:
+  yapp_server:
+    external: true
+    name: yapp_server
+    driver: bridge

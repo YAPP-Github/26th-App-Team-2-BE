@@ -1,0 +1,19 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_size = 4
+indent_style = space
+trim_trailing_whitespace = true
+insert_final_newline = true
+max_line_length = 120
+tab_width = 4
+
+[*.{kt,kts}]
+# 알파벳 순으로 정렬하되,
+# java.*, javax.*, kotlin.* 패키지와 alias import는 마지막에 배치됩니다.
+ij_kotlin_imports_layout=*,java.**,javax.**,kotlin.**,^
+
+[*.yml]
+indent_size = 2
