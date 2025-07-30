@@ -1,9 +1,9 @@
-name: CI CD to dev
+name: CI CD to main
 
 on:
   push:
     branches:
-      - dev
+      - main
 
 jobs:
   ci:
@@ -40,10 +40,10 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/brake:dev .
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/brake:prod .
 
       - name: Push image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/brake:dev
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/brake:prod
 
   cd:
     needs: ci
@@ -59,8 +59,8 @@ jobs:
       - name: Send env configs to remote
         uses: appleboy/scp-action@master
         with:
-          username: ${{ secrets.DEV_USERNAME }}
-          host: ${{ secrets.DEV_HOST }}
+          username: ${{ secrets.PROD_USERNAME }}
+          host: ${{ secrets.PROD_HOST }}
           key: ${{ secrets.SSH_KEY }}
           source: "./YAPP-ENV/"
           target: "/home/app"
@@ -68,8 +68,8 @@ jobs:
       - name: Send script to remote
         uses: appleboy/scp-action@master
         with:
-          username: ${{ secrets.DEV_USERNAME }}
-          host: ${{ secrets.DEV_HOST }}
+          username: ${{ secrets.PROD_USERNAME }}
+          host: ${{ secrets.PROD_HOST }}
           key: ${{ secrets.SSH_KEY }}
           source: "./scripts/deploy.sh"
           target: "/home/app"
@@ -77,22 +77,22 @@ jobs:
       - name: Send docker-compose to remote
         uses: appleboy/scp-action@master
         with:
-          username: ${{ secrets.DEV_USERNAME }}
-          host: ${{ secrets.DEV_HOST }}
+          username: ${{ secrets.PROD_USERNAME }}
+          host: ${{ secrets.PROD_HOST }}
           key: ${{ secrets.SSH_KEY }}
-          source: "./deploy/dev/"
+          source: "./deploy/prod/"
           target: "/home/app"
 
       - name: Deploy
         uses: appleboy/ssh-action@master
         with:
-          username: ${{ secrets.DEV_USERNAME }}
-          host: ${{ secrets.DEV_HOST }}
+          username: ${{ secrets.PROD_USERNAME }}
+          host: ${{ secrets.PROD_HOST }}
           key: ${{ secrets.SSH_KEY }}
           script: |
             sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/brake:dev
-            cd /home/app/deploy/dev
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/brake:prod
+            cd /home/app/deploy/prod
             chmod 777 ../scripts/deploy.sh
             ../scripts/deploy.sh
             docker image prune -f

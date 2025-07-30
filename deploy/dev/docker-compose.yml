@@ -1,7 +1,7 @@
 services:
   blue:
     container_name: blue
-    image: gvf156/yapp-dev:latest
+    image: gvf156/brake:dev
     volumes:
       - /home/app/YAPP-ENV:/YAPP-ENV:ro
       - /home/app/logs:/app/logs
@@ -16,7 +16,7 @@ services:
       - yapp_server
   green:
     container_name: green
-    image: gvf156/yapp-dev:latest
+    image: gvf156/brake:dev
     volumes:
       - /home/app/YAPP-ENV:/YAPP-ENV:ro
       - /home/app/logs:/app/logs
