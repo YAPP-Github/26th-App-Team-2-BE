@@ -51,6 +51,12 @@ start_service() {
   echo "[Service] Pulling image for $NAME..."
   docker compose pull "$NAME"
 
+  # 이미 존재하는 컨테이너가 있으면 중지하고 제거
+  if docker ps -a --format '{{.Names}}' | grep -q "^${NAME}$"; then
+    echo "[Service] Existing container '$NAME' found. Removing..."
+    docker compose rm -sf "$NAME"
+  fi
+
   echo "[Service] Starting $NAME container..."
   docker compose up -d "$NAME"
 }
