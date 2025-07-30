@@ -92,8 +92,8 @@ jobs:
           script: |
             sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/brake:prod
-            mv /home/app/deploy/prod/* /home/app/deploy/
-            rm -r /home/app/deploy/prod
+            cp -r /home/app/deploy/prod/* /home/app/deploy/
+            rm -rf /home/app/deploy/prod
             cd /home/app/deploy
             chmod 777 ../scripts/deploy.sh
             ../scripts/deploy.sh
