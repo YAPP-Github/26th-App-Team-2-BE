@@ -54,7 +54,7 @@ start_service() {
   # 이미 존재하는 컨테이너가 있으면 중지하고 제거
   if docker ps -a --format '{{.Names}}' | grep -q "^${NAME}$"; then
     echo "[Service] Existing container '$NAME' found. Removing..."
-    docker compose rm -sf "$NAME"
+    docker rm -f "$NAME"
   fi
 
   echo "[Service] Starting $NAME container..."
