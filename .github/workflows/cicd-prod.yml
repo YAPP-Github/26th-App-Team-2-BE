@@ -80,7 +80,7 @@ jobs:
           username: ${{ secrets.PROD_USERNAME }}
           host: ${{ secrets.PROD_HOST }}
           key: ${{ secrets.SSH_KEY }}
-          source: "./deploy/prod/"
+          source: "./deploy/prod/*"
           target: "/home/app"
 
       - name: Deploy
@@ -93,6 +93,6 @@ jobs:
             sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/brake:prod
             cd /home/app/deploy/prod
-            chmod 777 ../../scripts/deploy.sh
-            ../../scripts/deploy.sh
+            chmod 777 /scripts/deploy.sh
+            /scripts/deploy.sh
             docker image prune -f
