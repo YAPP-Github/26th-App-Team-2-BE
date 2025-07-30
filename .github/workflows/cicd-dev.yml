@@ -80,7 +80,7 @@ jobs:
           username: ${{ secrets.DEV_USERNAME }}
           host: ${{ secrets.DEV_HOST }}
           key: ${{ secrets.SSH_KEY }}
-          source: "./deploy/dev/*"
+          source: "./deploy/dev/"
           target: "/home/app"
 
       - name: Deploy
@@ -92,7 +92,9 @@ jobs:
           script: |
             sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/brake:dev
-            cd /home/app/
-            chmod 777 /scripts/deploy.sh
-            /scripts/deploy.sh
+            mv /home/app/deploy/dev/* /home/app/deploy/
+            rm -r /home/app/deploy/dev
+            cd /home/app/deploy
+            chmod 777 ../scripts/deploy.sh
+            ../scripts/deploy.sh
             docker image prune -f
