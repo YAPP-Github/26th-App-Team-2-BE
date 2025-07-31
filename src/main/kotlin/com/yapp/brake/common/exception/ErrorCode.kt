@@ -27,4 +27,10 @@ enum class ErrorCode(
     // Device Profile
     DEVICE_PROFILE_NOT_FOUND(404, "D-001", "디바이스 프로필을 찾을 수 없습니다."),
     DEVICE_PROFILE_INVALID(400, "D-002", "디바이스 프로필 정보가 유효하지 않습니다."),
+
+    // OAuth
+    OAUTH_APPLE_AUTH_INVALID(400, "O-001", "유효하지 않은 애플 인증 정보입니다."),
+    OAUTH_APPLE_API_SERVER_ERROR(500, "O-002", "애플 로그인 처리 중 내부 오류가 발생했습니다."),
+    OAUTH_KAKAO_AUTH_INVALID(400, "O-003", "유효하지 않은 카카오 인증 정보입니다."),
+    OAUTH_KAKAO_API_SERVER_ERROR(500, "O-004", "카카오 로그인 처리 중 내부 오류가 발생했습니다."),
 }

@@ -28,9 +28,30 @@ class KakaoFeignErrorDecoder : ErrorDecoder {
                     )
                 logger.error { "[KakaoFeignErrorDecoder.decode] response=$body" }
 
-                CustomException(ErrorCode.UNAUTHORIZED)
+                classifyError(body.error)
             }
 
             else -> CustomException(ErrorCode.INTERNAL_SERVER_ERROR)
         }
+
+    /***
+     * @ref: https://developers.kakao.com/docs/latest/ko/kakaologin/trouble-shooting#token
+     * @ref: https://developers.kakao.com/docs/latest/ko/rest-api/reference#error-code-kakaologin
+     */
+    private fun classifyError(error: String?): Exception =
+        error?.let {
+            when {
+                error.startsWith(KAKAO_ACCESS_TOKEN_ERROR_PREFIX)
+                -> CustomException(ErrorCode.OAUTH_KAKAO_API_SERVER_ERROR)
+                error.startsWith(KAKAO_COMMON_ERROR_PREFIX)
+                -> CustomException(ErrorCode.OAUTH_KAKAO_AUTH_INVALID)
+                else
+                -> CustomException(ErrorCode.UNAUTHORIZED)
+            }
+        } ?: CustomException(ErrorCode.UNAUTHORIZED)
+
+    companion object {
+        private const val KAKAO_ACCESS_TOKEN_ERROR_PREFIX = "KOE"
+        private const val KAKAO_COMMON_ERROR_PREFIX = "-"
+    }
 }
