@@ -1,7 +1,6 @@
 package com.yapp.brake.auth.controller
 
 import andDocument
-import com.yapp.brake.auth.dto.request.LogoutRequest
 import com.yapp.brake.auth.dto.request.OAuthLoginRequest
 import com.yapp.brake.auth.dto.request.RefreshTokenRequest
 import com.yapp.brake.auth.dto.response.OAuthLoginResponse
@@ -14,11 +13,13 @@ import com.yapp.brake.support.restdocs.NUMBER
 import com.yapp.brake.support.restdocs.OBJECT
 import com.yapp.brake.support.restdocs.STRING
 import com.yapp.brake.support.restdocs.Tag
+import com.yapp.brake.support.restdocs.description
 import com.yapp.brake.support.restdocs.toJsonString
 import com.yapp.brake.support.restdocs.type
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.doNothing
 import org.mockito.kotlin.whenever
+import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -109,26 +110,22 @@ class AuthControllerTest : RestApiTestBase() {
     fun `로그아웃 API`() {
         val memberId = 1L
         val deviceProfileId = 1L
-        val request = LogoutRequest("accessToken")
-
+        val accessToken = "access-Token"
         val authentication = UsernamePasswordAuthenticationToken(memberId, deviceProfileId)
         SecurityContextHolder.getContext().authentication = authentication
 
-        doNothing().whenever(authUseCase).logout(deviceProfileId, request.accessToken)
+        doNothing().whenever(authUseCase).logout(deviceProfileId, accessToken)
 
         val builder =
             RestDocumentationRequestBuilders.post("/v1/auth/logout")
-                .content(request.toJsonString())
+                .header("Authorization", "Bearer $accessToken")
                 .contentType(MediaType.APPLICATION_JSON)
 
         mockMvc.perform(builder)
             .andExpect(status().isNoContent)
             .andDocument("auth-logout") {
                 tag(Tag.AUTH)
-                requestSchema(request::class.java.simpleName)
-                requestBody(
-                    "accessToken" type STRING means "기존 액세스 토큰",
-                )
+                requestHeaders(HttpHeaders.AUTHORIZATION description "액세스 토큰")
             }
     }
 }

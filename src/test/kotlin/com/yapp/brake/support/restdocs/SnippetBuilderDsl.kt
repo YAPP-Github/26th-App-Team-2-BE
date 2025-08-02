@@ -34,5 +34,9 @@ class SnippetBuilderDsl {
         builder.responseSchema(Schema(responseDtoClassName))
     }
 
+    fun requestHeaders(vararg headers: Header) {
+        builder.requestHeaders(*headers.map { it.descriptor }.toTypedArray())
+    }
+
     fun build(): ResourceSnippetParameters = builder.build()
 }
