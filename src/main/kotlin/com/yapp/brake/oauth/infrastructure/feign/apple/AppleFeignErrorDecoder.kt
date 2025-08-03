@@ -24,9 +24,20 @@ class AppleFeignErrorDecoder : ErrorDecoder {
                 val body = objectMapper.readValue(response?.body()?.asInputStream(), AppleErrorResponse::class.java)
                 logger.error { "[AppleFeignErrorDecoder.decode] response=$body" }
 
-                CustomException(ErrorCode.UNAUTHORIZED)
+                classifyError(body.error)
             }
 
             else -> CustomException(ErrorCode.INTERNAL_SERVER_ERROR)
         }
+
+    /***
+     * @ref https://developer.apple.com/documentation/signinwithapplerestapi/errorresponse
+     */
+    private fun classifyError(error: String?): Exception {
+        return when (error) {
+            "invalid_grant" -> CustomException(ErrorCode.OAUTH_APPLE_AUTH_INVALID)
+            null -> CustomException(ErrorCode.UNAUTHORIZED)
+            else -> CustomException(ErrorCode.OAUTH_APPLE_API_SERVER_ERROR)
+        }
+    }
 }
