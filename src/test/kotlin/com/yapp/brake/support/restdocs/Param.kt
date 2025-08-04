@@ -1,8 +1,6 @@
 package com.yapp.brake.support.restdocs
 
 import org.springframework.restdocs.request.ParameterDescriptor
-import org.springframework.restdocs.request.PathParametersSnippet
-import org.springframework.restdocs.request.QueryParametersSnippet
 import org.springframework.restdocs.request.RequestDocumentation
 
 /**
@@ -47,24 +45,4 @@ private fun createField(
             .description(description) // 파라미터 설명을 설정
 
     return Param(descriptor) // 설정된 파라미터 설명을 가진 Param 객체 반환
-}
-
-/**
- * 경로 파라미터들을 `PathParametersSnippet` 객체로 변환하여 반환합니다.
- *
- * @param params 경로 파라미터들의 배열
- * @return `PathParametersSnippet` 객체
- */
-fun pathParameters(vararg params: Param): PathParametersSnippet {
-    return RequestDocumentation.pathParameters(params.map { it.descriptor })
-}
-
-/**
- * 쿼리 파라미터들을 `QueryParametersSnippet` 객체로 변환하여 반환합니다.
- *
- * @param params 쿼리 파라미터들의 배열
- * @return `QueryParametersSnippet` 객체
- */
-fun queryParameters(vararg params: Param): QueryParametersSnippet {
-    return RequestDocumentation.queryParameters(params.map { it.descriptor })
 }
