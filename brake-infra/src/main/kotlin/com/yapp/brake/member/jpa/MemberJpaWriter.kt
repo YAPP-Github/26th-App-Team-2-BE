@@ -1,7 +1,7 @@
 package com.yapp.brake.member.jpa
 
+import com.yapp.brake.member.infrastructure.MemberWriter
 import com.yapp.brake.member.model.Member
-import jdk.javadoc.internal.doclets.toolkit.MemberWriter
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 

@@ -1,5 +1,6 @@
 package com.yapp.brake.session.jpa
 
+import com.yapp.brake.session.infrastructure.SessionWriter
 import com.yapp.brake.session.model.Session
 import org.springframework.stereotype.Repository
 

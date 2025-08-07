@@ -3,6 +3,7 @@ package com.yapp.brake.member.jpa
 import com.yapp.brake.common.enums.SocialProvider
 import com.yapp.brake.common.exception.CustomException
 import com.yapp.brake.common.exception.ErrorCode
+import com.yapp.brake.member.infrastructure.MemberReader
 import com.yapp.brake.member.model.Member
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional

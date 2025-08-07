@@ -1,5 +1,6 @@
 package com.yapp.brake.outbox.jpa
 
+import com.yapp.brake.outbox.infrastructure.OutboxWriter
 import com.yapp.brake.outbox.model.Outbox
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional

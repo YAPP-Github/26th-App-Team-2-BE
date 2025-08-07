@@ -42,13 +42,13 @@ class KakaoFeignErrorDecoder : ErrorDecoder {
         error?.let {
             when {
                 error.startsWith(KAKAO_ACCESS_TOKEN_ERROR_PREFIX)
-                    -> CustomException(ErrorCode.OAUTH_KAKAO_API_SERVER_ERROR)
+                -> CustomException(ErrorCode.OAUTH_KAKAO_API_SERVER_ERROR)
 
                 error.startsWith(KAKAO_COMMON_ERROR_PREFIX)
-                    -> CustomException(ErrorCode.OAUTH_KAKAO_AUTH_INVALID)
+                -> CustomException(ErrorCode.OAUTH_KAKAO_AUTH_INVALID)
 
                 else
-                    -> CustomException(ErrorCode.UNAUTHORIZED)
+                -> CustomException(ErrorCode.UNAUTHORIZED)
             }
         } ?: CustomException(ErrorCode.UNAUTHORIZED)
 

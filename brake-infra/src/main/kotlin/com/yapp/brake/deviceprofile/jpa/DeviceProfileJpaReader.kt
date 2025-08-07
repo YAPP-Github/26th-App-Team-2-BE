@@ -2,6 +2,7 @@ package com.yapp.brake.deviceprofile.jpa
 
 import com.yapp.brake.common.exception.CustomException
 import com.yapp.brake.common.exception.ErrorCode
+import com.yapp.brake.deviceprofile.infrastructure.DeviceProfileReader
 import com.yapp.brake.deviceprofile.model.DeviceProfile
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional

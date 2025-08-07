@@ -6,13 +6,22 @@ plugins {
 
 val flywayVersion = "10.16.0"
 
+extra["springCloudVersion"] = "2025.0.0"
+
 dependencies {
     implementation(project(":brake-infra"))
+    implementation(project(":brake-internal"))
     implementation(project(":brake-domain"))
+
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
+
+    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+
+    // validation
+    implementation("org.springframework.boot:spring-boot-starter-validation")
 
     // security
     implementation("org.springframework.boot:spring-boot-starter-security")
@@ -32,6 +41,12 @@ dependencies {
 
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
     testImplementation("com.epages:restdocs-api-spec-mockmvc:0.19.4")
+}
+
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+    }
 }
 
 openapi3 {

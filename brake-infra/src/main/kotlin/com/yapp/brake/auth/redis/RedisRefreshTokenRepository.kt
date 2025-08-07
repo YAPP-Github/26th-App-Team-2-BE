@@ -1,5 +1,6 @@
 package com.yapp.brake.auth.redis
 
+import com.yapp.brake.auth.infrastructure.RefreshTokenRepository
 import com.yapp.brake.common.exception.CustomException
 import com.yapp.brake.common.exception.ErrorCode
 import io.github.oshai.kotlinlogging.KotlinLogging

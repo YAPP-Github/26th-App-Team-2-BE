@@ -1,5 +1,6 @@
 package com.yapp.brake.statistic.jpa
 
+import com.yapp.brake.statistic.infrastructure.DailySessionStatisticReader
 import com.yapp.brake.statistic.model.DailySessionStatistic
 import com.yapp.brake.statistic.model.SessionStatistics
 import org.springframework.stereotype.Repository

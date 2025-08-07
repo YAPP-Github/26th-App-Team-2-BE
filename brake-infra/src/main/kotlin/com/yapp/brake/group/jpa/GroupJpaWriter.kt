@@ -1,5 +1,6 @@
 package com.yapp.brake.group.jpa
 
+import com.yapp.brake.group.infrastructure.GroupWriter
 import com.yapp.brake.group.model.Group
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional

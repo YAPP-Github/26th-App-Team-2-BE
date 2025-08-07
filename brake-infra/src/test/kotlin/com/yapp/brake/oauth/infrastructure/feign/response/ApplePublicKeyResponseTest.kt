@@ -2,8 +2,8 @@ package com.yapp.brake.oauth.infrastructure.feign.response
 
 import com.yapp.brake.common.exception.CustomException
 import com.yapp.brake.common.exception.ErrorCode
-import com.yapp.brake.oauth.infrastructure.feign.apple.response.ApplePublicKey
-import com.yapp.brake.oauth.infrastructure.feign.apple.response.ApplePublicKeyResponse
+import com.yapp.brake.oauth.feign.apple.response.ApplePublicKey
+import com.yapp.brake.oauth.feign.apple.response.ApplePublicKeyResponse
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertEquals

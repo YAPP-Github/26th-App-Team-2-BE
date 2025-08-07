@@ -1,6 +1,10 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 val jwtVersion = "0.12.6"
 
 dependencies {
+    implementation(project(":brake-internal"))
+
     implementation("org.springframework.boot:spring-boot-starter-web")
     // validation
     implementation("org.springframework.boot:spring-boot-starter-validation")
@@ -21,4 +25,9 @@ tasks.test {
 }
 kotlin {
     jvmToolchain(21)
+}
+
+tasks {
+    withType<Jar> { enabled = true }
+    withType<BootJar> { enabled = false }
 }

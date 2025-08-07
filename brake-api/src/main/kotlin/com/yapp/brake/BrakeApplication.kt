@@ -6,6 +6,12 @@ import org.springframework.boot.runApplication
 
 @SpringBootApplication(
     exclude = [UserDetailsServiceAutoConfiguration::class],
+    scanBasePackages = [
+        "com.yapp.api",
+        "com.yapp.infra",
+        "com.yapp.domain",
+        "com.yapp.internal",
+    ],
 )
 class BrakeApplication
 

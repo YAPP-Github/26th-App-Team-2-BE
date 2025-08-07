@@ -1,0 +1,49 @@
+spring:
+  application:
+    name: yapp
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/yapp-local?useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      repositories:
+        enabled: false
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    out-of-order: true
+
+jwt:
+  secret: YOURBASE64ENCODEDSECRETKEYYOURBASE64ENCODEDSECRETKEY
+  access-token-expiry-time: 1209600
+  refresh-token-expiry-time: 1209600
+
+cors:
+  allowed-origins: "http://localhost:*"
+
+oauth:
+  kakao:
+    client-id: db02a4824f6b1234baba20a3aa492b32
+    client-secret: 0WpTg7fYM4BC3P1BsxPAla60IursB9kZ
+    redirect-uri: https://www.yapp-dev/oauth
+    admin-key: 1ecdadf79560a095199e920c3feba362
+  apple:
+    client-id: yapp.breake.service
+    team-id: DX6WKZY687
+    key-id: DG4C5SZ4ZX
+    audience: https://appleid.apple.com
+    auth-key-path: classpath:AuthKey_DG4C5SZ4ZX.p8
+
+logging:
+  config: classpath:/log/logback-local.xml

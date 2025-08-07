@@ -15,9 +15,14 @@ java {
     }
 }
 
+extra["springCloudVersion"] = "2025.0.0"
+
 dependencies {
     implementation(project(":brake-domain"))
+    implementation(project(":brake-internal"))
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.16.1")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.1")
+
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
     // feign
@@ -67,69 +72,7 @@ jacoco {
     toolVersion = "0.8.13"
 }
 
-tasks.jacocoTestReport {
-    dependsOn(tasks.test)
-    reports.xml.required.set(true)
-
-    classDirectories.setFrom(
-        files(
-            classDirectories.files.map {
-                fileTree(it) {
-                    exclude(
-                        "**/common/**",
-                    )
-                }
-            },
-        ),
-    )
-}
 tasks {
     withType<Jar> { enabled = true }
     withType<BootJar> { enabled = false }
-}
-tasks.withType<Test> {
-    finalizedBy(tasks.jacocoTestReport)
-    useJUnitPlatform()
-}
-
-ktlint {
-    reporters {
-        reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.JSON)
-    }
-}
-
-tasks.named<ProcessResources>("processResources") {
-    dependsOn("copy main env")
-}
-
-tasks.named<ProcessResources>("processTestResources") {
-    dependsOn("copy test env")
-}
-
-tasks.register<Copy>("copy main env") {
-    from("YAPP-ENV") {
-        include("*")
-        exclude("application-test.yml", "README.md")
-    }
-    into("src/main/resources")
-
-    onlyIf {
-        gradle.startParameter.taskNames.none { it.contains("test") }
-    }
-
-    doLast {
-        logger.lifecycle("✅ 메인 환경변수 복사 완료")
-    }
-}
-
-tasks.register<Copy>("copy test env") {
-    from("YAPP-ENV") {
-        include("application-test.yml")
-        rename("application-test.yml", "application.yml")
-    }
-    into("src/test/resources")
-
-    doLast {
-        logger.lifecycle("✅ 테스트 환경변수 복사 완료")
-    }
 }

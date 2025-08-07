@@ -1,9 +1,9 @@
 package com.yapp.brake.statistic.infrastructure.jpa.statistics
 
-import com.yapp.brake.statistic.infrastructure.jpa.DailySessionStatisticEntity
-import com.yapp.brake.statistic.infrastructure.jpa.DailySessionStatisticId
-import com.yapp.brake.statistic.infrastructure.jpa.DailySessionStatisticJpaReader
-import com.yapp.brake.statistic.infrastructure.jpa.DailySessionStatisticRepository
+import com.yapp.brake.statistic.jpa.DailySessionStatisticEntity
+import com.yapp.brake.statistic.jpa.DailySessionStatisticId
+import com.yapp.brake.statistic.jpa.DailySessionStatisticJpaReader
+import com.yapp.brake.statistic.jpa.DailySessionStatisticRepository
 import com.yapp.brake.statistic.model.DailySessionStatistic
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.mockito.Mockito.mock
