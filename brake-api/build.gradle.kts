@@ -7,8 +7,8 @@ plugins {
 val flywayVersion = "10.16.0"
 
 dependencies {
-//    implementation(project(":brake-infra"))
-//    implementation(project(":brake-domain"))
+    implementation(project(":brake-infra"))
+    implementation(project(":brake-domain"))
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -16,9 +16,6 @@ dependencies {
 
     // security
     implementation("org.springframework.boot:spring-boot-starter-security")
-
-    // validation
-    implementation("org.springframework.boot:spring-boot-starter-validation")
 
     // flyway
     implementation("org.flywaydb:flyway-core:$flywayVersion")
