@@ -1,6 +1,5 @@
 package com.yapp.brake.auth.infrastructure.redis
 
-import com.yapp.brake.auth.infrastructure.BlackListRepository
 import com.yapp.brake.common.exception.CustomException
 import com.yapp.brake.common.exception.ErrorCode
 import io.github.oshai.kotlinlogging.KotlinLogging

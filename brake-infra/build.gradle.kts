@@ -1,3 +1,5 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 plugins {
     kotlin("jvm") version "1.9.25"
     kotlin("plugin.spring") version "1.9.25"
@@ -14,17 +16,18 @@ java {
 }
 
 dependencies {
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation(project(":brake-domain"))
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.16.1")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
     // feign
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
 
     // JPA
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.2.5")
 
     // redis
-    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis:3.2.5")
 
     // Mysql
     runtimeOnly("com.mysql:mysql-connector-j")
@@ -80,11 +83,10 @@ tasks.jacocoTestReport {
         ),
     )
 }
-
-tasks.named("bootJar") {
-    dependsOn("copyToSwagger")
+tasks {
+    withType<Jar> { enabled = true }
+    withType<BootJar> { enabled = false }
 }
-
 tasks.withType<Test> {
     finalizedBy(tasks.jacocoTestReport)
     useJUnitPlatform()
@@ -99,7 +101,6 @@ ktlint {
 tasks.named<ProcessResources>("processResources") {
     dependsOn("copy main env")
 }
-
 
 tasks.named<ProcessResources>("processTestResources") {
     dependsOn("copy test env")

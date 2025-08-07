@@ -1,6 +1,5 @@
 package com.yapp.brake.outbox.infrastructure.jpa
 
-import com.yapp.brake.outbox.infrastructure.OutboxReader
 import com.yapp.brake.outbox.model.Outbox
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Repository

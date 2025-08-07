@@ -1,6 +1,5 @@
 package com.yapp.brake.deviceprofile.infrastructure.jpa
 
-import com.yapp.brake.deviceprofile.infrastructure.DeviceProfileWriter
 import com.yapp.brake.deviceprofile.model.DeviceProfile
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
