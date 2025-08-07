@@ -20,13 +20,6 @@ dependencies {
     testImplementation(kotlin("test"))
 }
 
-tasks.test {
-    useJUnitPlatform()
-}
-kotlin {
-    jvmToolchain(21)
-}
-
 tasks {
     withType<Jar> { enabled = true }
     withType<BootJar> { enabled = false }

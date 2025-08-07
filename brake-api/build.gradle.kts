@@ -4,13 +4,11 @@ plugins {
     id("com.epages.restdocs-api-spec") version "0.19.4"
 }
 
-val flywayVersion = "10.16.0"
-
 extra["springCloudVersion"] = "2025.0.0"
 
 dependencies {
-    implementation(project(":brake-infra"))
     implementation(project(":brake-internal"))
+    implementation(project(":brake-infra"))
     implementation(project(":brake-domain"))
 
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
@@ -18,17 +16,14 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
-    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
+    // Mysql
+    runtimeOnly("com.mysql:mysql-connector-j")
 
     // validation
     implementation("org.springframework.boot:spring-boot-starter-validation")
 
     // security
     implementation("org.springframework.boot:spring-boot-starter-security")
-
-    // flyway
-    implementation("org.flywaydb:flyway-core:$flywayVersion")
-    implementation("org.flywaydb:flyway-mysql:$flywayVersion")
 
     // monitoring
     implementation("org.springframework.boot:spring-boot-starter-actuator")
