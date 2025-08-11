@@ -14,13 +14,15 @@ object DataSerializer {
 
     private fun initialize(): ObjectMapper = jacksonObjectMapper().registerModules(JavaTimeModule())
 
-    inline fun <reified T> deserialize(data: String?): T? =
-        try {
+    inline fun <reified T> deserialize(data: String?): T? {
+        if (data.isNullOrBlank()) return null
+        return try {
             objectMapper.readValue(data, object : TypeReference<T>() {})
         } catch (e: JsonProcessingException) {
             logger.error(e) { "[DataSerializer.deserialize] data=$data, type=${T::class}" }
             null
         }
+    }
 
     fun <T> deserialize(
         data: String?,
