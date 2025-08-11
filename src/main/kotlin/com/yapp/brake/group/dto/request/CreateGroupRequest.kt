@@ -18,7 +18,7 @@ data class CreateGroupRequest(
         fun from(rawRequest: CreateGroupIosRequest): CreateGroupRequest {
             val groupApps =
                 deserialize<List<AddGroupAppRequest>>(rawRequest.groupApps)
-                    ?: throw CustomException(ErrorCode.INTERNAL_SERVER_ERROR)
+                    ?: throw CustomException(ErrorCode.BAD_REQUEST)
 
             return CreateGroupRequest(
                 name = rawRequest.name,
