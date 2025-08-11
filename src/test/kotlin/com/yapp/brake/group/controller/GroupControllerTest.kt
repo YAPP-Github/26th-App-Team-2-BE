@@ -299,7 +299,7 @@ class GroupControllerTest : RestApiTestBase() {
             .andDocument("groups-update-ios") {
                 tag(Tag.GROUP)
                 pathParameters("groupId" means "그룹 식별자")
-                requestSchema(request::class.java.simpleName)
+                requestSchema(iosRequest::class.java.simpleName)
                 responseSchema(response.data!!::class.java.simpleName)
                 requestBody(
                     "name" type STRING means "그룹 이름",
