@@ -1,0 +1,21 @@
+openapi: 3.0.1
+info:
+  title: Brake API
+  description: Brake API description
+  version: 0.1.0
+servers:
+- url: /
+tags: []
+paths: {}
+components:
+  schemas: {}
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      name: Authorization
+      in: header
+      description: "액세스 토큰을 기입해 주세요"
+security:
+  - bearerAuth: []
