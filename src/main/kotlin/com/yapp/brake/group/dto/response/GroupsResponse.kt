@@ -6,6 +6,8 @@ import com.yapp.brake.groupapp.model.GroupApp
 data class GroupsResponse(
     val groups: List<GroupResponse>,
 ) {
+    fun toIosResponse() = GroupsIosResponse(groups.map(GroupResponse::toIosResponse))
+
     companion object {
         fun from(
             groups: List<Group>,

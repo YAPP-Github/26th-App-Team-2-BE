@@ -2,9 +2,13 @@ package com.yapp.brake.group.controller
 
 import com.yapp.brake.common.dto.ApiResponse
 import com.yapp.brake.common.security.getDeviceProfileId
+import com.yapp.brake.group.dto.request.CreateGroupIosRequest
 import com.yapp.brake.group.dto.request.CreateGroupRequest
+import com.yapp.brake.group.dto.request.UpdateGroupIosRequest
 import com.yapp.brake.group.dto.request.UpdateGroupRequest
+import com.yapp.brake.group.dto.response.GroupIosResponse
 import com.yapp.brake.group.dto.response.GroupResponse
+import com.yapp.brake.group.dto.response.GroupsIosResponse
 import com.yapp.brake.group.dto.response.GroupsResponse
 import com.yapp.brake.group.service.GroupUseCase
 import jakarta.validation.Valid
@@ -36,8 +40,26 @@ class GroupController(
         )
     }
 
+    @PostMapping("/ios")
+    fun createIos(
+        @Valid @RequestBody
+        request: CreateGroupIosRequest,
+    ): ApiResponse<GroupIosResponse> {
+        return ApiResponse.success(
+            status = HttpStatus.CREATED.value(),
+            data = groupUseCase.create(getDeviceProfileId(), CreateGroupRequest.from(request)).toIosResponse(),
+        )
+    }
+
     @GetMapping
     fun readAll(): ApiResponse<GroupsResponse> = ApiResponse.success(groupUseCase.getAll(getDeviceProfileId()))
+
+    @GetMapping("/ios")
+    fun readAllIos(): ApiResponse<GroupsIosResponse> =
+        ApiResponse.success(
+            groupUseCase.getAll(getDeviceProfileId())
+                .toIosResponse(),
+        )
 
     @PutMapping("/{groupId}")
     fun modify(
@@ -47,6 +69,17 @@ class GroupController(
         request: UpdateGroupRequest,
     ): ApiResponse<GroupResponse> {
         return ApiResponse.success(groupUseCase.modify(getDeviceProfileId(), groupId, request))
+    }
+
+    @PutMapping("/ios/{groupId}")
+    fun modifyIos(
+        @PathVariable @Positive
+        groupId: Long,
+        @Valid @RequestBody
+        request: UpdateGroupIosRequest,
+    ): ApiResponse<GroupIosResponse> {
+        val updatedGroup = groupUseCase.modify(getDeviceProfileId(), groupId, UpdateGroupRequest.from(request))
+        return ApiResponse.success(updatedGroup.toIosResponse())
     }
 
     @DeleteMapping("/{groupId}")
