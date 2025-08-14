@@ -2,6 +2,7 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 extra["springCloudVersion"] = "2025.0.0"
 
+val jwtVersion = "0.12.6"
 dependencies {
     implementation(project(":brake-domain"))
     implementation(project(":brake-internal"))
@@ -27,6 +28,11 @@ dependencies {
 
     // Kotlin-Logging
     implementation("io.github.oshai:kotlin-logging-jvm:7.0.3")
+
+    // jwt
+    implementation("io.jsonwebtoken:jjwt-api:$jwtVersion")
+    implementation("io.jsonwebtoken:jjwt-impl:$jwtVersion")
+    implementation("io.jsonwebtoken:jjwt-jackson:$jwtVersion")
 
     // test
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")

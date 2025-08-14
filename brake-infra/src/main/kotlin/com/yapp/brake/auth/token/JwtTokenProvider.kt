@@ -1,5 +1,6 @@
-package com.yapp.brake.auth.service
+package com.yapp.brake.auth.token
 
+import com.yapp.brake.auth.infrastructure.TokenProvider
 import com.yapp.brake.common.config.properties.JwtProperties
 import com.yapp.brake.common.constants.TOKEN_TYPE_ACCESS
 import com.yapp.brake.common.constants.TOKEN_TYPE_REFRESH
@@ -14,9 +15,6 @@ import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.springframework.security.core.Authentication
-import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.stereotype.Component
 import java.util.Date
 
@@ -25,10 +23,10 @@ class JwtTokenProvider(
     private val jwtProperties: JwtProperties,
     private val memberReader: MemberReader,
     private val deviceProfileReader: DeviceProfileReader,
-) {
+) : TokenProvider {
     private val decodedSecretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtProperties.secret))
 
-    fun generateAccessToken(
+    override fun generateAccessToken(
         memberId: Long,
         deviceProfileId: Long,
     ): String {
@@ -40,7 +38,7 @@ class JwtTokenProvider(
         )
     }
 
-    fun generateRefreshToken(
+    override fun generateRefreshToken(
         memberId: Long,
         deviceProfileId: Long,
     ): String {
@@ -52,7 +50,7 @@ class JwtTokenProvider(
         )
     }
 
-    fun extractMemberId(
+    override fun extractMemberId(
         token: String,
         tokenType: String,
     ): Long {
@@ -66,7 +64,7 @@ class JwtTokenProvider(
         return claims.payload.subject.toLong()
     }
 
-    fun extractProfileId(token: String): Long {
+    override fun extractProfileId(token: String): Long {
         val claims = getClaims(token)
         return claims.payload[PROFILE_ID]
             ?.toString()
@@ -74,28 +72,9 @@ class JwtTokenProvider(
             ?: throw CustomException(ErrorCode.TOKEN_INVALID)
     }
 
-    fun extractExpiration(token: String): Long {
+    override fun extractExpiration(token: String): Long {
         val claims = getClaims(token)
         return claims.payload.expiration.time
-    }
-
-    fun getAuthentication(
-        memberId: Long,
-        deviceProfileId: Long,
-    ): Authentication {
-        val member =
-            memberReader.findById(memberId)
-                ?: throw CustomException(ErrorCode.MEMBER_NOT_FOUND)
-        val deviceProfile = deviceProfileReader.getById(deviceProfileId)
-
-        return UsernamePasswordAuthenticationToken(
-            member.id,
-            deviceProfile.id,
-            listOf(
-                SimpleGrantedAuthority(member.role.type),
-                SimpleGrantedAuthority(member.state.name),
-            ),
-        )
     }
 
     private fun generateToken(

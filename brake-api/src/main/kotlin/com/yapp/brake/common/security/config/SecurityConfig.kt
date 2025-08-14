@@ -1,12 +1,14 @@
 package com.yapp.brake.common.security.config
 
 import com.yapp.brake.auth.infrastructure.BlackListRepository
-import com.yapp.brake.auth.service.JwtTokenProvider
+import com.yapp.brake.auth.infrastructure.TokenProvider
 import com.yapp.brake.common.constants.ALLOWED_URIS
 import com.yapp.brake.common.filter.JwtAuthenticationFilter
 import com.yapp.brake.common.filter.MemberStateFilter
 import com.yapp.brake.common.security.exception.ForbiddenHandler
 import com.yapp.brake.common.security.exception.UnauthenticatedEntryPoint
+import com.yapp.brake.deviceprofile.infrastructure.DeviceProfileReader
+import com.yapp.brake.member.infrastructure.MemberReader
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.annotation.Order
@@ -45,7 +47,9 @@ class SecurityConfig(
     @Bean
     @Order(2)
     fun holdMemberFilterChain(
-        jwtTokenProvider: JwtTokenProvider,
+        memberReader: MemberReader,
+        deviceProfileReader: DeviceProfileReader,
+        tokenProvider: TokenProvider,
         blackListRepository: BlackListRepository,
         http: HttpSecurity,
     ): SecurityFilterChain {
@@ -68,7 +72,7 @@ class SecurityConfig(
             .exceptionHandling { it.authenticationEntryPoint(unauthenticatedEntryPoint) }
             .addFilterBefore(requestLoggingFilter, UsernamePasswordAuthenticationFilter::class.java)
             .addFilterBefore(
-                JwtAuthenticationFilter(jwtTokenProvider, blackListRepository),
+                JwtAuthenticationFilter(memberReader, deviceProfileReader, tokenProvider, blackListRepository),
                 UsernamePasswordAuthenticationFilter::class.java,
             )
 
@@ -78,7 +82,9 @@ class SecurityConfig(
     @Bean
     @Order(3)
     fun activeMemberFilterChain(
-        jwtTokenProvider: JwtTokenProvider,
+        memberReader: MemberReader,
+        deviceProfileReader: DeviceProfileReader,
+        tokenProvider: TokenProvider,
         blackListRepository: BlackListRepository,
         http: HttpSecurity,
     ): SecurityFilterChain {
@@ -100,7 +106,7 @@ class SecurityConfig(
             }
             .addFilterBefore(requestLoggingFilter, UsernamePasswordAuthenticationFilter::class.java)
             .addFilterBefore(
-                JwtAuthenticationFilter(jwtTokenProvider, blackListRepository),
+                JwtAuthenticationFilter(memberReader, deviceProfileReader, tokenProvider, blackListRepository),
                 UsernamePasswordAuthenticationFilter::class.java,
             )
             .addFilterAfter(MemberStateFilter(), ExceptionTranslationFilter::class.java)

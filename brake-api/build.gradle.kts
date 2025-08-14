@@ -7,8 +7,6 @@ plugins {
 extra["springCloudVersion"] = "2025.0.0"
 
 dependencies {
-    implementation(project(":brake-internal"))
-    implementation(project(":brake-infra"))
     implementation(project(":brake-domain"))
 
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
