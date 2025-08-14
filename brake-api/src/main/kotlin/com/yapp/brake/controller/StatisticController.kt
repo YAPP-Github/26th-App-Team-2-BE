@@ -1,4 +1,4 @@
-package com.yapp.brake.statistic.controller
+package com.yapp.brake.controller
 
 import com.yapp.brake.common.dto.ApiResponse
 import com.yapp.brake.common.security.getDeviceProfileId

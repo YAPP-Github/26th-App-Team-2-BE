@@ -1,4 +1,4 @@
-package com.yapp.brake.common.controller
+package com.yapp.brake.controller
 
 import com.yapp.brake.common.exception.ErrorCode
 import org.springframework.stereotype.Controller

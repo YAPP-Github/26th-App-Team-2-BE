@@ -1,15 +1,15 @@
 package com.yapp.brake.support
 
-import com.yapp.brake.auth.controller.AuthController
 import com.yapp.brake.auth.service.AuthUseCase
 import com.yapp.brake.common.filter.JwtAuthenticationFilter
-import com.yapp.brake.group.controller.GroupController
+import com.yapp.brake.controller.AuthController
+import com.yapp.brake.controller.GroupController
+import com.yapp.brake.controller.MemberController
+import com.yapp.brake.controller.SessionController
+import com.yapp.brake.controller.StatisticController
 import com.yapp.brake.group.service.GroupUseCase
-import com.yapp.brake.member.controller.MemberController
 import com.yapp.brake.member.service.MemberUseCase
-import com.yapp.brake.session.controller.SessionController
 import com.yapp.brake.session.service.SessionUseCase
-import com.yapp.brake.statistic.controller.StatisticController
 import com.yapp.brake.statistic.service.StatisticUseCase
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.ExtendWith

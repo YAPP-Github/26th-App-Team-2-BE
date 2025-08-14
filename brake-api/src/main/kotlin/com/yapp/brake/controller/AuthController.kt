@@ -1,4 +1,4 @@
-package com.yapp.brake.auth.controller
+package com.yapp.brake.controller
 
 import com.yapp.brake.auth.dto.request.OAuthLoginRequest
 import com.yapp.brake.auth.dto.request.RefreshTokenRequest
