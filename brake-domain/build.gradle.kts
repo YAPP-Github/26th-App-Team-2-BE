@@ -5,8 +5,10 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-web")
     // validation
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
 
     testImplementation(kotlin("test"))
 }

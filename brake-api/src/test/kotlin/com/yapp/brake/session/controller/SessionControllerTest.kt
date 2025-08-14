@@ -2,10 +2,9 @@ package com.yapp.brake.session.controller
 
 import andDocument
 import com.yapp.brake.common.dto.ApiResponse
-import com.yapp.brake.session.dto.request.AddSessionRequest
 import com.yapp.brake.session.dto.response.AddSessionResponse
 import com.yapp.brake.support.RestApiTestBase
-import com.yapp.brake.support.fixture.model.sessionFixture
+import com.yapp.brake.support.fixture.dto.session.addSessionRequestFixture
 import com.yapp.brake.support.restdocs.DATETIME
 import com.yapp.brake.support.restdocs.NUMBER
 import com.yapp.brake.support.restdocs.OBJECT
@@ -27,16 +26,7 @@ class SessionControllerTest : RestApiTestBase() {
     fun `세션 추가 API`() {
         val memberId = 1L
         val deviceProfileId = 1L
-        val session = sessionFixture()
-        val request =
-            AddSessionRequest(
-                groupId = session.groupId,
-                start = session.start,
-                end = session.end,
-                goalMinutes = session.goalMinutes,
-                snoozeUnit = session.snooze.unit,
-                snoozeCount = session.snooze.count,
-            )
+        val request = addSessionRequestFixture()
 
         val response =
             ApiResponse.success(
