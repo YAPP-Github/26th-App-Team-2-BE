@@ -4,6 +4,8 @@ import com.yapp.brake.common.exception.CustomException
 import com.yapp.brake.common.exception.ErrorCode
 import com.yapp.brake.oauth.apple.client.AppleAuthFeignClient
 import com.yapp.brake.oauth.apple.client.response.AppleTokenResponse
+import com.yapp.brake.oauth.apple.utils.parseHeaders
+import com.yapp.brake.oauth.apple.utils.toRSAPublicKey
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts

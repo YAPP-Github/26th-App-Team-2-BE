@@ -2,6 +2,7 @@ package com.yapp.brake.oauth.apple
 
 import com.yapp.brake.common.exception.CustomException
 import com.yapp.brake.common.exception.ErrorCode
+import com.yapp.brake.oauth.apple.utils.parseECPrivateKey
 import org.springframework.core.io.ResourceLoader
 import org.springframework.stereotype.Component
 import java.security.PrivateKey

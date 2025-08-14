@@ -2,6 +2,7 @@ package com.yapp.brake.oauth.utils
 
 import com.yapp.brake.common.exception.CustomException
 import com.yapp.brake.common.exception.ErrorCode
+import com.yapp.brake.oauth.apple.utils.parseHeaders
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EmptySource

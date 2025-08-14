@@ -2,6 +2,8 @@ package com.yapp.brake.oauth.utils
 
 import com.yapp.brake.common.exception.CustomException
 import com.yapp.brake.common.exception.ErrorCode
+import com.yapp.brake.oauth.apple.utils.parseECPrivateKey
+import com.yapp.brake.oauth.apple.utils.toRSAPublicKey
 import org.junit.jupiter.api.assertThrows
 import java.security.KeyPairGenerator
 import java.security.interfaces.ECPrivateKey
