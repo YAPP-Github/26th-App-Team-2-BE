@@ -1,4 +1,4 @@
-package com.yapp.brake.oauth.service
+package com.yapp.brake.oauth.infrastructure
 
 import com.yapp.brake.common.enums.SocialProvider
 import com.yapp.brake.oauth.model.OAuthUserInfo

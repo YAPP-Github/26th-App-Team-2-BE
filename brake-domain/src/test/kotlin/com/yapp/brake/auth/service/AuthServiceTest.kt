@@ -12,8 +12,8 @@ import com.yapp.brake.deviceprofile.infrastructure.DeviceProfileReader
 import com.yapp.brake.deviceprofile.infrastructure.DeviceProfileWriter
 import com.yapp.brake.member.infrastructure.MemberReader
 import com.yapp.brake.member.infrastructure.MemberWriter
+import com.yapp.brake.oauth.infrastructure.OAuthProvider
 import com.yapp.brake.oauth.model.OAuthUserInfo
-import com.yapp.brake.oauth.service.OAuthProvider
 import com.yapp.brake.support.fixture.model.deviceProfileFixture
 import com.yapp.brake.support.fixture.model.memberFixture
 import org.assertj.core.api.Assertions.assertThat

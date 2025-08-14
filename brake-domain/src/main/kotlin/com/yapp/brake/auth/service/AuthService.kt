@@ -17,8 +17,8 @@ import com.yapp.brake.deviceprofile.model.DeviceProfile
 import com.yapp.brake.member.infrastructure.MemberReader
 import com.yapp.brake.member.infrastructure.MemberWriter
 import com.yapp.brake.member.model.Member
+import com.yapp.brake.oauth.infrastructure.OAuthProvider
 import com.yapp.brake.oauth.model.OAuthUserInfo
-import com.yapp.brake.oauth.service.OAuthProvider
 import org.springframework.stereotype.Service
 import java.time.Duration
 

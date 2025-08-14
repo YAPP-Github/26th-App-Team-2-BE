@@ -6,7 +6,7 @@ import com.yapp.brake.common.event.EventType
 import com.yapp.brake.common.event.payload.MemberDeletedEventPayload
 import com.yapp.brake.common.exception.CustomException
 import com.yapp.brake.common.exception.ErrorCode
-import com.yapp.brake.oauth.service.OAuthProvider
+import com.yapp.brake.oauth.infrastructure.OAuthProvider
 import org.springframework.stereotype.Component
 
 @Component

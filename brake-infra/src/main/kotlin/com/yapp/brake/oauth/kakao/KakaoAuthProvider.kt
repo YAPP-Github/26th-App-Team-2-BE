@@ -1,11 +1,11 @@
 package com.yapp.brake.oauth.service.kakao
 
 import com.yapp.brake.common.enums.SocialProvider
+import com.yapp.brake.oauth.infrastructure.OAuthProvider
 import com.yapp.brake.oauth.kakao.client.KakaoApiFeignClient
 import com.yapp.brake.oauth.kakao.client.KakaoAuthFeignClient
 import com.yapp.brake.oauth.kakao.client.response.KakaoUserInfoResponse
 import com.yapp.brake.oauth.model.OAuthUserInfo
-import com.yapp.brake.oauth.service.OAuthProvider
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.stereotype.Component
 

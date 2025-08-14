@@ -1,8 +1,8 @@
 package com.yapp.brake.oauth.apple
 
 import com.yapp.brake.common.enums.SocialProvider
+import com.yapp.brake.oauth.infrastructure.OAuthProvider
 import com.yapp.brake.oauth.model.OAuthUserInfo
-import com.yapp.brake.oauth.service.OAuthProvider
 import org.springframework.stereotype.Component
 
 @Component
