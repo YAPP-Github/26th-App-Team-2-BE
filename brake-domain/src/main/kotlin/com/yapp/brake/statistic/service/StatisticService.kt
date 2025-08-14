@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.time.LocalDate
 
 @Service
-class StatisticService(
+internal class StatisticService(
     private val dailySessionStatisticReader: DailySessionStatisticReader,
 ) : StatisticUseCase {
     @Transactional(readOnly = true)

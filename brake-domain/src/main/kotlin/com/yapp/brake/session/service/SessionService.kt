@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class SessionService(
+internal class SessionService(
     private val sessionWriter: SessionWriter,
     private val outboxEventPublisher: OutboxEventPublisher,
 ) : SessionUseCase {
