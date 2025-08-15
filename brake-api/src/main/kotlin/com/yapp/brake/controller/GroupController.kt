@@ -1,12 +1,12 @@
 package com.yapp.brake.controller
 
-import com.yapp.brake.common.dto.ApiResponse
-import com.yapp.brake.common.security.getDeviceProfileId
+import com.yapp.brake.dto.ApiResponse
 import com.yapp.brake.group.dto.request.CreateGroupRequest
 import com.yapp.brake.group.dto.request.UpdateGroupRequest
 import com.yapp.brake.group.dto.response.GroupResponse
 import com.yapp.brake.group.dto.response.GroupsResponse
 import com.yapp.brake.group.service.GroupUseCase
+import com.yapp.brake.util.getDeviceProfileId
 import jakarta.validation.Valid
 import jakarta.validation.constraints.Positive
 import org.springframework.http.HttpStatus

@@ -1,10 +1,10 @@
 package com.yapp.brake.controller
 
-import com.yapp.brake.common.dto.ApiResponse
-import com.yapp.brake.common.security.getDeviceProfileId
+import com.yapp.brake.dto.ApiResponse
 import com.yapp.brake.session.dto.request.AddSessionRequest
 import com.yapp.brake.session.dto.response.AddSessionResponse
 import com.yapp.brake.session.service.SessionUseCase
+import com.yapp.brake.util.getDeviceProfileId
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.PostMapping

@@ -1,14 +1,14 @@
-package com.yapp.brake.common.security.config
+package com.yapp.brake.security.config
 
 import com.yapp.brake.auth.infrastructure.BlackListRepository
 import com.yapp.brake.auth.infrastructure.TokenProvider
-import com.yapp.brake.common.constants.ALLOWED_URIS
-import com.yapp.brake.common.filter.JwtAuthenticationFilter
-import com.yapp.brake.common.filter.MemberStateFilter
-import com.yapp.brake.common.security.exception.ForbiddenHandler
-import com.yapp.brake.common.security.exception.UnauthenticatedEntryPoint
+import com.yapp.brake.constants.ALLOWED_URIS
 import com.yapp.brake.deviceprofile.infrastructure.DeviceProfileReader
+import com.yapp.brake.filter.JwtAuthenticationFilter
+import com.yapp.brake.filter.MemberStateFilter
 import com.yapp.brake.member.infrastructure.MemberReader
+import com.yapp.brake.security.exception.ForbiddenHandler
+import com.yapp.brake.security.exception.UnauthenticatedEntryPoint
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.annotation.Order

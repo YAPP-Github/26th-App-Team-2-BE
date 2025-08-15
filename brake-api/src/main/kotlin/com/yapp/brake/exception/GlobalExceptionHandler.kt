@@ -1,8 +1,8 @@
-package com.yapp.brake.common.exception
+package com.yapp.brake.exception
 
-import com.yapp.brake.common.dto.ApiResponse
-import com.yapp.brake.common.exception.ErrorCode.BAD_REQUEST
-import com.yapp.brake.common.exception.ErrorCode.INTERNAL_SERVER_ERROR
+import com.yapp.brake.dto.ApiResponse
+import com.yapp.brake.exception.ErrorCode.BAD_REQUEST
+import com.yapp.brake.exception.ErrorCode.INTERNAL_SERVER_ERROR
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.validation.ConstraintViolationException
 import org.springframework.http.ResponseEntity

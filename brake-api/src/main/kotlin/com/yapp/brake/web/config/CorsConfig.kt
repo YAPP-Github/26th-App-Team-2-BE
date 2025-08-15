@@ -1,4 +1,4 @@
-package com.yapp.brake.common.config
+package com.yapp.brake.web.config
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean

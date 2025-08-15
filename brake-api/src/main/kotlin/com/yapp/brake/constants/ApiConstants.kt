@@ -1,8 +1,8 @@
-package com.yapp.brake.common.constants
+package com.yapp.brake.constants
 
-const val TOKEN_TYPE_ACCESS = "access"
-const val TOKEN_TYPE_REFRESH = "refresh"
-val ALLOWED_URIS =
+internal const val TOKEN_TYPE_ACCESS = "access"
+internal const val TOKEN_TYPE_REFRESH = "refresh"
+internal val ALLOWED_URIS =
     listOf(
         "/v1/auth/login",
         "/v1/auth/refresh",

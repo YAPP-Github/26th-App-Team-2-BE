@@ -1,4 +1,4 @@
-package com.yapp.brake.common.dto
+package com.yapp.brake.dto
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import org.springframework.http.HttpStatus

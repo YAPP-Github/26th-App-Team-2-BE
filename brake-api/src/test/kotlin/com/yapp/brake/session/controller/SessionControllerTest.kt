@@ -1,7 +1,7 @@
 package com.yapp.brake.session.controller
 
 import andDocument
-import com.yapp.brake.common.dto.ApiResponse
+import com.yapp.brake.dto.ApiResponse
 import com.yapp.brake.session.dto.response.AddSessionResponse
 import com.yapp.brake.support.RestApiTestBase
 import com.yapp.brake.support.fixture.dto.session.addSessionRequestFixture

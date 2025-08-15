@@ -1,10 +1,10 @@
 package com.yapp.brake.controller
 
-import com.yapp.brake.common.dto.ApiResponse
-import com.yapp.brake.common.security.getMemberId
+import com.yapp.brake.dto.ApiResponse
 import com.yapp.brake.member.dto.request.UpdateNicknameRequest
 import com.yapp.brake.member.dto.response.MemberResponse
 import com.yapp.brake.member.service.MemberUseCase
+import com.yapp.brake.util.getMemberId
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.DeleteMapping

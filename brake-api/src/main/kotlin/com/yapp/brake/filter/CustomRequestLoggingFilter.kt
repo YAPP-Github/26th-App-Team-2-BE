@@ -1,6 +1,6 @@
-package com.yapp.brake.common.logging
+package com.yapp.brake.filter
 
-import com.yapp.brake.common.constants.ALLOWED_URIS
+import com.yapp.brake.constants.ALLOWED_URIS
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.CommonsRequestLoggingFilter

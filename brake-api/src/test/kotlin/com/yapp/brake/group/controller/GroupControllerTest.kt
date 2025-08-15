@@ -1,7 +1,7 @@
 package com.yapp.brake.group.controller
 
 import andDocument
-import com.yapp.brake.common.dto.ApiResponse
+import com.yapp.brake.dto.ApiResponse
 import com.yapp.brake.support.RestApiTestBase
 import com.yapp.brake.support.fixture.dto.group.createGroupRequestFixture
 import com.yapp.brake.support.fixture.dto.group.groupResponseFixture

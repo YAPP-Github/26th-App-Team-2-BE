@@ -1,7 +1,7 @@
 package com.yapp.brake.statistic.controller
 
 import andDocument
-import com.yapp.brake.common.dto.ApiResponse
+import com.yapp.brake.dto.ApiResponse
 import com.yapp.brake.statistic.dto.response.DailySessionStatisticResponse
 import com.yapp.brake.statistic.dto.response.SessionStatisticsResponse
 import com.yapp.brake.support.RestApiTestBase

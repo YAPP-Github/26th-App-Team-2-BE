@@ -1,4 +1,4 @@
-package com.yapp.brake.common.filter
+package com.yapp.brake.filter
 
 import com.yapp.brake.member.model.MemberState
 import io.github.oshai.kotlinlogging.KotlinLogging

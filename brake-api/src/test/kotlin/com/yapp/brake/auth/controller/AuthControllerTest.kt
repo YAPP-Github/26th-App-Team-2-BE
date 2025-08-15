@@ -5,8 +5,8 @@ import com.yapp.brake.auth.dto.request.OAuthLoginRequest
 import com.yapp.brake.auth.dto.request.RefreshTokenRequest
 import com.yapp.brake.auth.dto.response.OAuthLoginResponse
 import com.yapp.brake.auth.dto.response.RefreshTokenResponse
-import com.yapp.brake.common.dto.ApiResponse
 import com.yapp.brake.common.enums.SocialProvider
+import com.yapp.brake.dto.ApiResponse
 import com.yapp.brake.member.model.MemberState
 import com.yapp.brake.support.RestApiTestBase
 import com.yapp.brake.support.restdocs.NUMBER

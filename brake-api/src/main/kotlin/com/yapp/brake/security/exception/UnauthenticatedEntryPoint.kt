@@ -1,4 +1,4 @@
-package com.yapp.brake.common.security.exception
+package com.yapp.brake.security.exception
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.servlet.http.HttpServletRequest

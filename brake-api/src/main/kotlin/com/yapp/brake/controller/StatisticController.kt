@@ -1,10 +1,10 @@
 package com.yapp.brake.controller
 
-import com.yapp.brake.common.dto.ApiResponse
-import com.yapp.brake.common.security.getDeviceProfileId
+import com.yapp.brake.dto.ApiResponse
 import com.yapp.brake.statistic.dto.request.QueryStatisticRequest
 import com.yapp.brake.statistic.dto.response.SessionStatisticsResponse
 import com.yapp.brake.statistic.service.StatisticUseCase
+import com.yapp.brake.util.getDeviceProfileId
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute

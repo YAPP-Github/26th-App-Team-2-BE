@@ -1,4 +1,4 @@
-package com.yapp.brake.common.exception
+package com.yapp.brake.exception
 
 class CustomException(
     val errorCode: ErrorCode,

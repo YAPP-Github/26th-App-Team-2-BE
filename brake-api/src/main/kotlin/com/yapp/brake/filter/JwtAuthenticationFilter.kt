@@ -1,13 +1,13 @@
-package com.yapp.brake.common.filter
+package com.yapp.brake.filter
 
 import com.yapp.brake.auth.infrastructure.BlackListRepository
 import com.yapp.brake.auth.infrastructure.TokenProvider
-import com.yapp.brake.common.constants.TOKEN_TYPE_ACCESS
-import com.yapp.brake.common.exception.CustomException
-import com.yapp.brake.common.exception.ErrorCode
-import com.yapp.brake.common.security.exception.UnauthenticatedEntryPoint.Companion.ATTRIBUTE_EXCEPTION_KEY
+import com.yapp.brake.constants.TOKEN_TYPE_ACCESS
 import com.yapp.brake.deviceprofile.infrastructure.DeviceProfileReader
+import com.yapp.brake.exception.CustomException
+import com.yapp.brake.exception.ErrorCode
 import com.yapp.brake.member.infrastructure.MemberReader
+import com.yapp.brake.security.exception.UnauthenticatedEntryPoint.Companion.ATTRIBUTE_EXCEPTION_KEY
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest

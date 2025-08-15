@@ -1,4 +1,4 @@
-package com.yapp.brake.common.exception
+package com.yapp.brake.exception
 
 enum class ErrorCode(
     val status: Int,

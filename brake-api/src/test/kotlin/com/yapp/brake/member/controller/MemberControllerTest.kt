@@ -1,7 +1,7 @@
 package com.yapp.brake.member.controller
 
 import andDocument
-import com.yapp.brake.common.dto.ApiResponse
+import com.yapp.brake.dto.ApiResponse
 import com.yapp.brake.member.dto.request.UpdateNicknameRequest
 import com.yapp.brake.member.dto.response.MemberResponse
 import com.yapp.brake.member.model.MemberState
