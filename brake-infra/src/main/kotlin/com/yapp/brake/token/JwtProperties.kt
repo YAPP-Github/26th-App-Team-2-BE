@@ -1,4 +1,4 @@
-package com.yapp.brake.common.config.properties
+package com.yapp.brake.token
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.stereotype.Component

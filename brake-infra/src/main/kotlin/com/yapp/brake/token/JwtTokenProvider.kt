@@ -1,13 +1,10 @@
-package com.yapp.brake.auth.token
+package com.yapp.brake.token
 
 import com.yapp.brake.auth.infrastructure.TokenProvider
-import com.yapp.brake.common.config.properties.JwtProperties
 import com.yapp.brake.common.constants.TOKEN_TYPE_ACCESS
 import com.yapp.brake.common.constants.TOKEN_TYPE_REFRESH
 import com.yapp.brake.common.exception.CustomException
 import com.yapp.brake.common.exception.ErrorCode
-import com.yapp.brake.deviceprofile.infrastructure.DeviceProfileReader
-import com.yapp.brake.member.infrastructure.MemberReader
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jws
@@ -21,8 +18,6 @@ import java.util.Date
 @Component
 class JwtTokenProvider(
     private val jwtProperties: JwtProperties,
-    private val memberReader: MemberReader,
-    private val deviceProfileReader: DeviceProfileReader,
 ) : TokenProvider {
     private val decodedSecretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtProperties.secret))
 
