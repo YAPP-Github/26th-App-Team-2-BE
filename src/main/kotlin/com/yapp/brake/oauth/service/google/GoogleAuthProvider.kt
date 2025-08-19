@@ -35,7 +35,7 @@ class GoogleAuthProvider(
                 GoogleTokenResponse.createEmpty()
             }
 
-        return getUserInfo(response.accessToken, "")
+        return getUserInfo(response.accessToken, response.refreshToken)
     }
 
     override fun withdraw(credential: String) {
@@ -62,7 +62,7 @@ class GoogleAuthProvider(
             }
 
         return OAuthUserInfo(
-            socialProvider = SocialProvider.KAKAO,
+            socialProvider = SocialProvider.GOOGLE,
             credential = refreshToken,
             email = userInfo.email,
         )
