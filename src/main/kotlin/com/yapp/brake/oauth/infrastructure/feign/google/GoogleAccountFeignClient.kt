@@ -1,7 +1,7 @@
 package com.yapp.brake.oauth.infrastructure.feign.google
 
 import org.springframework.cloud.openfeign.FeignClient
-import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestParam
 
 @FeignClient(
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam
     configuration = [GoogleFeignConfig::class],
 )
 interface GoogleAccountFeignClient {
-    @PostMapping
+    @GetMapping
     fun revokeToken(
         @RequestParam("token") token: String,
     )
