@@ -3,6 +3,7 @@ package com.yapp.brake.oauth.infrastructure.feign.google
 import com.yapp.brake.oauth.infrastructure.feign.google.response.GoogleTokenResponse
 import org.springframework.cloud.openfeign.FeignClient
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestParam
 
 @FeignClient(
@@ -18,10 +19,8 @@ interface GoogleAuthFeignClient {
         @RequestParam(name = "client_secret") clientSecret: String,
         @RequestParam(name = "redirect_uri") redirectUri: String,
         @RequestParam(name = "grant_type") grantType: String,
+        @RequestBody fakeDto: EmptyRequest = EmptyRequest(),
     ): GoogleTokenResponse
 
-    @PostMapping("/revoke")
-    fun revokeToken(
-        @RequestParam("token") token: String,
-    )
+    data class EmptyRequest(val empty: String = "")
 }

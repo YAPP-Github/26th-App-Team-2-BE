@@ -1,6 +1,7 @@
 package com.yapp.brake.oauth.service.google
 
 import com.yapp.brake.common.enums.SocialProvider
+import com.yapp.brake.oauth.infrastructure.feign.google.GoogleAccountFeignClient
 import com.yapp.brake.oauth.infrastructure.feign.google.GoogleApiFeignClient
 import com.yapp.brake.oauth.infrastructure.feign.google.GoogleAuthFeignClient
 import com.yapp.brake.oauth.infrastructure.feign.google.response.GoogleTokenResponse
@@ -17,6 +18,7 @@ class GoogleAuthProvider(
     private val googleProperties: GoogleProperties,
     private val googleAuthFeignClient: GoogleAuthFeignClient,
     private val googleApiFeignClient: GoogleApiFeignClient,
+    private val googleAccountFeignClient: GoogleAccountFeignClient,
 ) : OAuthProvider {
     override fun getOAuthUserInfo(code: String): OAuthUserInfo {
         val response =
@@ -33,12 +35,12 @@ class GoogleAuthProvider(
                 GoogleTokenResponse.createEmpty()
             }
 
-        return getUserInfo(response.accessToken, response.refreshToken)
+        return getUserInfo(response.accessToken, "")
     }
 
     override fun withdraw(credential: String) {
         try {
-            googleAuthFeignClient.revokeToken(credential)
+            googleAccountFeignClient.revokeToken(credential)
         } catch (e: Exception) {
             logger.error(e) { "[GoogleAuthProvider.withdraw] code=$credential" }
         }
