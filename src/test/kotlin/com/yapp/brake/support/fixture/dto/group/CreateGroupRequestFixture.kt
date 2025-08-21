@@ -9,8 +9,8 @@ fun createGroupRequestFixture(
     name: String = "SNS",
     groupApps: List<AddGroupAppRequest> =
         listOf(
-            addGroupAppRequestFixture("package-K", "카카오톡"),
-            addGroupAppRequestFixture("package-I", "인스타그램"),
+            addGroupAppRequestFixture("카카오톡", "package-K"),
+            addGroupAppRequestFixture("인스타그램", "package-I"),
         ),
 ) = CreateGroupRequest(
     name = name,
@@ -21,8 +21,8 @@ fun createGroupIosRequestFixture(
     name: String = "SNS",
     groupApps: List<AddGroupAppRequest> =
         listOf(
-            addGroupAppRequestFixture("package-K", "카카오톡"),
-            addGroupAppRequestFixture("package-I", "인스타그램"),
+            addGroupAppRequestFixture("카카오톡", "package-K"),
+            addGroupAppRequestFixture("인스타그램", "package-I"),
         ),
 ) = CreateGroupIosRequest(
     name = name,
