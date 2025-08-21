@@ -7,8 +7,8 @@ fun updateGroupRequestFixture(
     name: String = "SNS",
     groupApps: List<UpdateGroupAppRequest> =
         listOf(
-            updateGroupAppRequestFixture(1L, "카카오톡"),
-            updateGroupAppRequestFixture(2L, "인스타그램"),
+            updateGroupAppRequestFixture(1L, "카카오톡", "package-K"),
+            updateGroupAppRequestFixture(2L, "인스타그램", "package-I"),
         ),
 ) = UpdateGroupRequest(
     name = name,
