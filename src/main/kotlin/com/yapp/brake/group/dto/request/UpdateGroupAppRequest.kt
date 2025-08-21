@@ -8,6 +8,8 @@ data class UpdateGroupAppRequest(
     @field:Positive
     val groupAppId: Long? = null,
     @field:NotBlank
+    val packageName: String,
+    @field:NotBlank
     @field:Size(min = 2, max = 10)
     val name: String,
 )

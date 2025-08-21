@@ -59,6 +59,7 @@ class GroupControllerTest : RestApiTestBase() {
                     "name" type STRING means "그룹 이름",
                     "groupApps[]" type ARRAY means "관리 앱 목록",
                     "groupApps[].name" type STRING means "관리 앱 이름",
+                    "groupApps[].packageName" type STRING means "관리 앱 패키지 이름",
                 )
                 responseBody(
                     "data" type OBJECT means "응답 바디",
@@ -66,6 +67,7 @@ class GroupControllerTest : RestApiTestBase() {
                     "data.name" type STRING means "그룹 이름",
                     "data.groupApps[]" type ARRAY means "관리 앱 목록",
                     "data.groupApps[].groupAppId" type NUMBER means "관리 앱 식별자",
+                    "data.groupApps[].packageName" type STRING means "관리 앱 패키지 이름",
                     "data.groupApps[].name" type STRING means "관리 앱 이름",
                     "status" type NUMBER means "HTTP 코드",
                 )
@@ -151,6 +153,7 @@ class GroupControllerTest : RestApiTestBase() {
                     "data.groups[].name" type STRING means "그룹 이름",
                     "data.groups[].groupApps[]" type ARRAY means "관리 앱 목록",
                     "data.groups[].groupApps[].groupAppId" type NUMBER means "관리 앱 식별자",
+                    "data.groups[].groupApps[].packageName" type STRING means "관리 앱 패키지 이름",
                     "data.groups[].groupApps[].name" type STRING means "관리 앱 이름",
                     "status" type NUMBER means "HTTP 코드",
                 )
@@ -241,6 +244,7 @@ class GroupControllerTest : RestApiTestBase() {
                     "groupApps[]" type ARRAY means "관리 앱 목록",
                     "groupApps[].groupAppId" type NUMBER means "관리 앱 식별자" optional true,
                     "groupApps[].name" type STRING means "관리 앱 이름",
+                    "groupApps[].packageName" type STRING means "관리 앱 패키지 이름",
                 )
                 responseBody(
                     "data" type OBJECT means "응답 바디",
@@ -248,6 +252,7 @@ class GroupControllerTest : RestApiTestBase() {
                     "data.name" type STRING means "그룹 이름",
                     "data.groupApps[]" type ARRAY means "관리 앱 목록",
                     "data.groupApps[].groupAppId" type NUMBER means "관리 앱 식별자",
+                    "data.groupApps[].packageName" type STRING means "관리 앱 패키지 이름",
                     "data.groupApps[].name" type STRING means "관리 앱 이름",
                     "status" type NUMBER means "HTTP 코드",
                 )

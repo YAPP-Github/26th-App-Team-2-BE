@@ -12,7 +12,7 @@ class AddGroupAppRequestTest {
     inner class AddGroupAppRequestBoundaryTest {
         @Test
         fun `앱 이름의 길이가 2 미만이면 예외가 발생한다`() {
-            val request = AddGroupAppRequest("A")
+            val request = AddGroupAppRequest("A", "package-name")
             val violations = validator.validate(request)
 
             assertThat(violations).anyMatch { it.propertyPath.toString() == "name" }
@@ -20,7 +20,7 @@ class AddGroupAppRequestTest {
 
         @Test
         fun `앱 이름의 길이가 10 초과면 예외가 발생한다`() {
-            val request = AddGroupAppRequest("ABCDEFGHIJK")
+            val request = AddGroupAppRequest("ABCDEFGHIJK", "package-name")
             val violations = validator.validate(request)
 
             assertThat(violations).anyMatch { it.propertyPath.toString() == "name" }

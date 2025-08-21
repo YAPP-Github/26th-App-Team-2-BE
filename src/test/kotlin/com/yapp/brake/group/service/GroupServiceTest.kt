@@ -45,6 +45,7 @@ class GroupServiceTest {
                 groupAppFixture(
                     groupAppId = idx + 1L,
                     groupId = group.groupId,
+                    packageName = "package-$idx",
                     name = it.name,
                 )
             }
@@ -78,6 +79,7 @@ class GroupServiceTest {
                 groupAppFixture(
                     groupId = g.groupId,
                     groupAppId = (index + 1).toLong(),
+                    packageName = "package-$index",
                     name = "앱$index",
                 )
             }
@@ -109,6 +111,7 @@ class GroupServiceTest {
                     groupAppFixture(
                         groupAppId = idx + 1L,
                         groupId = group.groupId,
+                        packageName = "package-$idx",
                         name = it.name,
                     )
                 }
@@ -131,8 +134,8 @@ class GroupServiceTest {
         fun `관리 앱 그룹을 수정한다 (관리 앱 새로 추가 및 삭제)`() {
             val originGroupApps =
                 listOf(
-                    groupAppFixture(groupAppId = 1L, name = "카카오톡"),
-                    groupAppFixture(groupAppId = 2L, name = "인스타그램"),
+                    groupAppFixture(groupAppId = 1L, name = "카카오톡", packageName = "package-K"),
+                    groupAppFixture(groupAppId = 2L, name = "인스타그램", packageName = "package-I"),
                 )
 
             val request =
@@ -153,6 +156,7 @@ class GroupServiceTest {
                     groupAppFixture(
                         groupAppId = idx + 100L,
                         groupId = group.groupId,
+                        packageName = "package-$idx",
                         name = it.name,
                     )
                 }
