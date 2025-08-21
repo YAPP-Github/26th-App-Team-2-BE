@@ -5,7 +5,6 @@ import com.yapp.brake.oauth.infrastructure.feign.google.GoogleAccountFeignClient
 import com.yapp.brake.oauth.infrastructure.feign.google.GoogleApiFeignClient
 import com.yapp.brake.oauth.infrastructure.feign.google.GoogleAuthFeignClient
 import com.yapp.brake.oauth.infrastructure.feign.google.response.GoogleTokenResponse
-import com.yapp.brake.oauth.infrastructure.feign.google.response.GoogleUserInfoResponse
 import com.yapp.brake.oauth.model.OAuthUserInfo
 import com.yapp.brake.oauth.service.OAuthProvider
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -57,7 +56,6 @@ class GoogleAuthProvider(
                 googleApiFeignClient.getUserInfo("$GOOGLE_AUTH_HEADER_PREFIX$accessToken")
             } catch (e: Exception) {
                 logger.error(e) { "[GoogleAuthProvider.getUserInfo] token=$accessToken" }
-                GoogleUserInfoResponse.createEmpty()
                 throw e
             }
 
