@@ -2,7 +2,10 @@ package com.yapp.brake.group.controller
 
 import andDocument
 import com.yapp.brake.common.dto.ApiResponse
+import com.yapp.brake.group.dto.request.CreateGroupRequest
+import com.yapp.brake.group.dto.request.UpdateGroupIosRequest
 import com.yapp.brake.support.RestApiTestBase
+import com.yapp.brake.support.fixture.dto.group.createGroupIosRequestFixture
 import com.yapp.brake.support.fixture.dto.group.createGroupRequestFixture
 import com.yapp.brake.support.fixture.dto.group.groupResponseFixture
 import com.yapp.brake.support.fixture.dto.group.groupsResponseFixture
@@ -75,6 +78,52 @@ class GroupControllerTest : RestApiTestBase() {
     }
 
     @Test
+    fun `관리 앱 그룹 생성 IOS API`() {
+        val memberId = 1L
+        val deviceProfileId = 1L
+        val iosRequest = createGroupIosRequestFixture()
+        val deserializedRequest = CreateGroupRequest.from(iosRequest)
+        val useCaseResult = groupResponseFixture(deserializedRequest)
+        val response =
+            ApiResponse.success(
+                status = HttpStatus.CREATED.value(),
+                data = useCaseResult.toIosResponse(),
+            )
+
+        whenever(groupUseCase.create(deviceProfileId, deserializedRequest))
+            .thenReturn(useCaseResult)
+
+        val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), deviceProfileId)
+        SecurityContextHolder.getContext().authentication = authentication
+
+        val builder =
+            RestDocumentationRequestBuilders.post("/v1/groups/ios")
+                .content(iosRequest.toJsonString())
+                .contentType(MediaType.APPLICATION_JSON)
+
+        mockMvc.perform(builder)
+            .andExpect(status().isOk)
+            .andDocument("groups-create-ios") {
+                tag(Tag.GROUP)
+                requestSchema(iosRequest::class.java.simpleName)
+                responseSchema(response.data!!::class.java.simpleName)
+                requestBody(
+                    "name" type STRING means "그룹 이름",
+                    "groupApps" type STRING means "관리 앱 목록 RAW STRING",
+                )
+                responseBody(
+                    "data" type OBJECT means "응답 바디",
+                    "data.groupId" type NUMBER means "그룹 식별자",
+                    "data.name" type STRING means "그룹 이름",
+                    "data.groupApps" type STRING means "관리 앱 목록 RAW STRING",
+                    "status" type NUMBER means "HTTP 코드",
+                )
+            }
+
+        SecurityContextHolder.clearContext()
+    }
+
+    @Test
     fun `관리 앱 그룹 조회 API`() {
         val memberId = 1L
         val deviceProfileId = 1L
@@ -106,6 +155,44 @@ class GroupControllerTest : RestApiTestBase() {
                     "data.groups[].groupApps[]" type ARRAY means "관리 앱 목록",
                     "data.groups[].groupApps[].groupAppId" type NUMBER means "관리 앱 식별자",
                     "data.groups[].groupApps[].name" type STRING means "관리 앱 이름",
+                    "status" type NUMBER means "HTTP 코드",
+                )
+            }
+
+        SecurityContextHolder.clearContext()
+    }
+
+    @Test
+    fun `관리 앱 그룹 조회 IOS API`() {
+        val memberId = 1L
+        val deviceProfileId = 1L
+        val useCaseResult = groupsResponseFixture()
+        val response =
+            ApiResponse.success(
+                status = HttpStatus.OK.value(),
+                data = useCaseResult.toIosResponse(),
+            )
+
+        whenever(groupUseCase.getAll(deviceProfileId))
+            .thenReturn(useCaseResult)
+
+        val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), deviceProfileId)
+        SecurityContextHolder.getContext().authentication = authentication
+
+        val builder =
+            RestDocumentationRequestBuilders.get("/v1/groups/ios")
+
+        mockMvc.perform(builder)
+            .andExpect(status().isOk)
+            .andDocument("groups-get-all-ios") {
+                tag(Tag.GROUP)
+                responseSchema(response.data!!::class.java.simpleName)
+                responseBody(
+                    "data" type OBJECT means "응답 바디",
+                    "data.groups[]" type ARRAY means "그룹 리스트",
+                    "data.groups[].groupId" type NUMBER means "그룹 식별자",
+                    "data.groups[].name" type STRING means "그룹 이름",
+                    "data.groups[].groupApps" type STRING means "관리 앱 목록 RAW STRING",
                     "status" type NUMBER means "HTTP 코드",
                 )
             }
@@ -165,6 +252,64 @@ class GroupControllerTest : RestApiTestBase() {
                     "data.groupApps[]" type ARRAY means "관리 앱 목록",
                     "data.groupApps[].groupAppId" type NUMBER means "관리 앱 식별자",
                     "data.groupApps[].name" type STRING means "관리 앱 이름",
+                    "status" type NUMBER means "HTTP 코드",
+                )
+            }
+
+        SecurityContextHolder.clearContext()
+    }
+
+    @Test
+    fun `관리 앱 그룹 수정 IOS API`() {
+        val memberId = 1L
+        val deviceProfileId = 1L
+        val groupId = 1L
+        val request =
+            updateGroupRequestFixture(
+                groupApps =
+                    listOf(
+                        updateGroupAppRequestFixture(1L, "카카오톡"),
+                        updateGroupAppRequestFixture(2L, "인스타그램"),
+                        updateGroupAppRequestFixture(name = "카카오톡"),
+                        updateGroupAppRequestFixture(name = "인스타그램"),
+                    ),
+            )
+
+        val iosRequest = UpdateGroupIosRequest(request.name, request.groupApps.toJsonString())
+        val useCaseResult = groupResponseFixture(request)
+        val response =
+            ApiResponse.success(
+                status = HttpStatus.OK.value(),
+                data = useCaseResult.toIosResponse(),
+            )
+
+        whenever(groupUseCase.modify(deviceProfileId, groupId, request))
+            .thenReturn(useCaseResult)
+
+        val authentication = UsernamePasswordAuthenticationToken(memberId.toString(), deviceProfileId)
+        SecurityContextHolder.getContext().authentication = authentication
+
+        val builder =
+            RestDocumentationRequestBuilders.put("/v1/groups/ios/{groupId}", groupId)
+                .content(iosRequest.toJsonString())
+                .contentType(MediaType.APPLICATION_JSON)
+
+        mockMvc.perform(builder)
+            .andExpect(status().isOk)
+            .andDocument("groups-update-ios") {
+                tag(Tag.GROUP)
+                pathParameters("groupId" means "그룹 식별자")
+                requestSchema(iosRequest::class.java.simpleName)
+                responseSchema(response.data!!::class.java.simpleName)
+                requestBody(
+                    "name" type STRING means "그룹 이름",
+                    "groupApps" type STRING means "관리 앱 목록 RAW STRING",
+                )
+                responseBody(
+                    "data" type OBJECT means "응답 바디",
+                    "data.groupId" type NUMBER means "그룹 식별자",
+                    "data.name" type STRING means "그룹 이름",
+                    "data.groupApps" type STRING means "관리 앱 목록 RAW STRING",
                     "status" type NUMBER means "HTTP 코드",
                 )
             }

@@ -61,7 +61,8 @@ class SecurityConfig(
             .rememberMe { it.disable() }
             .requestCache { it.disable() }
             .securityMatcher { request ->
-                request.requestURI == "/v1/members/me" && request.method == HttpMethod.PATCH.name()
+                request.requestURI == "/v1/members/me" &&
+                    (request.method == HttpMethod.PATCH.name() || request.method == HttpMethod.DELETE.name())
             }
             .authorizeHttpRequests { it.anyRequest().permitAll() }
             .exceptionHandling { it.authenticationEntryPoint(unauthenticatedEntryPoint) }
