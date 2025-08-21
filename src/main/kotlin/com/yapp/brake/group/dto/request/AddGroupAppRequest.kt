@@ -7,4 +7,6 @@ data class AddGroupAppRequest(
     @field:NotBlank
     @field:Size(min = 2, max = 10)
     val name: String,
+    @field:NotBlank
+    val packageName: String,
 )
