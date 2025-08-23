@@ -3,7 +3,6 @@ package com.yapp.brake.oauth.service.kakao
 import com.yapp.brake.common.enums.SocialProvider
 import com.yapp.brake.oauth.infrastructure.feign.kakao.KakaoApiFeignClient
 import com.yapp.brake.oauth.infrastructure.feign.kakao.KakaoAuthFeignClient
-import com.yapp.brake.oauth.infrastructure.feign.kakao.response.KakaoUserInfoResponse
 import com.yapp.brake.oauth.model.OAuthUserInfo
 import com.yapp.brake.oauth.service.OAuthProvider
 import io.github.oshai.kotlinlogging.KotlinLogging
@@ -41,7 +40,6 @@ class KakaoAuthProvider(
                 kakaoApiFeignClient.getUserInfo("$KAKAO_AUTH_HEADER_PREFIX$token")
             } catch (e: Exception) {
                 logger.error(e) { "[KakaoAuthProvider.getUserInfo] token=$token" }
-                KakaoUserInfoResponse.createEmpty()
                 throw e
             }
 

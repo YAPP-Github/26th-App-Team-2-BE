@@ -6,6 +6,7 @@ import com.yapp.brake.common.exception.ErrorCode.BAD_REQUEST
 enum class SocialProvider {
     KAKAO,
     APPLE,
+    GOOGLE,
     ;
 
     companion object {
