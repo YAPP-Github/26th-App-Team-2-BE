@@ -4,6 +4,7 @@ extra["springCloudVersion"] = "2025.0.0"
 
 val jwtVersion = "0.12.6"
 dependencies {
+    implementation(project(":brake-common"))
     implementation(project(":brake-domain"))
     implementation(project(":brake-internal"))
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.16.1")
@@ -22,9 +23,6 @@ dependencies {
 
     // H2
     testImplementation("com.h2database:h2")
-
-    // Kotlin-Logging
-    implementation("io.github.oshai:kotlin-logging-jvm:7.0.3")
 
     // jwt
     implementation("io.jsonwebtoken:jjwt-api:$jwtVersion")

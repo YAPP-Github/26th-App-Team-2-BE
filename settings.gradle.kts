@@ -5,4 +5,5 @@ rootProject.name = "brake"
 include("brake-infra")
 include("brake-api")
 include("brake-domain")
+include("brake-common")
 include("brake-internal")
