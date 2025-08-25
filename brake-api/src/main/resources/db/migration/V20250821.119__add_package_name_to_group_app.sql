@@ -1,0 +1,2 @@
+ALTER TABLE group_app
+ADD COLUMN package_name VARCHAR(255) NOT NULL DEFAULT '';

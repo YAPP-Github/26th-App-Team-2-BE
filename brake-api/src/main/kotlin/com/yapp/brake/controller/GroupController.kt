@@ -36,8 +36,26 @@ class GroupController(
         )
     }
 
+//    @PostMapping("/ios")
+//    fun createIos(
+//        @Valid @RequestBody
+//        request: CreateGroupIosRequest,
+//    ): ApiResponse<GroupIosResponse> {
+//        return ApiResponse.success(
+//            status = HttpStatus.CREATED.value(),
+//            data = groupUseCase.create(getDeviceProfileId(), CreateGroupRequest.from(request)).toIosResponse(),
+//        )
+//    }
+
     @GetMapping
     fun readAll(): ApiResponse<GroupsResponse> = ApiResponse.success(groupUseCase.getAll(getDeviceProfileId()))
+
+//    @GetMapping("/ios")
+//    fun readAllIos(): ApiResponse<GroupsIosResponse> =
+//        ApiResponse.success(
+//            groupUseCase.getAll(getDeviceProfileId())
+//                .toIosResponse(),
+//        )
 
     @PutMapping("/{groupId}")
     fun modify(
@@ -48,6 +66,17 @@ class GroupController(
     ): ApiResponse<GroupResponse> {
         return ApiResponse.success(groupUseCase.modify(getDeviceProfileId(), groupId, request))
     }
+
+//    @PutMapping("/ios/{groupId}")
+//    fun modifyIos(
+//        @PathVariable @Positive
+//        groupId: Long,
+//        @Valid @RequestBody
+//        request: UpdateGroupIosRequest,
+//    ): ApiResponse<GroupIosResponse> {
+//        val updatedGroup = groupUseCase.modify(getDeviceProfileId(), groupId, UpdateGroupRequest.from(request))
+//        return ApiResponse.success(updatedGroup.toIosResponse())
+//    }
 
     @DeleteMapping("/{groupId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

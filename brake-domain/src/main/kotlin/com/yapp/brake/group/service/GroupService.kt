@@ -36,6 +36,7 @@ class GroupService(
                 val groupApp =
                     GroupApp.create(
                         groupId = group.groupId,
+                        packageName = it.packageName,
                         name = it.name,
                     )
 
@@ -68,7 +69,7 @@ class GroupService(
         val originGroupApps = groupAppReader.getByGroupId(groupId)
         val updatedGroupApps =
             request.groupApps
-                .map { GroupApp.create(it.groupAppId, groupId, it.name) }
+                .map { GroupApp.create(it.groupAppId, groupId, it.packageName, it.name) }
 
         val existed = findAppsToKeep(originGroupApps, updatedGroupApps)
         val added = findNewApps(updatedGroupApps).map(groupAppWriter::save)

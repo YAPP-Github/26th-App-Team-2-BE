@@ -48,7 +48,6 @@ subprojects {
     }
 
     dependencies {
-        // Kotlin-Logging
         implementation("io.github.oshai:kotlin-logging-jvm:7.0.3")
         implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
         implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -58,65 +57,6 @@ subprojects {
 val jwtVersion = "0.12.6"
 extra["springCloudVersion"] = "2025.0.0"
 val flywayVersion = "10.16.0"
-
-// dependencies {
-//    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
-//    implementation("org.springframework.boot:spring-boot-starter-web")
-//    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-//    implementation("org.jetbrains.kotlin:kotlin-reflect")
-//
-//    // feign
-//    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
-//
-//    // JPA
-//    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-//
-//    // redis
-//    implementation("org.springframework.boot:spring-boot-starter-data-redis")
-//
-//    // security
-//    implementation("org.springframework.boot:spring-boot-starter-security")
-//
-//    // Mysql
-//    runtimeOnly("com.mysql:mysql-connector-j")
-//
-//    // H2
-//    testImplementation("com.h2database:h2")
-//
-//    // Kotlin-Logging
-//    implementation("io.github.oshai:kotlin-logging-jvm:7.0.3")
-//
-//    // jwt
-//    implementation("io.jsonwebtoken:jjwt-api:$jwtVersion")
-//    implementation("io.jsonwebtoken:jjwt-impl:$jwtVersion")
-//    implementation("io.jsonwebtoken:jjwt-jackson:$jwtVersion")
-//
-//    // validation
-//    implementation("org.springframework.boot:spring-boot-starter-validation")
-//
-//    // flyway
-//    implementation("org.flywaydb:flyway-core:$flywayVersion")
-//    implementation("org.flywaydb:flyway-mysql:$flywayVersion")
-//
-//    // monitoring
-//    implementation("org.springframework.boot:spring-boot-starter-actuator")
-//    implementation("io.micrometer:micrometer-registry-prometheus")
-//
-//    // test
-//    testImplementation("org.springframework.boot:spring-boot-starter-test")
-//    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-//    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-//    testImplementation("org.mockito.kotlin:mockito-kotlin:5.4.0")
-//
-//    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")
-//    testImplementation("com.epages:restdocs-api-spec-mockmvc:0.19.4")
-// }
-//
-// dependencyManagement {
-//    imports {
-//        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
-//    }
-// }
 
 jacoco {
     toolVersion = "0.8.13"
