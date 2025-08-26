@@ -49,3 +49,5 @@ out/
 !/src/main/resources/log/
 /src/test/resources/
 docker-compose/.env
+*.yml
+**/openapi3.yaml
