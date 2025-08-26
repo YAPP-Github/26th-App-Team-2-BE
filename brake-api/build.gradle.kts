@@ -8,6 +8,9 @@ extra["springCloudVersion"] = "2025.0.0"
 
 dependencies {
     implementation(project(":brake-domain"))
+    implementation(project(":brake-infra"))
+    implementation(project(":brake-common"))
+    implementation(project(":brake-internal"))
 
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-web")
