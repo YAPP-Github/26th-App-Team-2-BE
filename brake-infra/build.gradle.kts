@@ -21,9 +21,6 @@ dependencies {
     // Mysql
     runtimeOnly("com.mysql:mysql-connector-j")
 
-    // H2
-    testImplementation("com.h2database:h2")
-
     // jwt
     implementation("io.jsonwebtoken:jjwt-api:$jwtVersion")
     implementation("io.jsonwebtoken:jjwt-impl:$jwtVersion")

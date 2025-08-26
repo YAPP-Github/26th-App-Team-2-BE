@@ -28,6 +28,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("io.micrometer:micrometer-registry-prometheus")
 
+    // H2
+    testImplementation("com.h2database:h2")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
@@ -93,4 +96,40 @@ tasks {
             into("static/swagger")
         }
     }
+}
+
+tasks.register<Copy>("copy main env") {
+    from("$rootDir/YAPP-ENV") {
+        include("*")
+        exclude("application-test.yml", "README.md")
+    }
+    into("$projectDir/src/main/resources")
+
+    onlyIf {
+        gradle.startParameter.taskNames.none { it.contains("test") }
+    }
+
+    doLast {
+        logger.lifecycle("✅ 메인 환경변수 복사 완료")
+    }
+}
+
+tasks.register<Copy>("copy test env") {
+    from("$rootDir/YAPP-ENV") {
+        include("application-test.yml")
+        rename("application-test.yml", "application.yml")
+    }
+    into("$projectDir/src/test/resources")
+
+    doLast {
+        logger.lifecycle("✅ 테스트 환경변수 복사 완료")
+    }
+}
+
+tasks.named<ProcessResources>("processResources") {
+    dependsOn("copy main env")
+}
+
+tasks.named<ProcessResources>("processTestResources") {
+    dependsOn("copy test env")
 }
