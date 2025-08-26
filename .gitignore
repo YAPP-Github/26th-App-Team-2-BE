@@ -51,3 +51,4 @@ out/
 docker-compose/.env
 *.yml
 **/openapi3.yaml
+*.p8
