@@ -1,3 +1,5 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 plugins {
     kotlin("jvm") version "1.9.25"
     kotlin("plugin.spring") version "1.9.25"
@@ -54,68 +56,57 @@ subprojects {
     }
 }
 
-val jwtVersion = "0.12.6"
-extra["springCloudVersion"] = "2025.0.0"
-val flywayVersion = "10.16.0"
-
-jacoco {
-    toolVersion = "0.8.13"
+tasks {
+    withType<Jar> { enabled = true }
+    withType<BootJar> { enabled = false }
 }
 
-tasks.jacocoTestReport {
-    dependsOn(tasks.test)
-    reports.xml.required.set(true)
-
-    classDirectories.setFrom(
-        files(
-            classDirectories.files.map {
-                fileTree(it) {
-                    exclude(
-                        "**/common/**",
-                    )
-                }
-            },
-        ),
-    )
-}
-
-tasks.withType<Test> {
-    finalizedBy(tasks.jacocoTestReport)
-    useJUnitPlatform()
-}
-
-tasks.named<ProcessResources>("processResources") {
-    dependsOn("copy main env")
-}
-
-tasks.named<ProcessResources>("processTestResources") {
-    dependsOn("copy test env")
-}
-
-tasks.register<Copy>("copy main env") {
-    from("YAPP-ENV") {
-        include("*")
-        exclude("application-test.yml", "README.md")
-    }
-    into("src/main/resources")
-
-    onlyIf {
-        gradle.startParameter.taskNames.none { it.contains("test") }
+configure(subprojects) {
+    jacoco {
+        toolVersion = "0.8.13"
     }
 
-    doLast {
-        logger.lifecycle("✅ 메인 환경변수 복사 완료")
+    tasks.jacocoTestReport {
+        dependsOn(tasks.test)
+        reports.xml.required.set(true)
+
+        classDirectories.setFrom(
+            files(
+                classDirectories.files.map {
+                    fileTree(it) {
+                        exclude(
+                            "**/common/**",
+                        )
+                    }
+                },
+            ),
+        )
+    }
+
+    tasks.withType<Test> {
+        finalizedBy(tasks.jacocoTestReport)
+        useJUnitPlatform()
     }
 }
 
-tasks.register<Copy>("copy test env") {
-    from("YAPP-ENV") {
-        include("application-test.yml")
-        rename("application-test.yml", "application.yml")
+val jacocoMerge =
+    tasks.register<JacocoReport>("jacocoMerge") {
+        dependsOn(subprojects.map { it.tasks.named("test") }) // 각 모듈 테스트 수행 후 병합
+        executionData.setFrom(
+            files(subprojects.map { "${it.projectDir}/build/jacoco/test.exec" }),
+        )
     }
-    into("src/test/resources")
 
-    doLast {
-        logger.lifecycle("✅ 테스트 환경변수 복사 완료")
+tasks.register<JacocoReport>("jacocoRootReport") {
+    dependsOn(jacocoMerge)
+
+    additionalSourceDirs.setFrom(files(subprojects.map { "${it.projectDir}/src/main/kotlin" }))
+    sourceDirectories.setFrom(files(subprojects.map { "${it.projectDir}/src/main/kotlin" }))
+    classDirectories.setFrom(files(subprojects.map { "${it.projectDir}/build/classes/kotlin/main" }))
+
+    executionData.setFrom(jacocoMerge.get().executionData)
+
+    reports {
+        xml.required.set(true)
     }
 }
