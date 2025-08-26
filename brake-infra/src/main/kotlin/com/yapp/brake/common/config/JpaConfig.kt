@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories
 @Configuration
 @EnableJpaAuditing
 @EnableJpaRepositories(
-    basePackages = ["com.yapp.brake.*.infrastructure.jpa"],
+    basePackages = ["com.yapp.brake.**.jpa"],
 )
 class JpaConfig
