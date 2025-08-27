@@ -14,7 +14,7 @@ repositories {
     mavenCentral()
 }
 
-group = "com.brake"
+group = "com.yapp.brake"
 version = "0.0.1-SNAPSHOT"
 
 subprojects {
