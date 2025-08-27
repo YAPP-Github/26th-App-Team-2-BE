@@ -7,7 +7,7 @@ import java.time.LocalTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class DailySessionStatisticResponseFixtureTest {
+class DailySessionStatisticResponseTest {
     @Test
     fun `날짜와 분 단위를 받아 요일과 시간을 만든다`() {
         // given
