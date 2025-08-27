@@ -1,6 +1,5 @@
-ARG MODULE_NAME=brake-api
-
 FROM eclipse-temurin:21-jdk-alpine AS build
+ARG MODULE_NAME=brake-api
 WORKDIR /app
 
 # Gradle Wrapper 복사
