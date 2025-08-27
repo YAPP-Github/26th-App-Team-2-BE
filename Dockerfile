@@ -25,6 +25,7 @@ RUN java -Djarmode=layertools -jar ${MODULE_NAME}-0.0.1-SNAPSHOT.jar extract
 
 # 실제 실행용 이미지
 FROM eclipse-temurin:21-jdk-alpine
+ARG MODULE_NAME=brake-api
 WORKDIR /app
 
 RUN apk --no-cache add curl
