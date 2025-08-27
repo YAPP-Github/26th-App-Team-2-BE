@@ -5,6 +5,9 @@ WORKDIR /app
 # Gradle Wrapper 복사
 COPY gradlew .
 COPY gradle gradle
+COPY build.gradle.kts settings.gradle.kts ./
+COPY ${MODULE_NAME}/build.gradle.kts ./${MODULE_NAME}/
+
 RUN chmod +x ./gradlew
 
 # 의존성 파일 복사
@@ -17,7 +20,7 @@ RUN ./gradlew --no-daemon dependencies
 COPY . .
 
 # 지정한 모듈 bootJar 실행
-RUN ./gradlew :${MODULE_NAME}:bootJar
+RUN ./gradlew :${MODULE_NAME}:bootJar --parallel
 
 # Layer Tools를 사용하여 Jar 파일에서 계층 분리
 WORKDIR /app/${MODULE_NAME}/build/libs

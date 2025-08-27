@@ -10,12 +10,13 @@ plugins {
     id("jacoco")
 }
 
-repositories {
-    mavenCentral()
+allprojects {
+    group = "com.yapp.brake"
+    version = "0.0.1-SNAPSHOT"
+    repositories {
+        mavenCentral()
+    }
 }
-
-group = "com.yapp.brake"
-version = "0.0.1-SNAPSHOT"
 
 subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
@@ -25,10 +26,6 @@ subprojects {
     apply(plugin = "io.spring.dependency-management")
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
     apply(plugin = "jacoco")
-
-    repositories {
-        mavenCentral()
-    }
 
     java {
         toolchain {

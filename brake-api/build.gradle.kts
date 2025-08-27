@@ -87,6 +87,7 @@ tasks.register<Copy>("copyToSwagger") {
 }
 
 tasks {
+    withType<Jar> { enabled = false }
     withType<BootJar> {
         enabled = true
         mainClass.set("com.yapp.brake.BrakeApplication")
