@@ -1,6 +1,6 @@
 package com.yapp.brake.controller
 
-import com.yapp.brake.exception.ErrorCode
+import com.yapp.brake.common.exception.ErrorCode
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping

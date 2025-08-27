@@ -1,8 +1,8 @@
 package com.yapp.brake.security.exception
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.yapp.brake.common.exception.ErrorCode.FORBIDDEN
 import com.yapp.brake.dto.ApiResponse
-import com.yapp.brake.exception.ErrorCode.FORBIDDEN
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.http.MediaType
