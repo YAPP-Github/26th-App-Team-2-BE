@@ -66,25 +66,7 @@ configure(subprojects) {
         toolVersion = "0.8.13"
     }
 
-    tasks.jacocoTestReport {
-        dependsOn(tasks.test)
-        reports.xml.required.set(true)
-
-        classDirectories.setFrom(
-            files(
-                classDirectories.files.map {
-                    fileTree(it) {
-                        exclude(
-                            "**/common/**",
-                        )
-                    }
-                },
-            ),
-        )
-    }
-
     tasks.withType<Test> {
-        finalizedBy(tasks.jacocoTestReport)
         useJUnitPlatform()
     }
 }
@@ -98,15 +80,27 @@ val jacocoMerge =
     }
 
 tasks.register<JacocoReport>("jacocoRootReport") {
-    dependsOn(jacocoMerge)
+    dependsOn(subprojects.map { it.tasks.named("test") }) // 각 모듈 테스트 먼저
+    mustRunAfter(subprojects.map { it.tasks.named("test") }) // 실행 순서 보장
 
     additionalSourceDirs.setFrom(files(subprojects.map { "${it.projectDir}/src/main/kotlin" }))
     sourceDirectories.setFrom(files(subprojects.map { "${it.projectDir}/src/main/kotlin" }))
-    classDirectories.setFrom(files(subprojects.map { "${it.projectDir}/build/classes/kotlin/main" }))
+    classDirectories.setFrom(
+        files(subprojects.map { "${it.projectDir}/build/classes/kotlin/main" }).map {
+            fileTree(it) {
+                exclude("**/common/**") // 여기서 한 번만 exclude
+            }
+        },
+    )
 
-    executionData.setFrom(jacocoMerge.get().executionData)
+    executionData.setFrom(files(subprojects.map { "${it.projectDir}/build/jacoco/test.exec" }))
 
     reports {
         xml.required.set(true)
+        html.required.set(true)
     }
+}
+
+tasks.named("check") {
+    dependsOn("jacocoRootReport")
 }
