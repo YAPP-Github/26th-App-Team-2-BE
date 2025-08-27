@@ -72,7 +72,7 @@ configure(subprojects) {
 
 val jacocoMerge =
     tasks.register<JacocoReport>("jacocoMerge") {
-        dependsOn(subprojects.map { it.tasks.named("test") }) // 각 모듈 테스트 수행 후 병합
+        dependsOn(subprojects.map { it.tasks.named("test") })
         executionData.setFrom(
             files(subprojects.map { "${it.projectDir}/build/jacoco/test.exec" }),
         )
@@ -92,7 +92,7 @@ tasks.register<JacocoReport>("jacocoRootReport") {
         },
     )
 
-    executionData.setFrom(files(subprojects.map { "${it.projectDir}/build/jacoco/test.exec" }))
+    executionData.setFrom(jacocoMerge.get().executionData)
 
     reports {
         xml.required.set(true)
@@ -100,6 +100,6 @@ tasks.register<JacocoReport>("jacocoRootReport") {
     }
 }
 
-tasks.named("check") {
-    dependsOn("jacocoRootReport")
+tasks.named("test") {
+    finalizedBy("jacocoRootReport")
 }
