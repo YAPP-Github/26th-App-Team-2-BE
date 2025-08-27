@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam
 @FeignClient(
     value = "kakao-api-client",
     url = "https://kapi.kakao.com",
-    configuration = [com.yapp.brake.oauth.kakao.client.KakaoFeignConfig::class],
+    configuration = [KakaoFeignConfig::class],
 )
 interface KakaoApiFeignClient {
     @GetMapping(
