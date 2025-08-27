@@ -1,3 +1,5 @@
+ARG MODULE_NAME=brake-api
+
 FROM eclipse-temurin:21-jdk-alpine AS build
 WORKDIR /app
 
@@ -6,31 +8,32 @@ COPY gradlew .
 COPY gradle gradle
 RUN chmod +x ./gradlew
 
-# 의존성 파일 복사 및 다운로드
-COPY build.gradle.kts .
-COPY settings.gradle.kts .
+# 의존성 파일 복사
+COPY build.gradle.kts settings.gradle.kts ./
 
 # 의존성 다운로드 (캐시용)
 RUN ./gradlew --no-daemon dependencies
 
-# 소스코드 복사 및 애플리케이션 빌드
-# Layered Jar 활성화를 위해 bootJar 태스크를 사용
+# 소스코드 전체 복사
 COPY . .
-RUN ./gradlew bootJar
+
+# 지정한 모듈 bootJar 실행
+RUN ./gradlew :${MODULE_NAME}:bootJar
 
 # Layer Tools를 사용하여 Jar 파일에서 계층 분리
-WORKDIR /app/build/libs
-RUN java -Djarmode=layertools -jar *.jar extract
+WORKDIR /app/${MODULE_NAME}/build/libs
+RUN java -Djarmode=layertools -jar ${MODULE_NAME}-0.0.1-SNAPSHOT.jar extract
 
+# 실제 실행용 이미지
 FROM eclipse-temurin:21-jdk-alpine
 WORKDIR /app
 
 RUN apk --no-cache add curl
 
-# Layer 별 복사 변경되지 않았다면 복사 안 함
-COPY --from=build /app/build/libs/dependencies/ ./
-COPY --from=build /app/build/libs/spring-boot-loader/ ./
-COPY --from=build /app/build/libs/snapshot-dependencies/ ./
-COPY --from=build /app/build/libs/application/ ./
+# Layer 별 복사
+COPY --from=build /app/${MODULE_NAME}/build/libs/dependencies/ ./
+COPY --from=build /app/${MODULE_NAME}/build/libs/spring-boot-loader/ ./
+COPY --from=build /app/${MODULE_NAME}/build/libs/snapshot-dependencies/ ./
+COPY --from=build /app/${MODULE_NAME}/build/libs/application/ ./
 
 ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]
