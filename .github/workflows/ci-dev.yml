@@ -52,7 +52,7 @@ jobs:
         if: always()
         uses: EnricoMi/publish-unit-test-result-action@v2
         with:
-          files: "build/test-results/test/TEST-*.xml"
+          files: "**/build/test-results/test/TEST-*.xml"
 
       - name: Comment Test Failures
         uses: mikepenz/action-junit-report@v5
