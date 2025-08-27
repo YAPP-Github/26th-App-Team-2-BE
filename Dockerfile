@@ -21,7 +21,7 @@ RUN ./gradlew :${MODULE_NAME}:bootJar
 
 # Layer Tools를 사용하여 Jar 파일에서 계층 분리
 WORKDIR /app/${MODULE_NAME}/build/libs
-RUN java -Djarmode=layertools -jar ${MODULE_NAME}-0.0.1-SNAPSHOT.jar extract
+RUN java -Djarmode=layertools -jar ${MODULE_NAME}-*.jar extract
 
 # 실제 실행용 이미지
 FROM eclipse-temurin:21-jdk-alpine
