@@ -90,7 +90,7 @@ tasks {
     withType<Jar> { enabled = false }
     withType<BootJar> {
         enabled = true
-        mainClass.set("com.yapp.brake.BrakeApplication")
+        mainClass.set("com.yapp.brake.BrakeApplicationKt")
         dependsOn("copyToSwagger")
 
         from("build/api-spec/openapi3.yaml") {

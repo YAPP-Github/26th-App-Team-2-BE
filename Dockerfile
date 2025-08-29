@@ -14,7 +14,7 @@ RUN chmod +x ./gradlew
 COPY build.gradle.kts settings.gradle.kts ./
 
 # 의존성 다운로드 (캐시용)
-RUN ./gradlew --no-daemon dependencies
+RUN ./gradlew :${MODULE_NAME}:dependencies --no-daemon
 
 # 소스코드 전체 복사
 COPY . .
@@ -22,21 +22,12 @@ COPY . .
 # 지정한 모듈 bootJar 실행
 RUN ./gradlew :${MODULE_NAME}:bootJar --parallel
 
-# Layer Tools를 사용하여 Jar 파일에서 계층 분리
-WORKDIR /app/${MODULE_NAME}/build/libs
-RUN java -Djarmode=layertools -jar ${MODULE_NAME}-*.jar extract
-
-# 실제 실행용 이미지
 FROM eclipse-temurin:21-jdk-alpine
 ARG MODULE_NAME=brake-api
 WORKDIR /app
 
 RUN apk --no-cache add curl
 
-# Layer 별 복사
-COPY --from=build /app/${MODULE_NAME}/build/libs/dependencies/ ./
-COPY --from=build /app/${MODULE_NAME}/build/libs/spring-boot-loader/ ./
-COPY --from=build /app/${MODULE_NAME}/build/libs/snapshot-dependencies/ ./
-COPY --from=build /app/${MODULE_NAME}/build/libs/application/ ./
+COPY --from=build /app/${MODULE_NAME}/build/libs/${MODULE_NAME}-0.0.1-SNAPSHOT.jar app.jar
 
-ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]
+ENTRYPOINT ["java", "-Xms512m", "-Xmx1g", "-Duser.timezone=Asia/Seoul", "-jar", "app.jar"]
